@@ -46,34 +46,10 @@ class DefaultController extends Controller
      *         The actions must be in 'kebab-case'
      * @access protected
      */
-    protected $allowAnonymous = ['index', 'do-something'];
+    protected $allowAnonymous = false;
 
     // Public Methods
     // =========================================================================
 
-    /**
-     * Handle a request going to our plugin's index action URL,
-     * e.g.: actions/spoon/default
-     *
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $result = 'Welcome to the DefaultController actionIndex() method';
 
-        return $result;
-    }
-
-    /**
-     * Handle a request going to our plugin's actionDoSomething URL,
-     * e.g.: actions/spoon/default/do-something
-     *
-     * @return mixed
-     */
-    public function actionDoSomething()
-    {
-        $result = 'Welcome to the DefaultController actionDoSomething() method';
-
-        return $result;
-    }
 }

@@ -12,7 +12,6 @@ namespace angellco\spoon;
 
 use angellco\spoon\services\SpoonService as SpoonServiceService;
 use angellco\spoon\services\BlockTypes as BlockTypesService;
-use angellco\spoon\models\Settings;
 
 use Craft;
 use craft\base\Plugin;
@@ -143,6 +142,24 @@ class Spoon extends Plugin
         );
     }
 
+    /**
+     * Loads the edit page for the global context.
+     *
+     * @return mixed|\yii\web\Response
+     */
+    public function getSettingsResponse()
+    {
+        $variables = [];
+
+        $variables['matrixFields'] = [];//craft()->pimpMyMatrix->getMatrixFields()
+
+        $variables['globalSpoonedBlockTypes'] = [];//craft()->pimpMyMatrix_blockTypes->getBlockTypesByContext('global', 'fieldId', true)
+
+//        craft()->pimpMyMatrix->loadConfigurator('#pimpmymatrix-global-context-table', 'global');
+
+        return \Craft::$app->controller->renderTemplate('spoon/_settings/edit-global-context', $variables);
+    }
+
     // Protected Methods
     // =========================================================================
 
@@ -156,19 +173,4 @@ class Spoon extends Plugin
         return new Settings();
     }
 
-    /**
-     * Returns the rendered settings HTML, which will be inserted into the content
-     * block on the settings page.
-     *
-     * @return string The rendered settings HTML
-     */
-    protected function settingsHtml(): string
-    {
-        return Craft::$app->view->renderTemplate(
-            'spoon/settings',
-            [
-                'settings' => $this->getSettings()
-            ]
-        );
-    }
 }
