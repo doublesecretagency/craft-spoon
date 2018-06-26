@@ -1,5 +1,5 @@
 {
-    "name": "angellcospoon/spoon",
+    "name": "angellco/spoon",
     "description": "Enhance Matrix",
     "type": "craft-plugin",
     "version": "3.0.0",
@@ -26,7 +26,7 @@
     },
     "autoload": {
         "psr-4": {
-          "angellcospoon\\spoon\\": "src/"
+          "angellco\\spoon\\": "src/"
         }
     },
     "extra": {
@@ -36,9 +36,9 @@
         "hasCpSection": false,
         "changelogUrl": "https://raw.githubusercontent.com/angell-co/spoon/master/CHANGELOG.md",
         "components": {
-            "spoonService": "angellcospoon\\spoon\\services\\SpoonService",
-            "blockTypes": "angellcospoon\\spoon\\services\\BlockTypes"
+            "spoonService": "angellco\\spoon\\services\\SpoonService",
+            "blockTypes": "angellco\\spoon\\services\\BlockTypes"
         },
-        "class": "angellcospoon\\spoon\\Spoon"
+        "class": "angellco\\spoon\\Spoon"
     }
 }

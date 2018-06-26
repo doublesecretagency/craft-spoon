@@ -8,11 +8,11 @@
  * @copyright Copyright (c) 2018 Angell & Co
  */
 
-namespace angellcospoon\spoon;
+namespace angellco\spoon;
 
-use angellcospoon\spoon\services\SpoonService as SpoonServiceService;
-use angellcospoon\spoon\services\BlockTypes as BlockTypesService;
-use angellcospoon\spoon\models\Settings;
+use angellco\spoon\services\SpoonService as SpoonServiceService;
+use angellco\spoon\services\BlockTypes as BlockTypesService;
+use angellco\spoon\models\Settings;
 
 use Craft;
 use craft\base\Plugin;

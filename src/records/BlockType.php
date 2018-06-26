@@ -8,9 +8,9 @@
  * @copyright Copyright (c) 2018 Angell & Co
  */
 
-namespace angellcospoon\spoon\records;
+namespace angellco\spoon\records;
 
-use angellcospoon\spoon\Spoon;
+use angellco\spoon\Spoon;
 
 use Craft;
 use craft\db\ActiveRecord;

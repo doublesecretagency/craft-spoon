@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2018 Angell & Co
  */
 
-namespace angellcospoon\spoon\assetbundles\Spoon;
+namespace angellco\spoon\assetbundles\Spoon;
 
 use Craft;
 use craft\web\AssetBundle;
@@ -43,7 +43,7 @@ class SpoonAsset extends AssetBundle
     public function init()
     {
         // define the path that your publishable resources live
-        $this->sourcePath = "@angellcospoon/spoon/assetbundles/spoon/dist";
+        $this->sourcePath = "@angellco/spoon/assetbundles/spoon/dist";
 
         // define the dependencies
         $this->depends = [

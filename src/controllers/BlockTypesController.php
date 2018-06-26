@@ -8,9 +8,9 @@
  * @copyright Copyright (c) 2018 Angell & Co
  */
 
-namespace angellcospoon\spoon\controllers;
+namespace angellco\spoon\controllers;
 
-use angellcospoon\spoon\Spoon;
+use angellco\spoon\Spoon;
 
 use Craft;
 use craft\web\Controller;
