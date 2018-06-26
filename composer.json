@@ -1,0 +1,44 @@
+{
+    "name": "angellcospoon/spoon",
+    "description": "Enhance Matrix",
+    "type": "craft-plugin",
+    "version": "3.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "spoon"
+    ],
+    "support": {
+        "docs": "https://github.com/angell-co/spoon/blob/master/README.md",
+        "issues": "https://github.com/angell-co/spoon/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Angell & Co",
+            "homepage": "https://angell.io"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1"
+    },
+    "autoload": {
+        "psr-4": {
+          "angellcospoon\\spoon\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Spoon",
+        "handle": "spoon",
+        "hasCpSettings": true,
+        "hasCpSection": false,
+        "changelogUrl": "https://raw.githubusercontent.com/angell-co/spoon/master/CHANGELOG.md",
+        "components": {
+            "spoonService": "angellcospoon\\spoon\\services\\SpoonService",
+            "blockTypes": "angellcospoon\\spoon\\services\\BlockTypes"
+        },
+        "class": "angellcospoon\\spoon\\Spoon"
+    }
+}
