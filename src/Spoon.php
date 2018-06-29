@@ -40,7 +40,6 @@ use yii\base\Event;
  * @property  FieldsService $fields
  * @property  BlockTypesService $blockTypes
  * @property  LoaderService $loader
- * @property  Settings $settings
  * @method    Settings getSettings()
  */
 class Spoon extends Plugin
@@ -95,12 +94,12 @@ class Spoon extends Plugin
 //            }
 //        );
 //
-//        // Register our CP routes
+        // Register our CP routes
 //        Event::on(
 //            UrlManager::class,
 //            UrlManager::EVENT_REGISTER_CP_URL_RULES,
 //            function (RegisterUrlRulesEvent $event) {
-//                $event->rules['cpActionTrigger1'] = 'spoon/default/do-something';
+//                $event->rules['spoon/getConfigurator'] = 'spoon/default/getConfigurator';
 //                $event->rules['cpActionTrigger2'] = 'spoon/block-types/do-something';
 //            }
 //        );
@@ -160,19 +159,6 @@ class Spoon extends Plugin
         $this->loader->configurator('#spoon-global-context-table', 'global');
 
         return \Craft::$app->controller->renderTemplate('spoon/_settings/edit-global-context', $variables);
-    }
-
-    // Protected Methods
-    // =========================================================================
-
-    /**
-     * Creates and returns the model used to store the plugin’s settings.
-     *
-     * @return \craft\base\Model|null
-     */
-    protected function createSettingsModel()
-    {
-        return new Settings();
     }
 
 }

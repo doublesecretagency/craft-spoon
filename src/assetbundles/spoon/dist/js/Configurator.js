@@ -38,7 +38,6 @@
             {
 
                 this.$container = $(container);
-                console.log(this.$container);
                 this.setSettings(settings, Spoon.Configurator.defaults);
 
                 if (this.settings.context === 'global')
@@ -222,7 +221,7 @@
                 data += '&context=' + this.settings.context
 
                 // Post it
-                Craft.postActionRequest('spoon/blockTypes/saveBlockTypes', data, $.proxy(function(response, textStatus)
+                Craft.postActionRequest('spoon/block-types/save', data, $.proxy(function(response, textStatus)
                 {
                     this.$spinner.addClass('hidden');
                     if (textStatus == 'success' && response.success)
@@ -249,7 +248,7 @@
                     fieldId : this.$form.data('spoon-field-id'),
                     context : this.settings.context
                 };
-                Craft.postActionRequest('spoon/getConfigurator', data, $.proxy(function(response, textStatus)
+                Craft.postActionRequest('spoon/configurator/get-html', data, $.proxy(function(response, textStatus)
                 {
                     if (textStatus == 'success')
                     {

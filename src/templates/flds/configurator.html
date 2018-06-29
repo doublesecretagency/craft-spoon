@@ -1,0 +1,78 @@
+{% do view.registerTranslations('app', [
+    "Rename",
+    "Delete",
+    "Make required",
+    "Make not required",
+    "Remove",
+    "Give your tab a name.",
+]) %}
+
+{% macro tab(groupName, selectedBlockTypes) %}
+	<div class="fld-tab">
+		<div class="tabs">
+			<div class="tab sel draggable">
+				<span>{{ groupName }}</span>
+				"Content"|t('app')
+				<a class="settings icon" title="{{ 'Edit'|t('app') }}"></a>
+			</div>
+		</div>
+		<div class="fld-tabcontent">
+			{% for blockType in selectedBlockTypes %}
+				<div class="fld-field" data-id="{{ blockType.matrixBlockTypeId }}">
+					<a class="settings icon" title="{{ 'Edit'|t('app') }}"></a>
+					<span>{{ blockType.getBlockType().name|t('site') }}</span>
+					<input class="id-input" type="hidden" name="spoonedBlockTypes[{{ groupName|e('url') }}][]" value="{{ blockType.matrixBlockTypeId }}">
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+{% endmacro %}
+
+<div id="spoon-configurator" class="fieldlayoutform">
+
+	<input type="hidden" name="fieldId" value="{{ matrixField.id }}">
+
+	<h2 class="first">{{ "Group your block types"|t('app') }}</h2>
+
+	<div class="fld-tabs">
+		{% if spoonedBlockTypes and spoonedBlockTypes|length %}
+			{% import _self as macros %}
+
+			{% for groupName,selectedBlockTypes in spoonedBlockTypes %}
+				{{ macros.tab(groupName, selectedBlockTypes) }}
+			{% endfor %}
+		{% endif %}
+	</div>
+
+	<div class="newtabbtn-container">
+		<div class="btn add icon">{{ "New Group"|t('app') }}</div>
+	</div>
+
+	<div class="unusedfields">
+		{% set unGroupedSelectedBlockTypeIds = [] %}
+
+		{% if spoonedBlockTypes and spoonedBlockTypes|length %}
+			{% for groupName,selectedBlockTypes in spoonedBlockTypes %}
+				{% for selectedBlockType in selectedBlockTypes %}
+					{% set unGroupedSelectedBlockTypeIds = unGroupedSelectedBlockTypeIds|merge([selectedBlockType.matrixBlockTypeId]) %}
+				{% endfor %}
+			{% endfor %}
+		{% endif %}
+
+		<div class="fld-tab unused{% if unGroupedSelectedBlockTypeIds|length == blockTypes|length %} hidden{% endif %}">
+			<div class="tabs">
+				<div class="tab sel"><span>{{ "Blocks"|t('app') }}</span></div>
+			</div>
+			<div class="fld-tabcontent">
+				{% for blockType in blockTypes %}
+					{% set selected = blockType.id in unGroupedSelectedBlockTypeIds %}
+					<div class="fld-field unused{% if selected %} hidden{% endif %}" data-id="{{ blockType.id }}">
+						<span>{{ blockType.name }}</span>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+
+	</div>
+
+</div>
