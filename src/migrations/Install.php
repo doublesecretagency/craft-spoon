@@ -97,20 +97,23 @@ class Install extends Migration
     {
         $tablesCreated = false;
 
-    // spoon_blocktype table
-        $tableSchema = Craft::$app->db->schema->getTableSchema('{{%spoon_blocktype}}');
+        // spoon_blocktypes table
+        $tableSchema = Craft::$app->db->schema->getTableSchema('{{%spoon_blocktypes}}');
         if ($tableSchema === null) {
             $tablesCreated = true;
             $this->createTable(
-                '{{%spoon_blocktype}}',
+                '{{%spoon_blocktypes}}',
                 [
                     'id' => $this->primaryKey(),
                     'dateCreated' => $this->dateTime()->notNull(),
                     'dateUpdated' => $this->dateTime()->notNull(),
                     'uid' => $this->uid(),
-                // Custom columns in the table
-                    'siteId' => $this->integer()->notNull(),
-                    'some_field' => $this->string(255)->notNull()->defaultValue(''),
+
+                    'fieldId' => $this->integer()->notNull(),
+                    'matrixBlockTypeId' => $this->integer()->notNull(),
+                    'fieldLayoutId' => $this->integer()->notNull(),
+                    'groupName' => $this->string(255)->notNull()->defaultValue(''),
+                    'context' => $this->string(255)->notNull()->defaultValue(''),
                 ]
             );
         }
@@ -125,17 +128,38 @@ class Install extends Migration
      */
     protected function createIndexes()
     {
-    // spoon_blocktype table
+        // spoon_blocktypes table
         $this->createIndex(
             $this->db->getIndexName(
-                '{{%spoon_blocktype}}',
-                'some_field',
-                true
+                '{{%spoon_blocktypes}}',
+                'fieldId',
+                false
             ),
-            '{{%spoon_blocktype}}',
-            'some_field',
-            true
+            '{{%spoon_blocktypes}}',
+            'fieldId',
+            false
         );
+        $this->createIndex(
+            $this->db->getIndexName(
+                '{{%spoon_blocktypes}}',
+                'matrixBlockTypeId',
+                false
+            ),
+            '{{%spoon_blocktypes}}',
+            'matrixBlockTypeId',
+            false
+        );
+        $this->createIndex(
+            $this->db->getIndexName(
+                '{{%spoon_blocktypes}}',
+                'fieldLayoutId',
+                false
+            ),
+            '{{%spoon_blocktypes}}',
+            'fieldLayoutId',
+            false
+        );
+
         // Additional commands depending on the db driver
         switch ($this->driver) {
             case DbConfig::DRIVER_MYSQL:
@@ -152,12 +176,30 @@ class Install extends Migration
      */
     protected function addForeignKeys()
     {
-    // spoon_blocktype table
+        // spoon_blocktypes table
         $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%spoon_blocktype}}', 'siteId'),
-            '{{%spoon_blocktype}}',
-            'siteId',
-            '{{%sites}}',
+            $this->db->getForeignKeyName('{{%spoon_blocktypes}}', 'fieldId'),
+            '{{%spoon_blocktypes}}',
+            'fieldId',
+            '{{%fields}}',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
+        $this->addForeignKey(
+            $this->db->getForeignKeyName('{{%spoon_blocktypes}}', 'matrixBlockTypeId'),
+            '{{%spoon_blocktypes}}',
+            'matrixBlockTypeId',
+            '{{%matrixblocktypes}}',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
+        $this->addForeignKey(
+            $this->db->getForeignKeyName('{{%spoon_blocktypes}}', 'fieldLayoutId'),
+            '{{%spoon_blocktypes}}',
+            'fieldLayoutId',
+            '{{%fieldlayouts}}',
             'id',
             'CASCADE',
             'CASCADE'
@@ -180,7 +222,7 @@ class Install extends Migration
      */
     protected function removeTables()
     {
-    // spoon_blocktype table
-        $this->dropTableIfExists('{{%spoon_blocktype}}');
+        // spoon_blocktypes table
+        $this->dropTableIfExists('{{%spoon_blocktypes}}');
     }
 }

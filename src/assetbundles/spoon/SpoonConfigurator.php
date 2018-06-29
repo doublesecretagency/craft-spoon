@@ -32,7 +32,7 @@ use craft\web\assets\cp\CpAsset;
  * @package   Spoon
  * @since     3.0.0
  */
-class SpoonAsset extends AssetBundle
+class SpoonConfigurator extends AssetBundle
 {
     // Public Methods
     // =========================================================================
@@ -53,7 +53,9 @@ class SpoonAsset extends AssetBundle
         // define the relative path to CSS/JS files that should be registered with the page
         // when this asset bundle is registered
         $this->js = [
-            'js/Spoon.js',
+            'js/BlockTypeFieldLayoutDesigner.js',
+            'js/GroupsDesigner.js',
+            'js/Configurator.js'
         ];
 
         $this->css = [

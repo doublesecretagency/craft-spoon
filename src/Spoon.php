@@ -10,8 +10,9 @@
 
 namespace angellco\spoon;
 
-use angellco\spoon\services\SpoonService as SpoonServiceService;
+use angellco\spoon\services\Fields as FieldsService;
 use angellco\spoon\services\BlockTypes as BlockTypesService;
+use angellco\spoon\services\Loader as LoaderService;
 
 use Craft;
 use craft\base\Plugin;
@@ -36,8 +37,9 @@ use yii\base\Event;
  * @package   Spoon
  * @since     3.0.0
  *
- * @property  SpoonServiceService $spoonService
+ * @property  FieldsService $fields
  * @property  BlockTypesService $blockTypes
+ * @property  LoaderService $loader
  * @property  Settings $settings
  * @method    Settings getSettings()
  */
@@ -83,36 +85,36 @@ class Spoon extends Plugin
         parent::init();
         self::$plugin = $this;
 
-        // Register our site routes
-        Event::on(
-            UrlManager::class,
-            UrlManager::EVENT_REGISTER_SITE_URL_RULES,
-            function (RegisterUrlRulesEvent $event) {
-                $event->rules['siteActionTrigger1'] = 'spoon/default';
-                $event->rules['siteActionTrigger2'] = 'spoon/block-types';
-            }
-        );
-
-        // Register our CP routes
-        Event::on(
-            UrlManager::class,
-            UrlManager::EVENT_REGISTER_CP_URL_RULES,
-            function (RegisterUrlRulesEvent $event) {
-                $event->rules['cpActionTrigger1'] = 'spoon/default/do-something';
-                $event->rules['cpActionTrigger2'] = 'spoon/block-types/do-something';
-            }
-        );
-
-        // Do something after we're installed
-        Event::on(
-            Plugins::class,
-            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-            function (PluginEvent $event) {
-                if ($event->plugin === $this) {
-                    // We were just installed
-                }
-            }
-        );
+//        // Register our site routes
+//        Event::on(
+//            UrlManager::class,
+//            UrlManager::EVENT_REGISTER_SITE_URL_RULES,
+//            function (RegisterUrlRulesEvent $event) {
+//                $event->rules['siteActionTrigger1'] = 'spoon/default';
+//                $event->rules['siteActionTrigger2'] = 'spoon/block-types';
+//            }
+//        );
+//
+//        // Register our CP routes
+//        Event::on(
+//            UrlManager::class,
+//            UrlManager::EVENT_REGISTER_CP_URL_RULES,
+//            function (RegisterUrlRulesEvent $event) {
+//                $event->rules['cpActionTrigger1'] = 'spoon/default/do-something';
+//                $event->rules['cpActionTrigger2'] = 'spoon/block-types/do-something';
+//            }
+//        );
+//
+//        // Do something after we're installed
+//        Event::on(
+//            Plugins::class,
+//            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
+//            function (PluginEvent $event) {
+//                if ($event->plugin === $this) {
+//                    // We were just installed
+//                }
+//            }
+//        );
 
 /**
  * Logging in Craft involves using one of the following methods:
@@ -151,11 +153,11 @@ class Spoon extends Plugin
     {
         $variables = [];
 
-        $variables['matrixFields'] = [];//craft()->pimpMyMatrix->getMatrixFields()
+        $variables['matrixFields'] = $this->fields->getMatrixFields();
 
-        $variables['globalSpoonedBlockTypes'] = [];//craft()->pimpMyMatrix_blockTypes->getBlockTypesByContext('global', 'fieldId', true)
+        $variables['globalSpoonedBlockTypes'] = $this->blockTypes->getBlockTypesByContext('global', 'fieldId', true);
 
-//        craft()->pimpMyMatrix->loadConfigurator('#pimpmymatrix-global-context-table', 'global');
+        $this->loader->configurator('#spoon-global-context-table', 'global');
 
         return \Craft::$app->controller->renderTemplate('spoon/_settings/edit-global-context', $variables);
     }

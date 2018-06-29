@@ -14,6 +14,7 @@ use angellco\spoon\Spoon;
 
 use Craft;
 use craft\db\ActiveRecord;
+use craft\records\Field;
 
 /**
  * BlockType Record
@@ -50,6 +51,18 @@ class BlockType extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%spoon_blocktype}}';
+        return '{{%spoon_blocktypes}}';
     }
+
+    /**
+     * Returns the block type’s field.
+     *
+     * @return ActiveQueryInterface The relational query object.
+     */
+//    public function getField(): ActiveQueryInterface
+//    {
+//        return $this->hasOne(Field::class, ['id' => 'fieldId']);
+//    }
+//
+
 }

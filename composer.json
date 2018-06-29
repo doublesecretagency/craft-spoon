@@ -36,8 +36,9 @@
         "hasCpSection": false,
         "changelogUrl": "https://raw.githubusercontent.com/angell-co/spoon/master/CHANGELOG.md",
         "components": {
-            "spoonService": "angellco\\spoon\\services\\SpoonService",
-            "blockTypes": "angellco\\spoon\\services\\BlockTypes"
+            "fields": "angellco\\spoon\\services\\Fields",
+            "blockTypes": "angellco\\spoon\\services\\BlockTypes",
+            "loader": "angellco\\spoon\\services\\Loader"
         },
         "class": "angellco\\spoon\\Spoon"
     }
