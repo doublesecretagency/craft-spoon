@@ -15,6 +15,7 @@ use angellco\spoon\Spoon;
 use Craft;
 use craft\db\ActiveRecord;
 use craft\records\Field;
+use craft\records\FieldLayout;
 
 /**
  * BlockType Record
@@ -59,10 +60,19 @@ class BlockType extends ActiveRecord
      *
      * @return ActiveQueryInterface The relational query object.
      */
-//    public function getField(): ActiveQueryInterface
-//    {
-//        return $this->hasOne(Field::class, ['id' => 'fieldId']);
-//    }
-//
+    public function getField(): ActiveQueryInterface
+    {
+        return $this->hasOne(Field::class, ['id' => 'fieldId']);
+    }
+
+    /**
+     * Returns the block type’s fieldLayout.
+     *
+     * @return ActiveQueryInterface The relational query object.
+     */
+    public function getFieldLayout(): ActiveQueryInterface
+    {
+        return $this->hasOne(FieldLayout::class, ['id' => 'fieldLayoutId']);
+    }
 
 }

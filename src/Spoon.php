@@ -154,7 +154,7 @@ class Spoon extends Plugin
 
         $variables['matrixFields'] = $this->fields->getMatrixFields();
 
-        $variables['globalSpoonedBlockTypes'] = $this->blockTypes->getBlockTypesByContext('global', 'fieldId', true);
+        $variables['globalSpoonedBlockTypes'] = $this->blockTypes->getByContext('global', 'fieldId', true);
 
         $this->loader->configurator('#spoon-global-context-table', 'global');
 

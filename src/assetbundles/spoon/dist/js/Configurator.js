@@ -62,7 +62,7 @@
                         fieldId : fieldId
                     };
 
-                Craft.postActionRequest('spoon/blockTypes/deleteBlockTypes', data, $.proxy(function(response, textStatus)
+                Craft.postActionRequest('spoon/block-types/delete', data, $.proxy(function(response, textStatus)
                 {
                     if (textStatus == 'success' && response.success)
                     {
@@ -158,11 +158,11 @@
                 this.$body = $('<div class="content"/>').appendTo(this.$body);
                 this.$bigSpinner = $('<div class="spinner big"/>').appendTo(this.$body);
                 this.$body = $('<div class="main"/>').appendTo(this.$body);
-                var $footer = $('<div class="footer"/>').appendTo(this.$form);
-                var $buttons = $('<div class="buttons right"/>').appendTo($footer);
+                var $footer = $('<div class="footer"/>').appendTo(this.$form),
+                    $buttons = $('<div class="buttons right"/>').appendTo($footer);
                 this.$spinner = $('<div class="spinner hidden"/>').appendTo($buttons);
-                var $cancelBtn = $('<div class="btn">'+Craft.t('Cancel')+'</div>').appendTo($buttons);
-                var $submitBtn = $('<input type="submit" class="btn submit" value="'+Craft.t('Save')+'"/>').appendTo($buttons);
+                var $cancelBtn = $('<div class="btn">'+Craft.t('app', 'Cancel')+'</div>').appendTo($buttons),
+                    $submitBtn = $('<input type="submit" class="btn submit" value="'+Craft.t('app', 'Save')+'"/>').appendTo($buttons);
 
                 // Make the Garnish Modal object
                 this.modal = new Garnish.Modal(this.$form,

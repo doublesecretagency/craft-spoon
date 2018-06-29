@@ -55,7 +55,7 @@ class ConfiguratorController extends Controller
 
         $context = Craft::$app->getRequest()->getParam('context');
 
-        $spoonedBlockTypes = Spoon::$plugin->blockTypes->getBlockTypesByContext($context, 'groupName', false, $fieldId);
+        $spoonedBlockTypes = Spoon::$plugin->blockTypes->getByContext($context, 'groupName', false, $fieldId);
 
         $fld = Craft::$app->view->renderTemplate('spoon/flds/configurator', array(
             'matrixField' => $field,

@@ -14,6 +14,7 @@ use angellco\spoon\Spoon;
 
 use Craft;
 use craft\base\Model;
+use craft\models\MatrixBlockType;
 
 /**
  * BlockType Model
@@ -33,14 +34,88 @@ class BlockType extends Model
     // =========================================================================
 
     /**
-     * Some model attribute
-     *
-     * @var string
+     * @var int|string|null ID The block ID. If unsaved, it will be in the format "newX".
      */
-    public $someAttribute = 'Some Default';
+    public $id;
+
+    /**
+     * @var int|null Field ID
+     */
+    public $fieldId;
+
+    /**
+     * @var int|null Field layout ID
+     */
+    public $fieldLayoutId;
+
+    /**
+     * @var string|null Field handle
+     */
+    public $fieldHandle;
+
+    /**
+     * @var int|null Matrix block type ID
+     */
+    public $matrixBlockTypeId;
+
+    /**
+     * @var MatrixBlockType|null Matrix block type model
+     */
+    public $matrixBlockType;
+
+    /**
+     * @var string|null Group name
+     */
+    public $groupName;
+
+    /**
+     * @var string|null Context
+     */
+    public $context;
+
 
     // Public Methods
     // =========================================================================
+
+    /**
+     * Use the block type name as the string representation.
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return (string)$this->getBlockType()->name;
+    }
+
+    /**
+     * Returns the Matrix Block Type model
+     *
+     * @return MatrixBlockType|null
+     */
+    public function getBlockType()
+    {
+        if ($this->matrixBlockType)
+        {
+            return $this->matrixBlockType;
+        }
+        else
+        {
+            return Craft::$app->matrix->getBlockTypeById($this->matrixBlockTypeId);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'fieldLayout' => [
+                'class' => FieldLayoutBehavior::class,
+                'elementType' => MatrixBlock::class
+            ],
+        ];
+    }
 
     /**
      * Returns the validation rules for attributes.
@@ -55,8 +130,10 @@ class BlockType extends Model
     public function rules()
     {
         return [
-            ['someAttribute', 'string'],
-            ['someAttribute', 'default', 'value' => 'Some Default'],
+            [['id', 'fieldId', 'matrixBlockTypeId', 'fieldLayoutId'], 'number', 'integerOnly' => true],
+            [['fieldHandle', 'groupName', 'context'], 'string'],
+            ['matrixBlockType', MatrixBlockType::class]
         ];
     }
+
 }

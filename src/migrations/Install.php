@@ -111,7 +111,7 @@ class Install extends Migration
 
                     'fieldId' => $this->integer()->notNull(),
                     'matrixBlockTypeId' => $this->integer()->notNull(),
-                    'fieldLayoutId' => $this->integer()->notNull(),
+                    'fieldLayoutId' => $this->integer(),
                     'groupName' => $this->string(255)->notNull()->defaultValue(''),
                     'context' => $this->string(255)->notNull()->defaultValue(''),
                 ]

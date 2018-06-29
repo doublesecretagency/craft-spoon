@@ -74,7 +74,7 @@ class BlockTypes extends Component
      * @param $ignoreSubContext Optionally ignore the sub context (id)
      * @return array
      */
-    public function getBlockTypesByContext($context, $groupBy = false, $ignoreSubContext = false, $fieldId = false)
+    public function getByContext($context, $groupBy = false, $ignoreSubContext = false, $fieldId = false)
     {
 
         if ($ignoreSubContext)
@@ -141,124 +141,108 @@ class BlockTypes extends Component
 
     }
 
-//    /**
-//     * Saves our version of a block type
-//     *
-//     * @method saveBlockType
-//     * @param  PimpMyMatrix_BlockTypeModel $blockType
-//     * @throws \Exception
-//     * @return bool
-//     */
-//    public function saveBlockType(PimpMyMatrix_BlockTypeModel $blockType)
-//    {
-//
-//        if ($blockType->id)
-//        {
-//            $blockTypeRecord = PimpMyMatrix_BlockTypeRecord::model()->findById($blockType->id);
-//
-//            if (!$blockTypeRecord)
-//            {
-//                throw new Exception(Craft::t('No PimpMyMatrix block type exists with the ID “{id}”', array('id' => $blockType->id)));
-//            }
-//        }
-//        else
-//        {
-//            $blockTypeRecord = new PimpMyMatrix_BlockTypeRecord();
-//        }
-//
-//        $blockTypeRecord->fieldId           = $blockType->fieldId;
-//        $blockTypeRecord->matrixBlockTypeId = $blockType->matrixBlockTypeId;
-//        $blockTypeRecord->fieldLayoutId     = $blockType->fieldLayoutId;
-//        $blockTypeRecord->groupName         = $blockType->groupName;
-//        $blockTypeRecord->context           = $blockType->context;
-//
-//        $blockTypeRecord->validate();
-//        $blockType->addErrors($blockTypeRecord->getErrors());
-//
-//        if (!$blockType->hasErrors())
-//        {
-//            $transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
-//            try
-//            {
-//
-//                // Save it!
-//                $blockTypeRecord->save(false);
-//
-//                // Might as well update our cache of the block type group while we have it.
-//                $this->_blockTypesByContext[$blockType->context] = $blockType;
-//
-//                if ($transaction !== null)
-//                {
-//                    $transaction->commit();
-//                }
-//            }
-//            catch (\Exception $e)
-//            {
-//                if ($transaction !== null)
-//                {
-//                    $transaction->rollback();
-//                }
-//
-//                throw $e;
-//            }
-//
-//            return true;
-//        }
-//        else
-//        {
-//            return false;
-//        }
-//    }
-//
-//
-//    /**
-//     * Deletes all the block types for a given context
-//     *
-//     * @param string $context
-//     * @throws \Exception
-//     * @return bool
-//     */
-//    public function deleteBlockTypesByContext($context = false, $fieldId = false)
-//    {
-//
-//        if (!$context)
-//        {
-//            return false;
-//        }
-//
-//        $transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
-//        try
-//        {
-//
-//            $attributes = array('context' => $context);
-//
-//            if ($fieldId)
-//            {
-//                $attributes['fieldId'] = $fieldId;
-//            }
-//
-//            $affectedRows = craft()->db->createCommand()->delete('pimpmymatrix_blocktypes', $attributes);
-//
-//            if ($transaction !== null)
-//            {
-//                $transaction->commit();
-//            }
-//
-//            return (bool) $affectedRows;
-//        }
-//        catch (\Exception $e)
-//        {
-//            if ($transaction !== null)
-//            {
-//                $transaction->rollback();
-//            }
-//
-//            throw $e;
-//        }
-//
-//    }
-//
-//
+    /**
+     * Saves our version of a block type
+     *
+     * @param BlockType $blockType
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public function save(BlockType $blockType)
+    {
+
+        if ($blockType->id)
+        {
+            $blockTypeRecord = BlockTypeRecord::findOne($blockType->id);
+
+            if (!$blockTypeRecord)
+            {
+                throw new Exception(Craft::t('No Spoon Block Type exists with the ID “{id}”', ['id' => $blockType->id]));
+            }
+        }
+        else
+        {
+            $blockTypeRecord = new BlockTypeRecord();
+        }
+
+        $blockTypeRecord->fieldId           = $blockType->fieldId;
+        $blockTypeRecord->matrixBlockTypeId = $blockType->matrixBlockTypeId;
+        $blockTypeRecord->fieldLayoutId     = $blockType->fieldLayoutId;
+        $blockTypeRecord->groupName         = $blockType->groupName;
+        $blockTypeRecord->context           = $blockType->context;
+
+        $blockTypeRecord->validate();
+        $blockType->addErrors($blockTypeRecord->getErrors());
+
+        if (!$blockType->hasErrors())
+        {
+
+            $transaction = Craft::$app->getDb()->beginTransaction();
+            try {
+
+                // Save it!
+                $blockTypeRecord->save(false);
+
+                // Might as well update our cache of the block type group while we have it.
+                $this->_blockTypesByContext[$blockType->context] = $blockType;
+
+                $transaction->commit();
+
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
+
+            return true;
+        }
+
+        return false;
+
+    }
+
+
+    /**
+     * Deletes all the block types for a given context
+     *
+     * @param string $context
+     * @throws \Exception
+     * @return bool
+     */
+    public function deleteByContext($context = false, $fieldId = false)
+    {
+
+        if (!$context)
+        {
+            return false;
+        }
+
+        $transaction = \Craft::$app->getDb()->beginTransaction();
+        try {
+            $condition = ['context' => $context];
+
+            if ($fieldId)
+            {
+                $condition['fieldId'] = $fieldId;
+            }
+
+            $affectedRows = Craft::$app->getDb()->createCommand()
+                ->delete('{{%spoon_blocktypes}}',$condition)
+                ->execute();
+
+            $transaction->commit();
+
+            return (bool) $affectedRows;
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+
+    }
+
+
+    // TODO MOVE FLD STUFF OUT
+
 //    /**
 //     * Saves a field layout and attaches it to the given pimped block type
 //     *
@@ -327,37 +311,37 @@ class BlockTypes extends Component
 //    }
 //
 //
-//    /**
-//     * Returns an array of fieldLayoutIds indexed by matrixBlockTypeIds
-//     * for the given context and fieldId combination
-//     *
-//     * @param  string            $context required
-//     * @param  int               $fieldId required
-//     * @return false|array
-//     */
-//    public function getFieldLayoutIds($context, $fieldId = false)
-//    {
-//
-//        if (!$fieldId)
-//        {
-//            return false;
-//        }
-//
-//        $blockTypeRecords = PimpMyMatrix_BlockTypeRecord::model()->findAllByAttributes(array(
-//            'context' => $context,
-//            'fieldId' => $fieldId
-//        ));
-//
-//        $return = array();
-//        foreach ($blockTypeRecords as $blockTypeRecord)
-//        {
-//            $return[$blockTypeRecord->matrixBlockTypeId] = $blockTypeRecord->fieldLayoutId;
-//        }
-//        return $return;
-//
-//    }
-//
-//
+    /**
+     * Returns an array of fieldLayoutIds indexed by matrixBlockTypeIds
+     * for the given context and fieldId combination
+     *
+     * @param  string            $context required
+     * @param  int               $fieldId required
+     * @return false|array
+     */
+    public function getFieldLayoutIds($context, $fieldId = false)
+    {
+
+        if (!$fieldId)
+        {
+            return false;
+        }
+
+        $blockTypeRecords = BlockTypeRecord::findAll([
+            'context' => $context,
+            'fieldId' => $fieldId
+        ]);
+
+        $return = array();
+        foreach ($blockTypeRecords as $blockTypeRecord)
+        {
+            $return[$blockTypeRecord->matrixBlockTypeId] = $blockTypeRecord->fieldLayoutId;
+        }
+        return $return;
+
+    }
+
+
     // Private Methods
     // =========================================================================
 
