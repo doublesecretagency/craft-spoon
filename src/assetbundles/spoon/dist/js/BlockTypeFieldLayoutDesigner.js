@@ -26,7 +26,7 @@
                     $menu = $('<div class="menu" data-align="center"/>').insertAfter($editBtn),
                     $ul = $('<ul/>').appendTo($menu);
 
-                $('<li><a data-action="remove">'+Craft.t('Remove')+'</a></li>').appendTo($ul);
+                $('<li><a data-action="remove">'+Craft.t('app', 'Remove')+'</a></li>').appendTo($ul);
 
                 new Garnish.MenuBtn($editBtn, {
                     onOptionSelect: $.proxy(this, 'onFieldOptionSelect')

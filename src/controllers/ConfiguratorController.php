@@ -38,6 +38,14 @@ class ConfiguratorController extends Controller
     // Public Methods
     // =========================================================================
 
+    /**
+     * Returns the fld HTML for the main configurator
+     *
+     * @return \yii\web\Response
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     * @throws \yii\web\BadRequestHttpException
+     */
     public function actionGetHtml()
     {
         $this->requirePostRequest();
@@ -68,4 +76,35 @@ class ConfiguratorController extends Controller
             'html' => $fld
         ]);
     }
+
+
+    /**
+     * Returns the html for the individual block type fld.
+     *
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionGetFieldsHtml()
+    {
+
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
+
+        $context = Craft::$app->getRequest()->getParam('context');
+        $blockTypeId = Craft::$app->getRequest()->getParam('blockTypeId');
+
+        $spoonedBlockType = Spoon::$plugin->blockTypes->getBlockType($context, $blockTypeId);
+
+        $fieldLayout = $spoonedBlockType->getFieldLayout();
+
+        $fld = Craft::$app->view->renderTemplate('spoon/flds/fields', array(
+            'spoonedBlockType' => $spoonedBlockType,
+            'fieldLayout' => $fieldLayout
+        ));
+
+        return $this->asJson([
+            'html' => $fld
+        ]);
+
+    }
+
 }

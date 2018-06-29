@@ -30,9 +30,9 @@
                     $menu = $('<div class="menu" data-align="center"/>').insertAfter($editBtn),
                     $ul = $('<ul/>').appendTo($menu);
 
-                $('<li><a data-action="edit-field-layout">'+Craft.t('Edit field layout')+'</a></li>').appendTo($ul);
+                $('<li><a data-action="edit-field-layout">'+Craft.t('app', 'Edit field layout')+'</a></li>').appendTo($ul);
 
-                $('<li><a data-action="remove">'+Craft.t('Remove')+'</a></li>').appendTo($ul);
+                $('<li><a data-action="remove">'+Craft.t('app', 'Remove')+'</a></li>').appendTo($ul);
 
                 new Garnish.MenuBtn($editBtn, {
                     onOptionSelect: $.proxy(this, 'onFieldOptionSelect')
@@ -70,7 +70,7 @@
 
                 var $labelSpan = $tab.find('.tabs .tab span'),
                     oldName = $labelSpan.text(),
-                    newName = prompt(Craft.t('Give your group a name.'), oldName);
+                    newName = prompt(Craft.t('app', 'Give your group a name.'), oldName);
 
                 if (newName && newName != oldName)
                 {
@@ -91,7 +91,7 @@
                     '<div class="tabs">' +
                     '<div class="tab sel draggable">' +
                     '<span>Group '+(this.tabGrid.$items.length+1)+'</span>' +
-                    '<a class="settings icon" title="'+Craft.t('Rename')+'"></a>' +
+                    '<a class="settings icon" title="'+Craft.t('app', 'Rename')+'"></a>' +
                     '</div>' +
                     '</div>' +
                     '<div class="fld-tabcontent"></div>' +
@@ -137,8 +137,8 @@
 
                 this.$spinner = $('<div class="spinner hidden"/>').appendTo($buttons);
 
-                var $cancelBtn = $('<div class="btn">'+Craft.t('Cancel')+'</div>').appendTo($buttons),
-                    $submitBtn = $('<input type="submit" class="btn submit" value="'+Craft.t('Save')+'"/>').appendTo($buttons);
+                var $cancelBtn = $('<div class="btn">'+Craft.t('app', 'Cancel')+'</div>').appendTo($buttons),
+                    $submitBtn = $('<input type="submit" class="btn submit" value="'+Craft.t('app', 'Save')+'"/>').appendTo($buttons);
 
                 this.modal = new Garnish.Modal(this.$form,
                     {
@@ -152,7 +152,7 @@
                                 blockTypeId : $blockType.data('id')
                             };
 
-                            Craft.postActionRequest('spoon/getFieldsConfigurator', data, $.proxy(function(response, textStatus)
+                            Craft.postActionRequest('spoon/configurator/get-fields-html', data, $.proxy(function(response, textStatus)
                             {
                                 if (textStatus == 'success')
                                 {
@@ -196,14 +196,14 @@
                     this.$spinner.addClass('hidden');
                     if (textStatus == 'success' && response.success)
                     {
-                        Craft.cp.displayNotice(Craft.t('Field layout saved.'));
+                        Craft.cp.displayNotice(Craft.t('app', 'Field layout saved.'));
                         this.modal.hide();
                     }
                     else
                     {
                         if (textStatus == 'success')
                         {
-                            Craft.cp.displayError(Craft.t('An unknown error occurred.'));
+                            Craft.cp.displayError(Craft.t('app', 'An unknown error occurred.'));
                         }
                     }
                 }, this));

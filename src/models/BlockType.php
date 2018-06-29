@@ -14,6 +14,8 @@ use angellco\spoon\Spoon;
 
 use Craft;
 use craft\base\Model;
+use craft\behaviors\FieldLayoutBehavior;
+use craft\elements\MatrixBlock;
 use craft\models\MatrixBlockType;
 
 /**

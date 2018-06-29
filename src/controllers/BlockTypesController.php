@@ -117,24 +117,22 @@ class BlockTypesController extends Controller
      */
     public function actionDelete()
     {
-//        $this->requirePostRequest();
-//        $this->requireAjaxRequest();
-//
-//        $context = craft()->request->getPost('context');
-//        $fieldId = craft()->request->getPost('fieldId');
-//
-//        if (craft()->pimpMyMatrix_blockTypes->deleteBlockTypesByContext($context, $fieldId))
-//        {
-//            $this->returnJson(array(
-//                'success' => true
-//            ));
-//        }
-//        else
-//        {
-//            $this->returnJson(array(
-//                'success' => false
-//            ));
-//        }
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
+
+        $context = Craft::$app->getRequest()->getParam('context');
+        $fieldId = Craft::$app->getRequest()->getParam('fieldId');
+
+        if (!Spoon::$plugin->blockTypes->deleteByContext($context, $fieldId))
+        {
+            $this->returnJson([
+                'success' => false
+            ]);
+        }
+
+        return $this->asJson([
+            'success' => true
+        ]);
 
     }
 

@@ -41,37 +41,39 @@ class BlockTypes extends Component
     // Public Methods
     // =========================================================================
 
-//    /**
-//     * Returns a single PimpMyMatrix_BlockTypeModel
-//     *
-//     * @method getBlockType
-//     * @param  string       $context           required
-//     * @param  int          $matrixBlockTypeId required
-//     * @return bool|PimpMyMatrix_BlockTypeModel
-//     */
-//    public function getBlockType($context = false, $matrixBlockTypeId = false)
-//    {
-//
-//        if (!$context || !$matrixBlockTypeId)
-//        {
-//            return false;
-//        }
-//
-//        $blockTypeRecord = BlockTypeRecord::model()->findByAttributes(array(
-//            'context'           => $context,
-//            'matrixBlockTypeId' => $matrixBlockTypeId
-//        ));
-//
-//        return $this->_populateBlockTypeFromRecord($blockTypeRecord);
-//
-//    }
+    /**
+     * Returns a single BlockType Model
+     *
+     * @param bool $context
+     * @param bool $matrixBlockTypeId
+     *
+     * @return bool|null
+     */
+    public function getBlockType($context = false, $matrixBlockTypeId = false)
+    {
+
+        if (!$context || !$matrixBlockTypeId)
+        {
+            return false;
+        }
+
+        $blockTypeRecord = BlockTypeRecord::findOne([
+            'context'           => $context,
+            'matrixBlockTypeId' => $matrixBlockTypeId
+        ]);
+
+        return $this->_populateBlockTypeFromRecord($blockTypeRecord);
+
+    }
 
     /**
      * Returns a block type by its context.
      *
-     * @param $context
-     * @param $groupBy          Group by an optional model attribute to group by
-     * @param $ignoreSubContext Optionally ignore the sub context (id)
+     * @param      $context
+     * @param bool $groupBy Group by an optional model attribute to group by
+     * @param bool $ignoreSubContext Optionally ignore the sub context (id)
+     * @param bool $fieldId
+     *
      * @return array
      */
     public function getByContext($context, $groupBy = false, $ignoreSubContext = false, $fieldId = false)
@@ -91,7 +93,7 @@ class BlockTypes extends Component
                 ];
             }
 
-            $blockTypeRecords = BlockTypeRecord::findAll($condition);
+            $blockTypeRecords = BlockTypeRecord::find()->where($condition)->all();
 
         }
         else
@@ -148,6 +150,7 @@ class BlockTypes extends Component
      *
      * @return bool
      * @throws \Exception
+     * @throws \yii\db\Exception
      */
     public function save(BlockType $blockType)
     {
@@ -201,13 +204,15 @@ class BlockTypes extends Component
 
     }
 
-
     /**
      * Deletes all the block types for a given context
      *
-     * @param string $context
-     * @throws \Exception
+     * @param bool $context
+     * @param bool $fieldId
+     *
      * @return bool
+     * @throws \Exception
+     * @throws \yii\db\Exception
      */
     public function deleteByContext($context = false, $fieldId = false)
     {
@@ -354,36 +359,47 @@ class BlockTypes extends Component
      */
     private function _populateBlockTypeFromRecord(BlockTypeRecord $blockTypeRecord)
     {
+
+        $blockType = new BlockType($blockTypeRecord->toArray([
+            'id',
+            'fieldId',
+            'matrixBlockTypeId',
+            'fieldLayoutId',
+            'groupName',
+            'context'
+        ]));
+
         if (!$blockTypeRecord)
         {
             return null;
         }
 
-        $blockType = BlockType::populateModel($blockTypeRecord);
-
         // Use the fieldId to get the field and save the handle on to the model
-        $matrixField = craft()->fields->getFieldById($blockType->fieldId);
+        $matrixField = Craft::$app->fields->getFieldById($blockType->fieldId);
         $blockType->fieldHandle = $matrixField->handle;
+
+
+        // TODO do we need these bits?
 
         // Save the MatrixBlockTypeModel on to our model
         $blockType->matrixBlockType = $blockType->getBlockType();
-
-        // Save the field layout content on to our model
-        $layout = $blockType->getFieldLayout();
-        $fields = array();
-        foreach ($layout->getFields() as $field)
-        {
-            $fields[] = array(
-                'tabId' => $field->tabId,
-                'sortOrder' => $field->sortOrder,
-                'field' => $field->getField()
-            );
-        }
-
-        $blockType->fieldLayout = array(
-            'tabs'   => $layout->getTabs(),
-            'fields' => $fields
-        );
+//
+//        // Save the field layout content on to our model
+//        $layout = $blockType->getFieldLayout();
+//        $fields = array();
+//        foreach ($layout->getFields() as $field)
+//        {
+//            $fields[] = [
+//                'tabId' => $field->tabId,
+//                'sortOrder' => $field->sortOrder,
+//                'field' => $field->getField()
+//            ];
+//        }
+//
+//        $blockType->fieldLayout = array(
+//            'tabs'   => $layout->getTabs(),
+//            'fields' => $fields
+//        );
 
         return $blockType;
     }

@@ -66,14 +66,14 @@
                 {
                     if (textStatus == 'success' && response.success)
                     {
-                        Craft.cp.displayNotice(Craft.t('Block type groups deleted.'));
+                        Craft.cp.displayNotice(Craft.t('app', 'Block type groups deleted.'));
                         $btn.addClass('hidden');
                     }
                     else
                     {
                         if (textStatus == 'success')
                         {
-                            Craft.cp.displayError(Craft.t('There was an unknown error.'));
+                            Craft.cp.displayError(Craft.t('app', 'There was an unknown error.'));
                         }
                     }
                 }, this));
@@ -125,7 +125,7 @@
                             .clone(true)
                             .prependTo($menu.find('ul:first'))
                             .find('a:first')
-                            .text(Craft.t('Group block types'))
+                            .text(Craft.t('app', 'Group block types'))
                             .data('spoon-field-id', $field.data('id'))
                             .attr('data-action', 'spoon')
                             .on('click', $.proxy(_this.onFieldConfiguratorClick, _this));
@@ -226,7 +226,7 @@
                     this.$spinner.addClass('hidden');
                     if (textStatus == 'success' && response.success)
                     {
-                        Craft.cp.displayNotice(Craft.t('Block type groups saved.'));
+                        Craft.cp.displayNotice(Craft.t('app', 'Block type groups saved.'));
                         this._populateModal();
                         this.$form.trigger('blockTypesSaved');
                     }
@@ -234,7 +234,7 @@
                     {
                         if (textStatus == 'success')
                         {
-                            Craft.cp.displayError(Craft.t('There was an unknown error saving some block type groups.'));
+                            Craft.cp.displayError(Craft.t('app', 'There was an unknown error saving some block type groups.'));
                         }
                     }
                 }, this));
