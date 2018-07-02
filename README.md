@@ -43,3 +43,7 @@ Some things to do, and ideas for potential features:
 * Release it
 
 Brought to you by [Angell & Co](https://angell.io)
+
+This project used to live under a [different name](https://github.com/angell-co/Pimp-My-Matrix) in Craft 2, but I renamed it for obvious reasons.
+
+Big thanks to the lovely people at [Supercool](https://github.com/supercool) for letting me take this project over.
