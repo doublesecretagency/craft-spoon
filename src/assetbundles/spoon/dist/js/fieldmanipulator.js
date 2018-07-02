@@ -275,7 +275,7 @@
                             this.initBlockFieldLayout($matrixBlock, $matrixField);
                         }
                         // If that failed, do another check against the global context
-                        else
+                        else if (this.settings.blockTypes.hasOwnProperty('global'))
                         {
                             var matrixFieldHandle = this._getMatrixFieldName($matrixField);
                             spoonedBlockTypes = $.grep(this.settings.blockTypes['global'], function(e){ return e.fieldHandle === matrixFieldHandle; });
@@ -298,6 +298,10 @@
                             {
                                 $matrixBlock.addClass('matrixblock-not-spooned');
                             }
+                        }
+                        else
+                        {
+                            $matrixBlock.addClass('matrixblock-not-spooned');
                         }
 
                     }
