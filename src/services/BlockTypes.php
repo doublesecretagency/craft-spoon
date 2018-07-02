@@ -207,10 +207,14 @@ class BlockTypes extends Component
             try {
 
                 // Save it!
+                $isNew = $blockTypeRecord->getIsNewRecord();
                 $blockTypeRecord->save(false);
+                if ($isNew) {
+                    $blockType->id = $blockTypeRecord->id;
+                }
 
                 // Might as well update our cache of the block type group while we have it.
-                $this->_blockTypesByContext[$blockType->context] = $blockType;
+                $this->_blockTypesByContext[$blockType->context][$blockType->id] = $blockType;
 
                 $transaction->commit();
 
