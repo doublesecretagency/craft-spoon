@@ -84,7 +84,7 @@ class Spoon extends Plugin
         parent::init();
         self::$plugin = $this;
 
-        if (!Craft::$app->plugins->doesPluginRequireDatabaseUpdate($this))
+        if ($this->isInstalled && !Craft::$app->plugins->doesPluginRequireDatabaseUpdate($this))
         {
             $this->loader->run();
         }
