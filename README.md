@@ -1,8 +1,8 @@
-# Spoon plugin for Craft CMS 3.x
+# Spoon
 
-Enhance Matrix
+Enhance your Matrix with groups, tabs and more!
 
-![Screenshot](resources/img/plugin-logo.png)
+![Icon](resources/img/icon.png)
 
 ## Requirements
 
