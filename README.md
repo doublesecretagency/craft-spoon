@@ -4,6 +4,8 @@ Enhance your Matrix with groups, tabs and more!
 
 ![Icon](resources/img/icon.png)
 
+*Beware this is beta-ware!* Currently your groups and tabs are limited to the global context, but in the future I will bring in support for Entry Types, Category Groups and more like in the good old days.
+
 ## Requirements
 
 This plugin requires Craft CMS 3.0.0-beta.23 or later.
