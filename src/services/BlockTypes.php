@@ -400,28 +400,15 @@ class BlockTypes extends Component
         $matrixField = Craft::$app->fields->getFieldById($blockType->fieldId);
         $blockType->fieldHandle = $matrixField->handle;
 
-
         // Save the MatrixBlockTypeModel on to our model
         $blockType->matrixBlockType = $blockType->getBlockType();
 
-        // TODO do we need these bits?
-//
-//        // Save the field layout content on to our model
-//        $layout = $blockType->getFieldLayout();
-//        $fields = array();
-//        foreach ($layout->getFields() as $field)
-//        {
-//            $fields[] = [
-//                'tabId' => $field->tabId,
-//                'sortOrder' => $field->sortOrder,
-//                'field' => $field->getField()
-//            ];
-//        }
-//
-//        $blockType->fieldLayout = array(
-//            'tabs'   => $layout->getTabs(),
-//            'fields' => $fields
-//        );
+        // Save the field layout content on to our model
+        $layout = $blockType->getFieldLayout();
+        $blockType->fieldLayoutModel = [
+            'tabs'   => $layout->getTabs(),
+            'fields' => $layout->getFields()
+        ];
 
         return $blockType;
     }

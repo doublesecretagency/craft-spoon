@@ -84,6 +84,11 @@ class Spoon extends Plugin
         parent::init();
         self::$plugin = $this;
 
+        if (!Craft::$app->plugins->doesPluginRequireDatabaseUpdate($this))
+        {
+            $this->loader->run();
+        }
+
 //        // Register our site routes
 //        Event::on(
 //            UrlManager::class,
@@ -114,6 +119,7 @@ class Spoon extends Plugin
 //                }
 //            }
 //        );
+
 
 /**
  * Logging in Craft involves using one of the following methods:

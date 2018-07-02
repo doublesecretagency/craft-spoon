@@ -77,7 +77,6 @@ class ConfiguratorController extends Controller
         ]);
     }
 
-
     /**
      * Returns the html for the individual block type fld.
      *

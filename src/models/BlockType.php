@@ -51,6 +51,11 @@ class BlockType extends Model
     public $fieldLayoutId;
 
     /**
+     * @var mixed|null Field layout model
+     */
+    public $fieldLayoutModel;
+
+    /**
      * @var string|null Field handle
      */
     public $fieldHandle;

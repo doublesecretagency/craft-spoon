@@ -20,19 +20,6 @@ use craft\web\Controller;
 /**
  * BlockTypes Controller
  *
- * Generally speaking, controllers are the middlemen between the front end of
- * the CP/website and your plugin’s services. They contain action methods which
- * handle individual tasks.
- *
- * A common pattern used throughout Craft involves a controller action gathering
- * post data, saving it on a model, passing the model off to a service, and then
- * responding to the request appropriately depending on the service method’s response.
- *
- * Action methods begin with the prefix “action”, followed by a description of what
- * the method does (for example, actionSaveIngredient()).
- *
- * https://craftcms.com/docs/plugins/controllers
- *
  * @author    Angell & Co
  * @package   Spoon
  * @since     3.0.0
@@ -53,6 +40,13 @@ class BlockTypesController extends Controller
     // Public Methods
     // =========================================================================
 
+    /**
+     * Saves a Spoon block type
+     *
+     * @return \yii\web\Response
+     * @throws \yii\db\Exception
+     * @throws \yii\web\BadRequestHttpException
+     */
     public function actionSave()
     {
 
@@ -84,14 +78,14 @@ class BlockTypesController extends Controller
             {
                 foreach ($blockTypeIds as $blockTypeId)
                 {
-                    $pimpedBlockType = new BlockType();
-                    $pimpedBlockType->fieldId           = $fieldId;
-                    $pimpedBlockType->matrixBlockTypeId = $blockTypeId;
-                    $pimpedBlockType->fieldLayoutId     = isset($fieldLayoutIds[$blockTypeId]) ? $fieldLayoutIds[$blockTypeId] : null;
-                    $pimpedBlockType->groupName         = urldecode($groupName);
-                    $pimpedBlockType->context           = $context;
+                    $spoonedBlockType = new BlockType();
+                    $spoonedBlockType->fieldId           = $fieldId;
+                    $spoonedBlockType->matrixBlockTypeId = $blockTypeId;
+                    $spoonedBlockType->fieldLayoutId     = isset($fieldLayoutIds[$blockTypeId]) ? $fieldLayoutIds[$blockTypeId] : null;
+                    $spoonedBlockType->groupName         = urldecode($groupName);
+                    $spoonedBlockType->context           = $context;
 
-                    if (!Spoon::$plugin->blockTypes->save($pimpedBlockType))
+                    if (!Spoon::$plugin->blockTypes->save($spoonedBlockType))
                     {
                         $errors++;
                     }
@@ -112,9 +106,12 @@ class BlockTypesController extends Controller
 
     }
 
-
     /**
-     * Delete a set of spooned block types for a given field and context
+     * Delete a set of Spoon block types for a given field and context
+     *
+     * @return \yii\web\Response
+     * @throws \yii\db\Exception
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionDelete()
     {
@@ -138,7 +135,10 @@ class BlockTypesController extends Controller
     }
 
     /**
-     * Saves a field layout for a given spooned block type
+     * Saves a field layout for a given Spoon block type
+     *
+     * @return bool|\yii\web\Response
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveFieldLayout()
     {

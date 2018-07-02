@@ -15,13 +15,13 @@ use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 
 /**
- * SpoonConfigurator AssetBundle
+ * SpoonFieldManipulator AssetBundle
  *
  * @author    Angell & Co
  * @package   Spoon
  * @since     3.0.0
  */
-class SpoonConfigurator extends AssetBundle
+class SpoonFieldManipulator extends AssetBundle
 {
     // Public Methods
     // =========================================================================
@@ -42,9 +42,7 @@ class SpoonConfigurator extends AssetBundle
         // define the relative path to CSS/JS files that should be registered with the page
         // when this asset bundle is registered
         $this->js = [
-            'js/BlockTypeFieldLayoutDesigner.js',
-            'js/GroupsDesigner.js',
-            'js/Configurator.js'
+            'js/FieldManipulator.js',
         ];
 
         $this->css = [
