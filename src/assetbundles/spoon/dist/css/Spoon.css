@@ -97,7 +97,7 @@ body.rtl .buttons-spooned > .btn, body.rtl .buttons-spooned > .btngroup { margin
 /* tabs */
 .matrixblock-spooned .spoon-tabs {
     position: absolute;
-    top: 5px;
+    top: 0;
     right: 76px;
     display: block;
     font-size: 0;
@@ -110,7 +110,7 @@ body.rtl .buttons-spooned > .btn, body.rtl .buttons-spooned > .btngroup { margin
 
 .matrixblock-spooned .spoon-tabs li a {
     display: block;
-    padding: 4px 10px;
+    padding: 5px 10px;
     color: #777;
     white-space: nowrap;
 }
@@ -122,12 +122,10 @@ body.rtl .buttons-spooned > .btn, body.rtl .buttons-spooned > .btngroup { margin
 
 .matrixblock-spooned .spoon-tabs li a.sel {
     color: #29323d;
-    cursor: default;
-    background-color: #f9fafa;
-    border-radius: 3px 3px 0 0;
-    -webkit-box-shadow: 0 -3px 8px -2px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: 0 -3px 8px -2px rgba(0, 0, 0, 0.1);
-    box-shadow: 0 -3px 8px -2px rgba(0, 0, 0, 0.1);
+    background-color: #fbfcfd;
+    border-left: 1px solid #e3e5e8;
+    border-right: 1px solid #e3e5e8;
+    border-bottom: 1px solid #fbfcfd;
 }
 
 /**
