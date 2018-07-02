@@ -17,10 +17,10 @@
         </div>
         <div class="fld-tabcontent">
             {% for field in tabFields %}
-                <div class="fld-field" data-id="{{ field.fieldId }}">
+                <div class="fld-field" data-id="{{ field.id }}">
                     <a class="settings icon" title="{{ 'Edit'|t('app') }}"></a>
-                    <span>{{ field.getField().name }}</span>
-                    <input class="id-input" type="hidden" name="blockTypeFieldLayouts[{{ tabName|e('url') }}][]" value="{{ field.fieldId }}">
+                    <span>{{ field.name }}</span>
+                    <input class="id-input" type="hidden" name="blockTypeFieldLayouts[{{ tabName|e('url') }}][]" value="{{ field.id }}">
                 </div>
             {% endfor %}
         </div>

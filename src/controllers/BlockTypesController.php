@@ -11,6 +11,7 @@
 namespace angellco\spoon\controllers;
 
 use angellco\spoon\models\BlockType;
+use angellco\spoon\records\BlockType as BlockTypeRecord;
 use angellco\spoon\Spoon;
 
 use Craft;
@@ -136,55 +137,46 @@ class BlockTypesController extends Controller
 
     }
 
+    /**
+     * Saves a field layout for a given spooned block type
+     */
+    public function actionSaveFieldLayout()
+    {
 
-//    /**
-//     * Saves a field layout for a given pimped block type
-//     */
-//    public function actionSaveFieldLayout()
-//    {
-//
-//        $this->requirePostRequest();
-//        $this->requireAjaxRequest();
-//
-//        $pimpedBlockTypeId = craft()->request->getPost('pimpedBlockTypeId');
-//        $blockTypeFieldLayouts = craft()->request->getPost('blockTypeFieldLayouts');
-//
-//        if ($pimpedBlockTypeId)
-//        {
-//
-//            $pimpedBlockTypeRecord = PimpMyMatrix_BlockTypeRecord::model()->findById($pimpedBlockTypeId);
-//
-//            if (!$pimpedBlockTypeRecord)
-//            {
-//                throw new Exception(Craft::t('No PimpMyMatrix block type exists with the ID “{id}”', array('id' => $pimpedBlockTypeId)));
-//            }
-//
-//            $pimpedBlockType = PimpMyMatrix_BlockTypeModel::populateModel($pimpedBlockTypeRecord);
-//
-//        }
-//        else
-//        {
-//            return false;
-//        }
-//
-//        // Set the field layout on the model
-//        $postedFieldLayout = craft()->request->getPost('blockTypeFieldLayouts', array());
-//        $assembledLayout = craft()->fields->assembleLayout($postedFieldLayout, array());
-//        $pimpedBlockType->setFieldLayout($assembledLayout);
-//
-//        // Save it
-//        if (craft()->pimpMyMatrix_blockTypes->saveFieldLayout($pimpedBlockType))
-//        {
-//            $this->returnJson(array(
-//                'success' => true
-//            ));
-//        }
-//        else
-//        {
-//            $this->returnJson(array(
-//                'success' => false
-//            ));
-//        }
-//
-//    }
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
+
+        $spoonedBlockTypeId = Craft::$app->getRequest()->getParam('spoonedBlockTypeId');
+        $blockTypeFieldLayouts = Craft::$app->getRequest()->getParam('blockTypeFieldLayouts');
+
+        if ($spoonedBlockTypeId)
+        {
+            if (!$spoonedBlockType = Spoon::$plugin->blockTypes->getById($spoonedBlockTypeId)) {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+
+        // Set the field layout on the model
+        $postedFieldLayout = Craft::$app->getRequest()->getParam('blockTypeFieldLayouts');
+        $assembledLayout = Craft::$app->fields->assembleLayout($postedFieldLayout);
+        $spoonedBlockType->setFieldLayout($assembledLayout);
+
+        // Save it
+        if (!Spoon::$plugin->blockTypes->saveFieldLayout($spoonedBlockType))
+        {
+            return $this->asJson([
+                'success' => false
+            ]);
+        }
+
+        return $this->asJson([
+            'success' => true
+        ]);
+
+    }
+
 }

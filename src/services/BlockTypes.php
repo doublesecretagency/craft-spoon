@@ -16,6 +16,10 @@ use angellco\spoon\records\BlockType as BlockTypeRecord;
 
 use Craft;
 use craft\base\Component;
+use craft\records\FieldLayout as FieldLayoutRecord;
+use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
+use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
+use nystudio107\seomatic\models\jsonld\Integer;
 
 /**
  * BlockTypes Service
@@ -42,7 +46,25 @@ class BlockTypes extends Component
     // =========================================================================
 
     /**
-     * Returns a single BlockType Model
+     * Returns a Spoon block type model by its ID
+     *
+     * @param $id
+     *
+     * @return null
+     */
+    public function getById($id)
+    {
+        $blockTypeRecord = BlockTypeRecord::findOne($id);
+
+        if (!$blockTypeRecord) {
+            throw new Exception(Craft::t('No Spoon block type exists with the ID “{id}”', ['id' => $id]));
+        }
+
+        return $this->_populateBlockTypeFromRecord($blockTypeRecord);
+    }
+
+    /**
+     * Returns a single BlockType Model by its context and blockTypeId
      *
      * @param bool $context
      * @param bool $matrixBlockTypeId
@@ -246,76 +268,76 @@ class BlockTypes extends Component
     }
 
 
-    // TODO MOVE FLD STUFF OUT
+    // Public Methods for FLDs on our Block Types
+    // =========================================================================
 
-//    /**
-//     * Saves a field layout and attaches it to the given pimped block type
-//     *
-//     * @param  PimpMyMatrix_BlockTypeModel $pimpedBlockType [description]
-//     * @return bool
-//     */
-//    public function saveFieldLayout(PimpMyMatrix_BlockTypeModel $pimpedBlockType)
-//    {
-//
-//        // First, get the layout and save the old field layout id for later
-//        $layout = $pimpedBlockType->getFieldLayout();
-//        $oldFieldLayoutId = $pimpedBlockType->fieldLayoutId;
-//
-//        // Second save the layout - replicated from FieldsService::saveLayout()
-//        // to allow us to retain the $layout->id for our own use
-//        if ($layout->getTabs())
-//        {
-//            $layoutRecord = new FieldLayoutRecord();
-//            $layoutRecord->type = 'PimpMyMatrix_BlockType';
-//            $layoutRecord->save(false);
-//            $layout->id = $layoutRecord->id;
-//
-//            foreach ($layout->getTabs() as $tab)
-//            {
-//                $tabRecord = new FieldLayoutTabRecord();
-//                $tabRecord->layoutId  = $layout->id;
-//                $tabRecord->name      = $tab->name;
-//                $tabRecord->sortOrder = $tab->sortOrder;
-//                $tabRecord->save(false);
-//                $tab->id = $tabRecord->id;
-//
-//                foreach ($tab->getFields() as $field)
-//                {
-//                    $fieldRecord = new FieldLayoutFieldRecord();
-//                    $fieldRecord->layoutId  = $layout->id;
-//                    $fieldRecord->tabId     = $tab->id;
-//                    $fieldRecord->fieldId   = $field->fieldId;
-//                    $fieldRecord->required  = $field->required;
-//                    $fieldRecord->sortOrder = $field->sortOrder;
-//                    $fieldRecord->save(false);
-//                    $field->id = $fieldRecord->id;
-//                }
-//            }
-//
-//            // Now we have saved the layout, update the id on the given
-//            // pimped blocktype model
-//            $pimpedBlockType->fieldLayoutId = $layout->id;
-//
-//        }
-//        else
-//        {
-//            $pimpedBlockType->fieldLayoutId = null;
-//        }
-//
-//        // Save our pimped block type again
-//        if ($this->saveBlockType($pimpedBlockType))
-//        {
-//            // Delete the old field layout
-//            craft()->fields->deleteLayoutById($oldFieldLayoutId);
-//            return true;
-//        }
-//        else
-//        {
-//            return false;
-//        }
-//    }
-//
-//
+    /**
+     * Saves a field layout and attaches it to the given spooned block type
+     *
+     * @param BlockType $spoonedBlockType
+     *
+     * @return bool
+     */
+    public function saveFieldLayout(BlockType $spoonedBlockType)
+    {
+
+        // First, get the layout and save the old field layout id for later
+        $layout = $spoonedBlockType->getFieldLayout();
+        $oldFieldLayoutId = $spoonedBlockType->fieldLayoutId;
+
+        // Second save the layout - replicated from FieldsService::saveLayout()
+        // to allow us to retain the $layout->id for our own use
+        if ($layout->getTabs())
+        {
+            $layoutRecord = new FieldLayoutRecord();
+            $layoutRecord->type = 'Spoon_BlockType';
+            $layoutRecord->save(false);
+            $layout->id = $layoutRecord->id;
+
+            foreach ($layout->getTabs() as $tab)
+            {
+                $tabRecord = new FieldLayoutTabRecord();
+                $tabRecord->layoutId  = $layout->id;
+                $tabRecord->name      = $tab->name;
+                $tabRecord->sortOrder = $tab->sortOrder;
+                $tabRecord->save(false);
+                $tab->id = $tabRecord->id;
+
+                foreach ($tab->getFields() as $field)
+                {
+                    /** @var Field $field */
+                    $fieldRecord = new FieldLayoutFieldRecord();
+                    $fieldRecord->layoutId  = $layout->id;
+                    $fieldRecord->tabId     = $tab->id;
+                    $fieldRecord->fieldId   = $field->id;
+                    $fieldRecord->required  = (bool)$field->required;
+                    $fieldRecord->sortOrder = $field->sortOrder;
+                    $fieldRecord->save(false);
+                }
+            }
+
+            // Now we have saved the layout, update the id on the given
+            // spooned blocktype model
+            $spoonedBlockType->fieldLayoutId = $layout->id;
+
+        }
+        else
+        {
+            $spoonedBlockType->fieldLayoutId = null;
+        }
+
+        // Save our spooned block type again
+        if ($this->save($spoonedBlockType))
+        {
+            // Delete the old field layout
+            Craft::$app->fields->deleteLayoutById($oldFieldLayoutId);
+            return true;
+        }
+
+        return false;
+    }
+
+
     /**
      * Returns an array of fieldLayoutIds indexed by matrixBlockTypeIds
      * for the given context and fieldId combination
@@ -379,10 +401,10 @@ class BlockTypes extends Component
         $blockType->fieldHandle = $matrixField->handle;
 
 
-        // TODO do we need these bits?
-
         // Save the MatrixBlockTypeModel on to our model
         $blockType->matrixBlockType = $blockType->getBlockType();
+
+        // TODO do we need these bits?
 //
 //        // Save the field layout content on to our model
 //        $layout = $blockType->getFieldLayout();

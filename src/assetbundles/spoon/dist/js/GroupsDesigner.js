@@ -191,7 +191,7 @@
                 var data = this.$form.serialize();
 
                 // Post it
-                Craft.postActionRequest('spoon/blockTypes/saveFieldLayout', data, $.proxy(function(response, textStatus)
+                Craft.postActionRequest('spoon/block-types/save-field-layout', data, $.proxy(function(response, textStatus)
                 {
                     this.$spinner.addClass('hidden');
                     if (textStatus == 'success' && response.success)
