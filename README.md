@@ -2,7 +2,7 @@
 
 Enhance your Matrix with groups, tabs and more!
 
-![Icon](resources/img/icon.png)
+![Icon](resources/img/banner.png)
 
 **Beware this is beta-ware!**
 
