@@ -1,6 +1,6 @@
 {
     "name": "angellco/spoon",
-    "description": "A plugin for Craft to help enhance your Matrix fields with groups, tabs and more!",
+    "description": "A plugin for Craft to enhance your Matrix fields with groups, tabs and more!",
     "type": "craft-plugin",
     "keywords": [
         "craft",
