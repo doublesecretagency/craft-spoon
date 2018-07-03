@@ -40,9 +40,9 @@ TODO
 
 ## Roadmap
 
-* Support the other contexts PMM did
-* Also support plugin hooks
-* Deal with Sites / Locales etc
+* ~~Support the other contexts PMM did~~
+* ~~Also support plugin hooks~~ - removed support
+* ~~Deal with Sites / Locales etc~~
 * Write the C2 > C3 migration
 * Documentation
 * Release 3.0.0
