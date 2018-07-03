@@ -7,7 +7,8 @@
         "cms",
         "craftcms",
         "craft-plugin",
-        "spoon"
+        "spoon",
+        "matrix"
     ],
     "support": {
         "docs": "https://github.com/angell-co/spoon/blob/master/README.md",
@@ -39,6 +40,9 @@
             "blockTypes": "angellco\\spoon\\services\\BlockTypes",
             "loader": "angellco\\spoon\\services\\Loader"
         },
-        "class": "angellco\\spoon\\Spoon"
+        "class": "angellco\\spoon\\Spoon",
+        "branch-alias": {
+            "dev-master": "3.0.x-dev"
+        }
     }
 }
