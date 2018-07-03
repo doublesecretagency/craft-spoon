@@ -77,10 +77,9 @@ class Loader extends Component
             }
 
             // Users
-            if ( count($segments) == 3
+            if ( count($segments) == 2
                 && $segments[0] == 'settings'
                 && $segments[1] == 'users'
-                && $segments[2] == 'fields'
             )
             {
                 $this->configurator('#fieldlayoutform', 'users');
