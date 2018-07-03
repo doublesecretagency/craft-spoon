@@ -102,7 +102,7 @@ class Loader extends Component
             $context = 'global';
 
             // Entry types
-            if ( count($segments) == 3 && $segments[0] == 'entries' )
+            if ( count($segments) >= 3 && $segments[0] == 'entries' )
             {
 
                 if ($segments[2] == 'new')
@@ -126,7 +126,7 @@ class Loader extends Component
 
             }
             // Category groups
-            else if ( count($segments) == 3 && $segments[0] == 'categories' )
+            else if ( count($segments) >= 3 && $segments[0] == 'categories' )
             {
                 $group = Craft::$app->categories->getGroupByHandle($segments[1]);
                 if ($group)
@@ -135,9 +135,9 @@ class Loader extends Component
                 }
             }
             // Global sets
-            else if ( count($segments) == 2 && $segments[0] == 'globals' )
+            else if ( count($segments) >= 2 && $segments[0] == 'globals' )
             {
-                $set = Craft::$app->globals->getSetByHandle($segments[1]);
+                $set = Craft::$app->globals->getSetByHandle(end($segments));
                 if ($set)
                 {
                     $context = 'globalset:'.$set->id;
