@@ -4,6 +4,14 @@ Enhance your Matrix with groups, tabs and more!
 
 ![Icon](resources/img/banner.png)
 
+Use Spoon to group Matrix blocks, hide blocks and / or fields, and organise your block layouts with tabs.
+
+Spoon never touches your content, it is simply a layer on top of the core Matrix field type, so if you ever don’t want it you can just take the blue pill and uninstall it.
+
+Or is the red pill. Which is the real illusion?!
+
+---
+
 **Beware this is beta-ware!**
 
 Currently your groups and tabs are limited to the global context, but in the future I will bring in support for Entry Types, Category Groups and more like in the good old days.
