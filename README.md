@@ -4,11 +4,17 @@ Enhance your Matrix with groups, tabs and more!
 
 ![Icon](resources/img/icon.png)
 
-*Beware this is beta-ware!* Currently your groups and tabs are limited to the global context, but in the future I will bring in support for Entry Types, Category Groups and more like in the good old days.
+**Beware this is beta-ware!**
+
+Currently your groups and tabs are limited to the global context, but in the future I will bring in support for Entry Types, Category Groups and more like in the good old days.
+
+See the [roadmap](#roadmap) for progress.
+
+**Pricing:** this plugin will be paid for when it is released onto the plugin store, how much is as yet undecided. 
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.0-beta.23 or later.
+This plugin requires Craft CMS 3.0.x or later.
 
 ## Installation
 
@@ -26,21 +32,26 @@ To install the plugin, follow these instructions.
 
 ## Spoon Overview
 
--Insert text here-
-
-## Configuring Spoon
-
--Insert text here-
+TODO
 
 ## Using Spoon
 
--Insert text here-
+TODO
 
-## Spoon Roadmap
+## Roadmap
 
-Some things to do, and ideas for potential features:
+* Support the other contexts PMM did
+* Also support plugin hooks
+* Deal with Sites / Locales etc
+* Write the C2 > C3 migration
+* Documentation
+* Release 3.0.0
+* Convert JS to use the new Garnish global events, if possible
+* Support columns on flds
+* Vertical tab layout
+* Permissions! Per block type grouping
 
-* Release it
+---
 
 Brought to you by [Angell & Co](https://angell.io)
 
