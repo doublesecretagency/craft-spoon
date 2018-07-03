@@ -112,7 +112,9 @@ class Loader extends Component
                     }
                 }
 
-                $context = 'entrytype:'.$entryType->id;
+                if (isset($entryType) && $entryType) {
+                    $context = 'entrytype:'.$entryType->id;
+                }
 
             }
             // Category groups
