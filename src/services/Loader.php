@@ -85,16 +85,6 @@ class Loader extends Component
                 $this->configurator('#fieldlayoutform', 'users');
             }
 
-            // Call a hook to allow plugins to add their own configurator
-//            $hookedConfigurators = craft()->plugins->call('loadPimpMyMatrixConfigurator');
-//            foreach ($hookedConfigurators as $configurator)
-//            {
-//                if (isset($configurator['container']) && isset($configurator['context']))
-//                {
-//                    $this->loadConfigurator($configurator['container'], $configurator['context']);
-//                }
-//            }
-
             /**
              * Work out the context for the Matrix field manipulation
              */
@@ -148,16 +138,6 @@ class Loader extends Component
             {
                 $context = 'users';
             }
-
-            // Call a hook to allow plugins to add their own field manipulators
-//            $hookedFieldManipulators = craft()->plugins->call('loadPimpMyMatrixFieldManipulator');
-//            foreach ($hookedFieldManipulators as $hookedContext)
-//            {
-//                if (is_string($hookedContext))
-//                {
-//                    $context = $hookedContext;
-//                }
-//            }
 
             // Run the field manipulation code
             $this->fieldManipulator($context);
