@@ -468,19 +468,19 @@
                         // Make a new group ul if needed
                         if ( $menu.find('[data-spooned-group="'+spoonedBlockTypes[i].groupName+'"]').length === 0 )
                         {
-                            var $newUl = $('<ul class="padded hidden" id="spoon-group-'+spoonedBlockTypes[i].groupName.replace(/\s+/g, '')+'" data-spooned-group="'+spoonedBlockTypes[i].groupName+'" />');
+                            var $newUl = $('<ul class="padded hidden" data-spooned-group="'+spoonedBlockTypes[i].groupName+'" />');
                             if (i!==0)
                             {
                                 $('<hr/>').insertBefore($origUl);
                             }
-                            var $groupHeading = $('<a class="fieldtoggle" data-target="spoon-group-'+spoonedBlockTypes[i].groupName.replace(/\s+/g, '')+'">'+spoonedBlockTypes[i].groupName+'</a>');
+                            var $groupHeading = $('<a class="fieldtoggle">'+spoonedBlockTypes[i].groupName+'</a>');
                             $groupHeading.insertBefore($origUl);
 
                             $newUl.insertBefore($origUl);
 
                             this.addListener($groupHeading, 'click', function(event) {
                                 var $trigger = $(event.currentTarget),
-                                    $target = $('#'+$trigger.data('target'));
+                                    $target = $trigger.next('ul');
 
                                 if ($target.hasClass('hidden')) {
                                     $target.removeClass('hidden');
