@@ -15,6 +15,7 @@ use angellco\spoon\Spoon;
 use Craft;
 use craft\config\DbConfig;
 use craft\db\Migration;
+use craft\db\Query;
 
 /**
  * Spoon Install Migration
@@ -55,6 +56,11 @@ class Install extends Migration
      */
     public function safeUp()
     {
+
+        if ($this->_upgradeFromCraft2()) {
+            return;
+        }
+
         $this->driver = Craft::$app->getConfig()->getDb()->driver;
         if ($this->createTables()) {
             $this->createIndexes();
@@ -105,15 +111,14 @@ class Install extends Migration
                 '{{%spoon_blocktypes}}',
                 [
                     'id' => $this->primaryKey(),
-                    'dateCreated' => $this->dateTime()->notNull(),
-                    'dateUpdated' => $this->dateTime()->notNull(),
-                    'uid' => $this->uid(),
-
                     'fieldId' => $this->integer()->notNull(),
                     'matrixBlockTypeId' => $this->integer()->notNull(),
                     'fieldLayoutId' => $this->integer(),
                     'groupName' => $this->string(255)->notNull()->defaultValue(''),
                     'context' => $this->string(255)->notNull()->defaultValue(''),
+                    'dateCreated' => $this->dateTime()->notNull(),
+                    'dateUpdated' => $this->dateTime()->notNull(),
+                    'uid' => $this->uid(),
                 ]
             );
         }
@@ -225,4 +230,36 @@ class Install extends Migration
         // spoon_blocktypes table
         $this->dropTableIfExists('{{%spoon_blocktypes}}');
     }
+
+
+    // Private Methods
+    // =========================================================================
+
+    /**
+     * Upgrade from Craft 2
+     *
+     * @return bool
+     */
+    private function _upgradeFromCraft2()
+    {
+        // Fetch the old plugin row, if it was installed
+        $row = (new Query())
+            ->select(['id', 'settings'])
+            ->from(['{{%plugins}}'])
+            ->where(['in', 'handle', ['pimp-my-matrix', 'pimpmymatrix']])
+            ->one();
+
+        if (!$row) {
+            return false;
+        }
+
+        // Delete the old row
+        $this->delete('{{%plugins}}', ['id' => $row['id']]);
+
+        // Rename the old table, the schema is identical
+        $this->renameTable('{{%pimpmymatrix_blocktypes}}', '{{%spoon_blocktypes}}');
+
+        return true;
+    }
+
 }
