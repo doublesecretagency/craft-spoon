@@ -188,10 +188,12 @@ class Loader extends Component
 
             $view->registerAssetBundle(SpoonFieldManipulator::class);
 
+//            $config = Craft::$app->config->getConfigFromFile('spoon');
 
             $settings = [
                 'blockTypes' => $spoonedBlockTypes,
-                'context' => $context
+                'context' => $context,
+                'nestedSettingsHandles' => Spoon::$plugin->getSettings()->nestedSettings
             ];
 
             $view->registerJs('new Spoon.FieldManipulator('.Json::encode($settings, JSON_UNESCAPED_UNICODE).');');

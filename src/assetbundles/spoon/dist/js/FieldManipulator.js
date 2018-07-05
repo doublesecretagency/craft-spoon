@@ -257,7 +257,7 @@
 
                         // First, sort out the settings menu
                         var $settingsBtn = $matrixBlock.find('.actions .settings.menubtn');
-                        this.initSettingsMenu($settingsBtn, spoonedBlockTypes);
+                        this.initSettingsMenu($settingsBtn, spoonedBlockTypes, $matrixField);
 
                         // Second, get the current block’s type out of the dom so we can do the field layout
                         var matrixBlockTypeHandle = this._getMatrixBlockTypeHandle($matrixBlock);
@@ -430,7 +430,7 @@
 
             },
 
-            initSettingsMenu: function($settingsBtn, spoonedBlockTypes)
+            initSettingsMenu: function($settingsBtn, spoonedBlockTypes, $matrixField)
             {
                 setTimeout($.proxy(function()
                 {
@@ -440,9 +440,12 @@
                     // If there wasn’t one then fail and try again
                     if (!menuBtn)
                     {
-                        this.initSettingsMenu($settingsBtn, spoonedBlockTypes);
+                        this.initSettingsMenu($settingsBtn, spoonedBlockTypes, $matrixField);
                         return;
                     }
+
+                    // Get the field handle
+                    var matrixFieldHandle = this._getMatrixFieldName($matrixField);
 
                     // Get the actual menu out of it once we get this far
                     var $menu = menuBtn.menu.$container;
@@ -465,13 +468,41 @@
                         // Make a new group ul if needed
                         if ( $menu.find('[data-spooned-group="'+spoonedBlockTypes[i].groupName+'"]').length === 0 )
                         {
-                            var $newUl = $('<ul class="padded" data-spooned-group="'+spoonedBlockTypes[i].groupName+'" />');
-                            if (i!==0)
-                            {
-                                $('<hr/>').insertBefore($origUl);
+                            var nestedSettingsHandles = $.grep(this.settings.nestedSettingsHandles, function(a){ return a === matrixFieldHandle; });
+                            if (nestedSettingsHandles.length) {
+                                var $newUl = $('<ul class="padded hidden" data-spooned-group="'+spoonedBlockTypes[i].groupName+'" />');
+                                if (i!==0)
+                                {
+                                    $('<hr/>').insertBefore($origUl);
+                                }
+
+                                var $groupHeading = $('<a class="fieldtoggle">' + spoonedBlockTypes[i].groupName + '</a>');
+                                $groupHeading.insertBefore($origUl);
+
+                                $newUl.insertBefore($origUl);
+
+                                this.addListener($groupHeading, 'click', function(event) {
+                                    var $trigger = $(event.currentTarget),
+                                        $target = $trigger.next('ul');
+
+                                    if ($target.hasClass('hidden')) {
+                                        $target.removeClass('hidden');
+                                        $trigger.addClass('expanded');
+                                    } else {
+                                        $target.addClass('hidden');
+                                        $trigger.removeClass('expanded');
+                                    }
+                                });
+                            } else {
+                                var $newUl = $('<ul class="padded" data-spooned-group="'+spoonedBlockTypes[i].groupName+'" />');
+                                if (i!==0)
+                                {
+                                    $('<hr/>').insertBefore($origUl);
+                                }
+                                $('<h6>' + spoonedBlockTypes[i].groupName + '</h6>').insertBefore($origUl);
+                                $newUl.insertBefore($origUl);
                             }
-                            $('<h6>'+spoonedBlockTypes[i].groupName+'</h6>').insertBefore($origUl);
-                            $newUl.insertBefore($origUl);
+
                         }
 
                         // Add the li
@@ -523,7 +554,8 @@
         {
             defaults: {
                 blockTypes: null,
-                context: false
+                context: false,
+                nestedSettingsHandles: []
             }
         });
 

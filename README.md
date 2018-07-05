@@ -20,9 +20,11 @@ See the [roadmap](#roadmap) for progress.
 
 **Pricing:** this plugin will be paid for when it is released onto the plugin store, how much is as yet undecided. 
 
+
 ## Requirements
 
 This plugin requires Craft CMS 3.0.x or later.
+
 
 ## Installation
 
@@ -37,6 +39,7 @@ To install the plugin, follow these instructions.
         composer require angellco/spoon
 
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Spoon.
+
 
 ## Overview
 
@@ -91,6 +94,15 @@ Once you have some groups you can go one step further and customize the field la
 ![block type field layout](resources/img/docs/block-type-field-layout-editor.jpg)
 
 Thats it! You should now be able to browse to somewhere that uses that field and see your new groups and field layouts in action.
+
+
+## Config settings
+
+Spoon supports the standard config.php multi-environment friendly config file for the plugin settings. Just copy the config.php to your Craft config/ directory as spoon.php and you can configure the settings in a multi-environment friendly way.
+
+* `nestedSettings` - set this to an array of Matrix field handles that should use the nested settings menu display mode:
+
+![nested settings menu](resources/img/docs/nested-setting-menu-example.png)
 
 
 ## Roadmap
