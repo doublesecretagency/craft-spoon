@@ -112,7 +112,7 @@ Spoon supports the standard config.php multi-environment friendly config file fo
 * ~~Deal with Sites / Locales etc~~
 * ~~Write the C2 > C3 migration~~
 * ~~Documentation~~
-* Release 3.0.0
+* ~~Release 3.0.0~~
 * Convert JS to use the new Garnish global events, if possible
 * Support columns on flds
 * Vertical tab layout
