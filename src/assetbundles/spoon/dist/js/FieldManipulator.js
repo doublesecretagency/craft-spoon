@@ -37,15 +37,12 @@
                 // Work out if we’re in the 'entrytype' context so we can keep things up to date
                 if (this.settings.context.split(':')[0] === 'entrytype')
                 {
-                    // Thanks mmikkel: http://craftcms.stackexchange.com/a/9466/144
-                    this.addListener(Garnish.$doc, 'ajaxComplete', function(ev, status, requestData)
+                    // Listen to entry type switch
+                    Garnish.on(Craft.EntryTypeSwitcher, 'typeChange', $.proxy(function(ev)
                     {
-                        if ( requestData.url.indexOf( 'switchEntryType' ) > -1 )
-                        {
-                            this.settings.context = 'entrytype:' + $('#entryType').val();
-                            this.processMatrixFields();
-                        }
-                    });
+                        this.settings.context = 'entrytype:' + $('#entryType').val();
+                        this.processMatrixFields();
+                    }, this));
                 }
 
                 // Wait until load to loop the Matrix fields
