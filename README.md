@@ -99,16 +99,16 @@ Spoon supports the standard config.php multi-environment friendly config file fo
 
 ## Roadmap
 
-* ~~Support the other contexts PMM did~~
-* ~~Also support plugin hooks~~ - removed support
-* ~~Deal with Sites / Locales etc~~
-* ~~Write the C2 > C3 migration~~
-* ~~Documentation~~
-* ~~Release 3.0.0~~
-* Convert JS to use the new Garnish global events, if possible
-* Support columns on flds
-* Vertical tab layout
-* Permissions! Per block type grouping
+* [x] Support the other contexts PMM did
+* [x] Also support plugin hooks - removed support
+* [x] Deal with Sites / Locales etc
+* [x] Write the C2 > C3 migration
+* [x] Documentation
+* [x] Release 3.0.0
+* [ ] Convert JS to use the new Garnish global events, if possible
+* [ ] Support columns on flds
+* [ ] Vertical tab layout
+* [ ] Permissions! Per block type grouping
 
 ---
 
