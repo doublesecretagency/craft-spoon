@@ -10,15 +10,7 @@ Spoon never touches your content, it is simply a layer on top of the core Matrix
 
 Or is the red pill. Which is the real illusion?!
 
----
-
-**Beware this is beta-ware!**
-
-Currently your groups and tabs are limited to the global context, but in the future I will bring in support for Entry Types, Category Groups and more like in the good old days.
-
-See the [roadmap](#roadmap) for progress.
-
-**Pricing:** this plugin will be paid for when it is released onto the plugin store, how much is as yet undecided. 
+**Note:** The license fee for this plugin is $59.00 via the Craft Plugin Store.
 
 
 ## Requirements
