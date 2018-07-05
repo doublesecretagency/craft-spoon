@@ -23,6 +23,7 @@
  */
 
 return [
-
-
+    // An array of Matrix field handles that you want to use the nested settings
+    // menu display mode
+    'nestedSettings' => []
 ];
