@@ -15,7 +15,7 @@ Or is the red pill. Which is the real illusion?!
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.x or later.
+This plugin requires Craft CMS 3.0.15 or later.
 
 
 ## Installation
