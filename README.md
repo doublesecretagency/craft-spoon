@@ -102,7 +102,7 @@ Spoon supports the standard config.php multi-environment friendly config file fo
 
 * `nestedSettings` - set this to an array of Matrix field handles that should use the nested settings menu display mode:
 
-![nested settings menu](resources/img/docs/nested-setting-menu.png?v=2)
+![nested settings menu](resources/img/docs/nested-setting-menu-example.png)
 
 
 ## Roadmap
