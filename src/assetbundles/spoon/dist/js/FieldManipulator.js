@@ -142,7 +142,7 @@
                         var $mainButtons = $('<div class="btngroup" />').appendTo($spoonedButtonsContainer);
 
                         // the secondary one, used when the container gets too small
-                        var $secondaryButtons = $('<div class="btn add icon menubtn hidden">'+Craft.t('Add a block')+'</div>').appendTo($spoonedButtonsContainer),
+                        var $secondaryButtons = $('<div class="btn add icon menubtn hidden">'+Craft.t('app', 'Add a block')+'</div>').appendTo($spoonedButtonsContainer),
                             $secondaryMenu = $('<div class="menu spoon-secondary-menu" />').appendTo($spoonedButtonsContainer);
 
                         // loop each block type config
