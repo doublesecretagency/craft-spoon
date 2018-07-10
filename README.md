@@ -105,6 +105,7 @@ Spoon supports the standard config.php multi-environment friendly config file fo
 * [x] Write the C2 > C3 migration
 * [x] Documentation
 * [x] Release 3.0.0
+* [ ] Make it work with SuperTable
 * [ ] Convert JS to use the new Garnish global events instead of polling, if possible
 * [ ] Support columns on flds
 * [ ] Vertical tab layout
