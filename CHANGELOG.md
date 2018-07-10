@@ -4,13 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 3.0.0 - 2018-07-05
+
+## 3.0.0 - 2018-07-10
 ### Added
 - Added the `nestedSettings` config setting to allow a new, nested settings menu format ([#2](https://github.com/angell-co/Spoon/issues/2))
 - Added the Craft 2 > 3 migration 
 
 ### Fixed
-- Fixed an issue where switching the entry type didn’t update the UI - requires as yet unreleased Craft update ([#4](https://github.com/angell-co/Spoon/issues/4))
+- Fixed an issue where switching the entry type didn’t update the UI - requires Craft v3.0.15 or greater ([#4](https://github.com/angell-co/Spoon/issues/4))
+- Fixed a missing translation group key ([#5](https://github.com/angell-co/Spoon/issues/5))
 
 
 ## 3.0.0-beta.4 - 2018-07-03
