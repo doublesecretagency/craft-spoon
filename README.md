@@ -1,6 +1,6 @@
 # Spoon
 
-Enhance your Matrix with groups, tabs and more!
+Enhance your Matrix fields with groups, tabs and more!
 
 ![Icon](resources/img/banner.png)
 
@@ -10,19 +10,13 @@ Spoon never touches your content, it is simply a layer on top of the core Matrix
 
 Or is the red pill. Which is the real illusion?!
 
----
+**Note:** The license fee for this plugin is $59 via the Craft Plugin Store.
 
-**Beware this is beta-ware!**
-
-Currently your groups and tabs are limited to the global context, but in the future I will bring in support for Entry Types, Category Groups and more like in the good old days.
-
-See the [roadmap](#roadmap) for progress.
-
-**Pricing:** this plugin will be paid for when it is released onto the plugin store, how much is as yet undecided. 
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.x or later.
+This plugin requires Craft CMS 3.0.15 or later.
+
 
 ## Installation
 
@@ -37,6 +31,7 @@ To install the plugin, follow these instructions.
         composer require angellco/spoon
 
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Spoon.
+
 
 ## Overview
 
@@ -93,18 +88,27 @@ Once you have some groups you can go one step further and customize the field la
 Thats it! You should now be able to browse to somewhere that uses that field and see your new groups and field layouts in action.
 
 
+## Config settings
+
+Spoon supports the standard config.php multi-environment friendly config file for the plugin settings. Just copy the config.php to your Craft config/ directory as spoon.php and you can configure the settings in a multi-environment friendly way.
+
+* `nestedSettings` - set this to an array of Matrix field handles that should use the nested settings menu display mode:
+
+![nested settings menu](resources/img/docs/nested-setting-menu-example.png)
+
+
 ## Roadmap
 
-* ~~Support the other contexts PMM did~~
-* ~~Also support plugin hooks~~ - removed support
-* ~~Deal with Sites / Locales etc~~
-* ~~Write the C2 > C3 migration~~
-* ~~Documentation~~
-* Release 3.0.0
-* Convert JS to use the new Garnish global events, if possible
-* Support columns on flds
-* Vertical tab layout
-* Permissions! Per block type grouping
+* [x] Support the other contexts PMM did
+* [x] Also support plugin hooks - removed support
+* [x] Deal with Sites / Locales etc
+* [x] Write the C2 > C3 migration
+* [x] Documentation
+* [x] Release 3.0.0
+* [ ] Convert JS to use the new Garnish global events instead of polling, if possible
+* [ ] Support columns on flds
+* [ ] Vertical tab layout
+* [ ] Permissions! Per block type grouping
 
 ---
 

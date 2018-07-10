@@ -10,6 +10,7 @@
 
 namespace angellco\spoon;
 
+use angellco\spoon\models\Settings;
 use angellco\spoon\services\Fields as FieldsService;
 use angellco\spoon\services\BlockTypes as BlockTypesService;
 use angellco\spoon\services\Loader as LoaderService;
@@ -165,6 +166,17 @@ class Spoon extends Plugin
         $this->loader->configurator('#spoon-global-context-table', 'global');
 
         return \Craft::$app->controller->renderTemplate('spoon/_settings/edit-global-context', $variables);
+    }
+
+    // Protected Methods
+    // =========================================================================
+
+    /**
+     * @inheritdoc
+     */
+    protected function createSettingsModel()
+    {
+        return new Settings();
     }
 
 }

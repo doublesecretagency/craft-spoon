@@ -131,10 +131,18 @@ body.rtl .buttons-spooned > .btn, body.rtl .buttons-spooned > .btngroup { margin
 /**
  * Block level settings menu
  */
+
 .spoon-settings-menu h6 {
     margin-top: 10px;
     margin-bottom: 0;
     padding-left: 10px;
+}
+
+body.ltr .spoon-settings-menu a.fieldtoggle:before {
+    left: -12px;
+}
+body.rtl .spoon-settings-menu a.fieldtoggle:before {
+    right: -12px;
 }
 
 
