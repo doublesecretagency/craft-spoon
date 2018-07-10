@@ -1,6 +1,6 @@
 # Spoon
 
-Enhance your Matrix with groups, tabs and more!
+Enhance your Matrix fields with groups, tabs and more!
 
 ![Icon](resources/img/banner.png)
 
@@ -10,12 +10,12 @@ Spoon never touches your content, it is simply a layer on top of the core Matrix
 
 Or is the red pill. Which is the real illusion?!
 
-**Note:** The license fee for this plugin is $59.00 via the Craft Plugin Store.
+**Note:** The license fee for this plugin is $59 via the Craft Plugin Store.
 
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.x or later.
+This plugin requires Craft CMS 3.0.15 or later.
 
 
 ## Installation
@@ -105,7 +105,7 @@ Spoon supports the standard config.php multi-environment friendly config file fo
 * [x] Write the C2 > C3 migration
 * [x] Documentation
 * [x] Release 3.0.0
-* [ ] Convert JS to use the new Garnish global events, if possible
+* [ ] Convert JS to use the new Garnish global events instead of polling, if possible
 * [ ] Support columns on flds
 * [ ] Vertical tab layout
 * [ ] Permissions! Per block type grouping
