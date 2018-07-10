@@ -8,7 +8,7 @@ Use Spoon to group Matrix blocks, hide blocks and / or fields, and organise your
 
 Spoon never touches your content, it is simply a layer on top of the core Matrix field type, so if you ever don’t want it you can just take the blue pill and uninstall it.
 
-Or is the red pill. Which is the real illusion?!
+Or is it the red pill. Which is the real illusion?!
 
 **Note:** The license fee for this plugin is $59 via the Craft Plugin Store.
 
