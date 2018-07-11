@@ -8,10 +8,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 
 ### Changed
-- Updated the README with the relevant [GitHub project](https://github.com/angell-co/Spoon/projects/2) and a note about support
+- Updated the README with the relevant [GitHub project](https://github.com/angell-co/Spoon/projects/2) and a note about support 
 
 ### Fixed
 - Fixed a typo in the README
+- Fixed an issue where the initial page load in Safari was showing blank blocks ([#10](https://github.com/angell-co/Spoon/issues/10))
 
 
 ## 3.0.0 - 2018-07-10
