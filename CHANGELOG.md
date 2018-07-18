@@ -5,10 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## Unreleased
+## 3.0.1 - 2018-07-18
 
 ### Changed
-- Updated the README with the relevant [GitHub project](https://github.com/angell-co/Spoon/projects/2) and a note about support 
+- Updated the README with the relevant [GitHub project](https://github.com/angell-co/Spoon/projects/2) and a note about support
+- Changed the required version of Craft to 3.0.16 which fixes an issue with Safari when configuring block type layouts ([#8](https://github.com/angell-co/Spoon/issues/8)) 
 
 ### Fixed
 - Fixed a typo in the README
