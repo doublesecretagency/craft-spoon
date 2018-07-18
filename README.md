@@ -48,6 +48,16 @@ Use just one Matrix field and hide and show blocks or fields based on the Entry 
 ![group block types button](resources/img/docs/group-block-types.jpg)
 
 
+### Roadmap
+
+If you wish to keep up with the progress of this project you can do so in the [GitHub project](https://github.com/angell-co/Spoon/projects/2).
+
+
+### Support
+
+All support requests should be submitted via [GitHub issues](https://github.com/angell-co/Spoon/issues), if you need more in-depth help then please do reach out to me on the [Craft Slack](https://craftcms.com/community#slack) (@joshangell) or email me - [josh@angell.io](mailto:josh@angell.io). 
+
+
 ## Usage
 
 The way Spoon works is by allowing you to create your block type groups and field layouts in multiple contexts.
@@ -67,7 +77,8 @@ You can override your defaults for a specific context by going to the field layo
 
 ![group block types button](resources/img/docs/group-block-types.jpg)
 
-## Setting up defaults
+
+### Setting up defaults
 
 To create default block type groups and field layouts for all your Matrix fields go to Settings → Spoon. Here you will find a list of your current Matrix fields.
 
@@ -88,7 +99,7 @@ Once you have some groups you can go one step further and customize the field la
 Thats it! You should now be able to browse to somewhere that uses that field and see your new groups and field layouts in action.
 
 
-## Config settings
+### Config settings
 
 Spoon supports the standard config.php multi-environment friendly config file for the plugin settings. Just copy the config.php to your Craft config/ directory as spoon.php and you can configure the settings in a multi-environment friendly way.
 
@@ -96,20 +107,6 @@ Spoon supports the standard config.php multi-environment friendly config file fo
 
 ![nested settings menu](resources/img/docs/nested-setting-menu-example.png)
 
-
-## Roadmap
-
-* [x] Support the other contexts PMM did
-* [x] Also support plugin hooks - removed support
-* [x] Deal with Sites / Locales etc
-* [x] Write the C2 > C3 migration
-* [x] Documentation
-* [x] Release 3.0.0
-* [ ] Make it work with SuperTable
-* [ ] Convert JS to use the new Garnish global events instead of polling, if possible
-* [ ] Support columns on flds
-* [ ] Vertical tab layout
-* [ ] Permissions! Per block type grouping
 
 ---
 

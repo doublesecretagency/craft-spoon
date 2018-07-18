@@ -45,9 +45,6 @@
                     }, this));
                 }
 
-                // Wait until load to loop the Matrix fields
-                this.addListener(Garnish.$win, 'load', 'processMatrixFields');
-
                 // Debounced resize event
                 this.addListener(Garnish.$win, 'resize', $.proxy(function()
                 {
@@ -559,5 +556,19 @@
             }
         });
 
+
+    // Load event has to be here otherwise Safari doesn’t see it
+    Garnish.$win.on('load', function() {
+
+        // Check if the Spoon.fieldmanipulator has been created or not yet
+        if (typeof Spoon.fieldmanipulator == 'undefined') {
+            setTimeout(function() {
+                Spoon.fieldmanipulator.processMatrixFields();
+            }, 250);
+        } else {
+            Spoon.fieldmanipulator.processMatrixFields();
+        }
+
+    });
 
 })(jQuery);
