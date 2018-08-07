@@ -37,17 +37,4 @@ class Settings extends Model
      */
     public $nestedSettings = [];
 
-    // Public Methods
-    // =========================================================================
-
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            ['$nestedSettings', 'array']
-        ];
-    }
-
 }
