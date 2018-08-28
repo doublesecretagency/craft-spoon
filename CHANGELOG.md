@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Fixed
 - Fixed an issue with the settings model rules not being declared properly
+- Fixed an issue where sometimes the loader js wasn’t getting run 
 
 
 ## 3.0.1 - 2018-07-18
