@@ -69,14 +69,14 @@ body.rtl .buttons-spooned > .btn, body.rtl .buttons-spooned > .btngroup { margin
  */
 
 /* hide all matrix block fields */
-.matrix-field .matrixblock .fields {
+.matrix-field > .blocks > .matrixblock > .fields {
     -webkit-opacity: 0;
     -moz-opacity: 0;
     opacity: 0;
 }
 
 /* don’t break blocks that don’t need spooning */
-.matrixblock.matrixblock-not-spooned .fields {
+.matrixblock.matrixblock-not-spooned > .fields {
     -webkit-opacity: 1 !important;
     -moz-opacity: 1 !important;
     opacity: 1 !important;

@@ -338,7 +338,7 @@
 
                     // Make our own fields container and hide the native one, but keep its height
                     var $spoonedFields = $('<div class="spoon-fields"/>').css({ 'opacity' : 0 }).appendTo($matrixBlock),
-                        $fields = $matrixBlock.find('.fields');
+                        $fields = $matrixBlock.find('> .fields');
                     $fields.css({ 'opacity' : 0 });
 
                     // Wait a bit for the add block animation to finish
