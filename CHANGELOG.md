@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+
+## 3.1.0 - 2018-08-29
+
 ### Added
 - Now the global settings page shows you the parent field if the Matrix field is contained in a Super Table block
 
