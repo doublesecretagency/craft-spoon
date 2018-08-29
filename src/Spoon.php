@@ -163,6 +163,25 @@ class Spoon extends Plugin
 
         $variables['globalSpoonedBlockTypes'] = $this->blockTypes->getByContext('global', 'fieldId', true);
 
+        // If Super Table is installed get all of the ST fields and store by child field context
+        $superTablePlugin = \Craft::$app->plugins->getPluginByPackageName('verbb/super-table');
+        if ($superTablePlugin && $variables['matrixFields']) {
+            $superTableService = new \verbb\supertable\services\SuperTableService();
+
+            foreach ($variables['matrixFields'] as $matrixField) {
+                if (strpos($matrixField->context, 'superTableBlockType') === 0) {
+                    $parts = explode(':', $matrixField->context);
+                    if (isset($parts[1])) {
+
+                        /** @var \verbb\supertable\models\SuperTableBlockTypeModel $superTableBlockType */
+                        $superTableBlockType = $superTableService->getBlockTypeById($parts[1]);
+
+                        $variables['superTableFields'][$matrixField->context] = \Craft::$app->fields->getFieldById($superTableBlockType->fieldId);
+                    }
+                }
+            }
+        }
+
         $this->loader->configurator('#spoon-global-context-table', 'global');
 
         return \Craft::$app->controller->renderTemplate('spoon/_settings/edit-global-context', $variables);

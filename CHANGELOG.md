@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+### Added
+- Now the global settings page shows you the parent field if the Matrix field is contained in a Super Table block
+
 ### Fixed
 - Fixed an issue with the settings model rules not being declared properly
 - Fixed an issue where sometimes the loader js wasn’t getting run 
