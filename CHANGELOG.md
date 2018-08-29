@@ -11,7 +11,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Fixed
 - Fixed an issue with the settings model rules not being declared properly
-- Fixed an issue where sometimes the loader js wasn’t getting run 
+- Fixed an issue where sometimes the loader js wasn’t getting run
+- Fixed an issue where no fields would show if the Matrix field being spooned was inside another Matrix field some how, tested inside Super Table ([#7](https://github.com/angell-co/Spoon/issues/7))
 
 
 ## 3.0.1 - 2018-07-18
