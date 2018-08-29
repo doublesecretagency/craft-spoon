@@ -37,7 +37,7 @@ class Loader extends Component
     {
 
         // Check the conditions are right to run
-        if ( Craft::$app->request->isCpRequest && !Craft::$app->getUser()->getIsGuest() && !Craft::$app->request->getAcceptsJson() )
+        if ( Craft::$app->request->isCpRequest && !Craft::$app->request->getAcceptsJson())
         {
 
             $segments = Craft::$app->request->getSegments();

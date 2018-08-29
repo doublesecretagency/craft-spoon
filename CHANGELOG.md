@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+
+
+## 3.1.0 - 2018-08-29
+
+### Added
+- Now the global settings page shows you the parent field if the Matrix field is contained in a Super Table block
+
+### Fixed
+- Fixed an issue with the settings model rules not being declared properly
+- Fixed an issue where sometimes the loader js wasn’t getting run
+- Fixed an issue where no fields would show if the Matrix field being spooned was inside another Matrix field some how, tested inside Super Table ([#7](https://github.com/angell-co/Spoon/issues/7))
+
 
 ## 3.0.1 - 2018-07-18
 

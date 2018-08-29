@@ -6,12 +6,29 @@
     <p>{{ "Here you can set up default block type groups and field layouts for all your Matrix fields."|t }}</p>
     {% if matrixFields|length %}
         <table id="spoon-global-context-table" class="data fullwidth">
+            <thead>
+                <tr>
+                    <th>Matrix Field</th>
+                    {% if superTableFields is defined %}
+                        <th colspan="2">Parent Field</th>
+                    {% endif %}
+                    <th></th>
+                </tr>
+            </thead>
             <tbody>
             {% for field in matrixFields %}
                 <tr>
-                    <td>
+                    <td{% if superTableFields is defined and 'superTableBlockType' not in field.context %} colspan="3"{% endif %}>
                         <a title="{{ 'Edit'|t }}" role="button" class="edit" data-spoon-field-id="{{ field.id }}">{{ field.name }}</a>
                     </td>
+                    {% if superTableFields is defined and 'superTableBlockType' in field.context %}
+                        <td>
+                            <a href="{{ url('settings/fields/edit/' ~ superTableFields[field.context].id) }}" title="{{ 'Edit'|t }}" role="button">
+                                {{ superTableFields[field.context].name }}
+                            </a>
+                        </td>
+                        <td>Super Table</td>
+                    {% endif %}
                     <td class="thin">
                         <a class="delete icon{% if field.id not in globalSpoonedBlockTypes|keys %} hidden{% endif %}" title="{{ 'Delete'|t }}" role="button" data-spoon-field-id="{{ field.id }}"></a>
                     </td>
