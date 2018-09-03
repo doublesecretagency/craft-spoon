@@ -176,7 +176,39 @@ class Spoon extends Plugin
                         /** @var \verbb\supertable\models\SuperTableBlockTypeModel $superTableBlockType */
                         $superTableBlockType = $superTableService->getBlockTypeById($parts[1]);
 
-                        $variables['superTableFields'][$matrixField->context] = \Craft::$app->fields->getFieldById($superTableBlockType->fieldId);
+                        /** @var \verbb\supertable\fields\SuperTableField $superTableField */
+                        $superTableField = \Craft::$app->fields->getFieldById($superTableBlockType->fieldId);
+
+                        $variables['superTableFields'][$matrixField->context] = [
+                            'kind' => 'Super Table',
+                            'field' => $superTableField,
+                            'child' => false
+                        ];
+
+                        // If the context of _this_ field is inside a Matrix block ... then we need to do more inception
+                        if (strpos($superTableField->context, 'matrixBlockType') === 0) {
+                            $nestedParts = explode(':', $superTableField->context);
+                            if (isset($nestedParts[1])) {
+
+                                /** @var craft\models\MatrixBlockType $matrixBlockType */
+                                $matrixBlockType = \Craft::$app->matrix->getBlockTypeById($nestedParts[1]);
+
+                                /** @var craft\fields\Matrix $globalField */
+                                $globalField = \Craft::$app->fields->getFieldById($matrixBlockType->fieldId);
+
+                                $variables['superTableFields'][$matrixField->context] = [
+                                    'kind' => 'Matrix',
+                                    'field' => $globalField,
+                                    'child' => [
+                                        'kind' => 'Super Table',
+                                        'field' => $superTableField
+                                    ]
+                                ];
+
+                            }
+                        }
+
+
                     }
                 }
             }

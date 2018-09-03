@@ -22,12 +22,23 @@
                         <a title="{{ 'Edit'|t }}" role="button" class="edit" data-spoon-field-id="{{ field.id }}">{{ field.name }}</a>
                     </td>
                     {% if superTableFields is defined and 'superTableBlockType' in field.context %}
+                        {% set fieldData = superTableFields[field.context] %}
                         <td>
-                            <a href="{{ url('settings/fields/edit/' ~ superTableFields[field.context].id) }}" title="{{ 'Edit'|t }}" role="button">
-                                {{ superTableFields[field.context].name }}
+                            <a href="{{ url('settings/fields/edit/' ~ fieldData.field.id) }}" title="{{ 'Edit'|t }}" role="button">
+                                {{ fieldData.field.name }}
                             </a>
+                            {% if fieldData.child %}
+                                >
+                                {{ fieldData.child.field.name }}
+                            {% endif %}
                         </td>
-                        <td>Super Table</td>
+                        <td>
+                            {{ fieldData.kind }}
+                            {% if fieldData.child %}
+                                >
+                                {{ fieldData.child.kind }}
+                            {% endif %}
+                        </td>
                     {% endif %}
                     <td class="thin">
                         <a class="delete icon{% if field.id not in globalSpoonedBlockTypes|keys %} hidden{% endif %}" title="{{ 'Delete'|t }}" role="button" data-spoon-field-id="{{ field.id }}"></a>
