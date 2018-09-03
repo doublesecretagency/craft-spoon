@@ -410,6 +410,9 @@ class BlockTypes extends Component
 
         }
 
+        
+        // TODO: store the full nested handle, cope with ST > Matrix and Matrix > ST > Matrix
+        
 //        $superTableService->getParentSuperTableField();
 //        var matrixFieldHandle = parts[parts.length-8] + '-' + parts[parts.length-5] + '-' + parts[parts.length-2];
 //
