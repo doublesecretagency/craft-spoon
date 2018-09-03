@@ -13,8 +13,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Now the global settings page shows you the parent field if the Matrix field is contained in a Super Table block
 
 ### Fixed
-- Fixed an issue with the settings model rules not being declared properly
-- Fixed an issue where sometimes the loader js wasn’t getting run
+- Fixed an issue with the settings model rules not being declared properly ([#14](https://github.com/angell-co/Spoon/pull/14))
+- Fixed an issue where sometimes the loader js wasn’t getting run ([#13](https://github.com/angell-co/Spoon/issues/13))
 - Fixed an issue where no fields would show if the Matrix field being spooned was inside another Matrix field some how, tested inside Super Table ([#7](https://github.com/angell-co/Spoon/issues/7))
 
 
