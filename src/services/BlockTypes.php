@@ -404,6 +404,19 @@ class BlockTypes extends Component
         $matrixField = Craft::$app->fields->getFieldById($blockType->fieldId);
         $blockType->fieldHandle = $matrixField->handle;
 
+
+        // If the field is actually inside a SuperTable
+        if (strpos($matrixField->context, 'superTableBlockType') === 0) {
+
+        }
+
+//        $superTableService->getParentSuperTableField();
+//        var matrixFieldHandle = parts[parts.length-8] + '-' + parts[parts.length-5] + '-' + parts[parts.length-2];
+//
+//        // Matrix Handle > ST Handle > Matrix Handle
+//        contentBlocks-testSt-stField3
+
+
         // Save the MatrixBlockTypeModel on to our model
         $blockType->matrixBlockType = $blockType->getBlockType();
 
