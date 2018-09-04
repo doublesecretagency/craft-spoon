@@ -521,9 +521,6 @@
             _getMatrixFieldName: function($matrixField)
             {
 
-                // fields-contentBlocks-field ---- contentBlocks
-                // fields-contentBlocks-66-fields-testSt-67-fields-stField3-field ---- contentBlocks-testSt-stField3 <<<
-
                 var matrixFieldId = $matrixField.parentsUntil('.field').parent().prop('id'),
                     parts = matrixFieldId.split("-");
 
@@ -539,9 +536,6 @@
                 else if (parts.length === 3) {
                     var matrixFieldHandle = parts[parts.length-2];
                 }
-
-                // console.log(parts);
-                console.log(matrixFieldHandle);
 
                 if ( matrixFieldHandle != '' )
                 {

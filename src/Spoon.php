@@ -19,8 +19,6 @@ use Craft;
 use craft\base\Plugin;
 use craft\services\Plugins;
 use craft\events\PluginEvent;
-use craft\web\UrlManager;
-use craft\events\RegisterUrlRulesEvent;
 
 use yii\base\Event;
 
@@ -85,61 +83,17 @@ class Spoon extends Plugin
         parent::init();
         self::$plugin = $this;
 
-        if ($this->isInstalled && !Craft::$app->plugins->doesPluginRequireDatabaseUpdate($this))
-        {
-            $this->loader->run();
-        }
+        // Wait until all the plugins have loaded before running the loader
+        Event::on(
+            Plugins::class,
+            Plugins::EVENT_AFTER_LOAD_PLUGINS,
+            function () {
+                if ($this->isInstalled && !Craft::$app->plugins->doesPluginRequireDatabaseUpdate($this)) {
+                    $this->loader->run();
+                }
+            }
+        );
 
-//        // Register our site routes
-//        Event::on(
-//            UrlManager::class,
-//            UrlManager::EVENT_REGISTER_SITE_URL_RULES,
-//            function (RegisterUrlRulesEvent $event) {
-//                $event->rules['siteActionTrigger1'] = 'spoon/default';
-//                $event->rules['siteActionTrigger2'] = 'spoon/block-types';
-//            }
-//        );
-//
-        // Register our CP routes
-//        Event::on(
-//            UrlManager::class,
-//            UrlManager::EVENT_REGISTER_CP_URL_RULES,
-//            function (RegisterUrlRulesEvent $event) {
-//                $event->rules['spoon/getConfigurator'] = 'spoon/default/getConfigurator';
-//                $event->rules['cpActionTrigger2'] = 'spoon/block-types/do-something';
-//            }
-//        );
-//
-//        // Do something after we're installed
-//        Event::on(
-//            Plugins::class,
-//            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-//            function (PluginEvent $event) {
-//                if ($event->plugin === $this) {
-//                    // We were just installed
-//                }
-//            }
-//        );
-
-
-/**
- * Logging in Craft involves using one of the following methods:
- *
- * Craft::trace(): record a message to trace how a piece of code runs. This is mainly for development use.
- * Craft::info(): record a message that conveys some useful information.
- * Craft::warning(): record a warning message that indicates something unexpected has happened.
- * Craft::error(): record a fatal error that should be investigated as soon as possible.
- *
- * Unless `devMode` is on, only Craft::warning() & Craft::error() will log to `craft/storage/logs/web.log`
- *
- * It's recommended that you pass in the magic constant `__METHOD__` as the second parameter, which sets
- * the category to the method (prefixed with the fully qualified class name) where the constant appears.
- *
- * To enable the Yii debug toolbar, go to your user account in the AdminCP and check the
- * [] Show the debug toolbar on the front end & [] Show the debug toolbar on the Control Panel
- *
- * http://www.yiiframework.com/doc-2.0/guide-runtime-logging.html
- */
         Craft::info(
             Craft::t(
                 'spoon',
@@ -164,7 +118,7 @@ class Spoon extends Plugin
         $variables['globalSpoonedBlockTypes'] = $this->blockTypes->getByContext('global', 'fieldId', true);
 
         // If Super Table is installed get all of the ST fields and store by child field context
-        $superTablePlugin = \Craft::$app->plugins->getPluginByPackageName('verbb/super-table');
+        $superTablePlugin = \Craft::$app->plugins->getPlugin('super-table');
         if ($superTablePlugin && $variables['matrixFields']) {
             $superTableService = new \verbb\supertable\services\SuperTableService();
 
@@ -207,7 +161,6 @@ class Spoon extends Plugin
 
                             }
                         }
-
 
                     }
                 }
