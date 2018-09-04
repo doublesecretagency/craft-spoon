@@ -10,6 +10,12 @@ Spoon never touches your content, it is simply a layer on top of the core Matrix
 
 Or is it the red pill. Which is the real illusion?!
 
+**Now works with [Super Table](https://verbb.io/craft-plugins/super-table)!**
+
+Get inception heavy with either a Matrix inside a Super Table or go wild and nest that Super Table in _another_ Matrix for more fun.
+
+---
+
 **Note:** The license fee for this plugin is $59 via the Craft Plugin Store.
 
 
