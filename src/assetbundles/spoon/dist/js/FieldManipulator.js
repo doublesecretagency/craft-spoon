@@ -81,7 +81,7 @@
                     _this.initBlockTypeGroups($matrixField);
 
                     // initialize the blocks
-                    $matrixField.find('.blocks > .matrixblock').each(function()
+                    $matrixField.find('> .blocks > .matrixblock').each(function()
                     {
                         _this.initBlocks($(this), $matrixField);
                     });
