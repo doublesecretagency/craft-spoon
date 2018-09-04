@@ -10,7 +10,7 @@
                 <tr>
                     <th>Matrix Field</th>
                     {% if superTableFields is defined %}
-                        <th colspan="2">Parent Field</th>
+                        <th></th>
                     {% endif %}
                     <th></th>
                 </tr>
@@ -18,17 +18,75 @@
             <tbody>
             {% for field in matrixFields %}
                 <tr>
-                    <td{% if superTableFields is defined and 'superTableBlockType' not in field.context %} colspan="3"{% endif %}>
+                    <td{% if superTableFields is defined and 'superTableBlockType' not in field.context %} colspan="2"{% endif %}>
+
+                {% if superTableFields is defined and 'superTableBlockType' in field.context %}
+                    {% set fieldData = superTableFields[field.context] %}
+                        <ul class="structure">
+                            <li>
+                                {{ fieldData.field.name }}
+                            </li>
+                            {% if fieldData.child %}
+                                <li>
+                                    <ul>
+                                        <li>
+                                            {{ fieldData.child.field.name }}
+                                            <ul>
+                                                <li>
+                                                    <a title="{{ 'Edit'|t }}" role="button" class="edit" data-spoon-field-id="{{ field.id }}">{{ field.name }}</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <ul>
+                                        <li>
+                                            <a title="{{ 'Edit'|t }}" role="button" class="edit" data-spoon-field-id="{{ field.id }}">{{ field.name }}</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </td>
+
+                    <td>
+                        <ul class="structure">
+
+                            {% if fieldData.child %}
+                                <li>
+                                    {{ fieldData.kind }}
+                                </li>
+                                <li>
+                                    <ul>
+                                        <li>
+                                            {{ fieldData.child.kind }}
+                                            <ul>
+                                                <li>
+                                                    Matrix
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% else %}
+                                <li>
+                                    {{ fieldData.kind }}
+                                    <ul>
+                                        <li>
+                                            Matrix
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                        </ul>
+
+                    </td>
+                {% else %}
                         <a title="{{ 'Edit'|t }}" role="button" class="edit" data-spoon-field-id="{{ field.id }}">{{ field.name }}</a>
                     </td>
-                    {% if superTableFields is defined and 'superTableBlockType' in field.context %}
-                        <td>
-                            <a href="{{ url('settings/fields/edit/' ~ superTableFields[field.context].id) }}" title="{{ 'Edit'|t }}" role="button">
-                                {{ superTableFields[field.context].name }}
-                            </a>
-                        </td>
-                        <td>Super Table</td>
-                    {% endif %}
+                {% endif %}
                     <td class="thin">
                         <a class="delete icon{% if field.id not in globalSpoonedBlockTypes|keys %} hidden{% endif %}" title="{{ 'Delete'|t }}" role="button" data-spoon-field-id="{{ field.id }}"></a>
                     </td>

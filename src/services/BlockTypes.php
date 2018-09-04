@@ -19,7 +19,6 @@ use craft\base\Component;
 use craft\records\FieldLayout as FieldLayoutRecord;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
-use nystudio107\seomatic\models\jsonld\Integer;
 
 /**
  * BlockTypes Service
@@ -40,6 +39,10 @@ class BlockTypes extends Component
     // =========================================================================
 
     private $_blockTypesByContext;
+
+    private $_superTablePlugin;
+
+    private $_superTableService;
 
 
     // Public Methods
@@ -403,6 +406,49 @@ class BlockTypes extends Component
         // Use the fieldId to get the field and save the handle on to the model
         $matrixField = Craft::$app->fields->getFieldById($blockType->fieldId);
         $blockType->fieldHandle = $matrixField->handle;
+
+
+        // Super Table support
+        if (!$this->_superTablePlugin) {
+            $this->_superTablePlugin = \Craft::$app->plugins->getPluginByPackageName('verbb/super-table');
+        }
+        if ($this->_superTablePlugin) {
+
+            if (!$this->_superTableService) {
+                $this->_superTableService = new \verbb\supertable\services\SuperTableService();
+            }
+
+            // If the field is actually inside a SuperTable
+            if (strpos($matrixField->context, 'superTableBlockType') === 0) {
+                $parts = explode(':', $matrixField->context);
+                if (isset($parts[1])) {
+
+                    /** @var \verbb\supertable\models\SuperTableBlockTypeModel $superTableBlockType */
+                    $superTableBlockType = $this->_superTableService->getBlockTypeById($parts[1]);
+
+                    /** @var \verbb\supertable\fields\SuperTableField $superTableField */
+                    $superTableField = \Craft::$app->fields->getFieldById($superTableBlockType->fieldId);
+
+                    $blockType->fieldHandle = $superTableField->handle."-".$matrixField->handle;
+
+                    // If the context of _this_ field is inside a Matrix block ... then we need to do more inception
+                    if (strpos($superTableField->context, 'matrixBlockType') === 0) {
+                        $nestedParts = explode(':', $superTableField->context);
+                        if (isset($nestedParts[1])) {
+
+                            /** @var craft\models\MatrixBlockType $matrixBlockType */
+                            $matrixBlockType = \Craft::$app->matrix->getBlockTypeById($nestedParts[1]);
+
+                            /** @var craft\fields\Matrix $globalField */
+                            $globalField = \Craft::$app->fields->getFieldById($matrixBlockType->fieldId);
+
+                            $blockType->fieldHandle = $globalField->handle."-".$superTableField->handle."-".$matrixField->handle;
+                        }
+                    }
+                }
+            }
+        }
+
 
         // Save the MatrixBlockTypeModel on to our model
         $blockType->matrixBlockType = $blockType->getBlockType();

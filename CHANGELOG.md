@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 
 
+## 3.2.0 - 2018-09-04
+
+### Added
+- Added support for Super Table allowing you to use Spoon on Matrix fields that are inside Super Table fields, both `Super Table > Matrix` and `Matrix > Super Table > Matrix`. Initially this is only for the global context which means you can only change these nested Matrix fields in the Spoon settings page and those changes apply everywhere.  
+
+
 ## 3.1.0 - 2018-08-29
 
 ### Added
