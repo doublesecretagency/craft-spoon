@@ -19,7 +19,6 @@ use craft\base\Component;
 use craft\records\FieldLayout as FieldLayoutRecord;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
-use nystudio107\seomatic\models\jsonld\Integer;
 
 /**
  * BlockTypes Service
