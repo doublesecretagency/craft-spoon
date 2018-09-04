@@ -318,8 +318,6 @@
             initBlockFieldLayout: function($matrixBlock, $matrixField)
             {
 
-                // console.log($matrixBlock.data('spooned-block-type'));
-                // return;
                 var spoonedBlockType = $matrixBlock.data('spooned-block-type'),
                     tabs = spoonedBlockType.fieldLayoutModel.tabs,
                     fields = spoonedBlockType.fieldLayoutModel.fields;
@@ -431,6 +429,7 @@
 
             initSettingsMenu: function($settingsBtn, spoonedBlockTypes, $matrixField)
             {
+                console.log($settingsBtn, spoonedBlockTypes, $matrixField);
                 setTimeout($.proxy(function()
                 {
                     // Get the Garnish.MenuBtn object
@@ -463,7 +462,6 @@
                     for (var i = 0; i < spoonedBlockTypes.length; i++)
                     {
                         var handle = spoonedBlockTypes[i].matrixBlockType.handle;
-                        // console.log(handle);
 
                         // Make a new group ul if needed
                         if ( $menu.find('[data-spooned-group="'+spoonedBlockTypes[i].groupName+'"]').length === 0 )
