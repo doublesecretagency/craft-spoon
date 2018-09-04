@@ -161,3 +161,15 @@ html.noscroll .spoon-settings-menu {
     overflow-y: auto;
     overflow-x: hidden;
 }
+
+/**
+ * Fix the structure inside the global context table
+ */
+body.ltr #spoon-global-context-table .structure li { padding-left: 0; }
+body.rtl #spoon-global-context-table .structure li { padding-right: 0; }
+
+body.ltr #spoon-global-context-table .structure ul { margin-left: 0; }
+body.rtl #spoon-global-context-table .structure ul { margin-right: 0; }
+
+body.ltr #spoon-global-context-table .structure ul li { padding-left: 44px; }
+body.rtl #spoon-global-context-table .structure ul li { padding-right: 44px; }
