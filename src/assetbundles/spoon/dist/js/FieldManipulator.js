@@ -81,7 +81,7 @@
                     _this.initBlockTypeGroups($matrixField);
 
                     // initialize the blocks
-                    $matrixField.find('.blocks > .matrixblock').each(function()
+                    $matrixField.find('> .blocks > .matrixblock').each(function()
                     {
                         _this.initBlocks($(this), $matrixField);
                     });
@@ -145,6 +145,8 @@
                         // loop each block type config
                         for (var i = 0; i < spoonedBlockTypes.length; i++)
                         {
+
+                            // console.log(spoonedBlockTypes);
 
                             // check if group exists, add if not
                             if ( $mainButtons.find('[data-spooned-group="'+spoonedBlockTypes[i].groupName+'"]').length === 0 )
@@ -316,8 +318,6 @@
             initBlockFieldLayout: function($matrixBlock, $matrixField)
             {
 
-                // console.log($matrixBlock.data('spooned-block-type'));
-                // return;
                 var spoonedBlockType = $matrixBlock.data('spooned-block-type'),
                     tabs = spoonedBlockType.fieldLayoutModel.tabs,
                     fields = spoonedBlockType.fieldLayoutModel.fields;
@@ -429,6 +429,7 @@
 
             initSettingsMenu: function($settingsBtn, spoonedBlockTypes, $matrixField)
             {
+                console.log($settingsBtn, spoonedBlockTypes, $matrixField);
                 setTimeout($.proxy(function()
                 {
                     // Get the Garnish.MenuBtn object
@@ -504,6 +505,7 @@
 
                         // Add the li
                         var $li = $menu.find('a[data-type="'+handle+'"]').parents('li');
+
                         $newUl.append($li);
                         $li.removeClass('hidden');
                     }
@@ -516,9 +518,22 @@
              */
             _getMatrixFieldName: function($matrixField)
             {
-                var matrixFieldId = $matrixField.parents('.field').prop('id'),
-                    parts = matrixFieldId.split("-"),
-                    matrixFieldHandle = parts[parts.length-2];
+
+                var matrixFieldId = $matrixField.parentsUntil('.field').parent().prop('id'),
+                    parts = matrixFieldId.split("-");
+
+                // Matrix inside Something (e.g. Super Table) inside Matrix
+                if (parts.length === 9) {
+                    var matrixFieldHandle = parts[parts.length-8] + '-' + parts[parts.length-5] + '-' + parts[parts.length-2];
+                }
+                // Matrix inside Something (e.g. Super Table)
+                else if (parts.length === 6) {
+                    var matrixFieldHandle = parts[parts.length-5] + '-' + parts[parts.length-2];
+                }
+                // Normal Matrix
+                else if (parts.length === 3) {
+                    var matrixFieldHandle = parts[parts.length-2];
+                }
 
                 if ( matrixFieldHandle != '' )
                 {
@@ -535,7 +550,7 @@
              */
             _getMatrixBlockTypeHandle: function($matrixBlock)
             {
-                var blockTypeHandle = $matrixBlock.find('input[type="hidden"][name*="type"]').val();
+                var blockTypeHandle = $matrixBlock.find('> input[type="hidden"][name*="type"]').val();
 
                 if ( typeof blockTypeHandle == 'string' )
                 {
