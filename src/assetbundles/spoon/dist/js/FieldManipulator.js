@@ -146,8 +146,6 @@
                         for (var i = 0; i < spoonedBlockTypes.length; i++)
                         {
 
-                            // console.log(spoonedBlockTypes);
-
                             // check if group exists, add if not
                             if ( $mainButtons.find('[data-spooned-group="'+spoonedBlockTypes[i].groupName+'"]').length === 0 )
                             {
@@ -429,7 +427,6 @@
 
             initSettingsMenu: function($settingsBtn, spoonedBlockTypes, $matrixField)
             {
-                console.log($settingsBtn, spoonedBlockTypes, $matrixField);
                 setTimeout($.proxy(function()
                 {
                     // Get the Garnish.MenuBtn object
