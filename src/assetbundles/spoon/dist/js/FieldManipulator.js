@@ -150,7 +150,7 @@
                             if ( $mainButtons.find('[data-spooned-group="'+spoonedBlockTypes[i].groupName+'"]').length === 0 )
                             {
                                 // main buttons
-                                var $mainMenuBtn = $('<div class="btn  menubtn">'+spoonedBlockTypes[i]['groupName']+'</div>').appendTo($mainButtons),
+                                var $mainMenuBtn = $('<div class="btn  menubtn">'+Craft.t('site', spoonedBlockTypes[i]['groupName'])+'</div>').appendTo($mainButtons),
                                     $mainMenu = $('<div class="menu" data-spooned-group="'+spoonedBlockTypes[i]['groupName']+'" />').appendTo($mainButtons),
                                     $mainUl = $('<ul />').appendTo($mainMenu);
 
@@ -159,12 +159,12 @@
                                 {
                                     $('<hr>').appendTo($secondaryMenu);
                                 }
-                                $('<h6>'+spoonedBlockTypes[i]['groupName']+'</h6>').appendTo($secondaryMenu);
+                                $('<h6>'+Craft.t('site', spoonedBlockTypes[i]['groupName'])+'</h6>').appendTo($secondaryMenu);
                                 var $secondaryUl = $('<ul/>').appendTo($secondaryMenu);
                             }
 
                             // make a link
-                            $li = $('<li><a data-type="'+spoonedBlockTypes[i].matrixBlockType.handle+'">'+spoonedBlockTypes[i].matrixBlockType.name+'</a></li>');
+                            $li = $('<li><a data-type="'+spoonedBlockTypes[i].matrixBlockType.handle+'">'+Craft.t('site', spoonedBlockTypes[i].matrixBlockType.name)+'</a></li>');
 
                             // add it to the main list
                             $li.appendTo($mainUl);
@@ -364,7 +364,7 @@
                             if (tabs.length > 1)
                             {
                                 var $tabLi = $('<li/>').appendTo($tabs);
-                                $('<a id="'+spoonedNamespace+'-'+i+'" class="tab'+navClasses+'">'+tabs[i].name+'</a>')
+                                $('<a id="'+spoonedNamespace+'-'+i+'" class="tab'+navClasses+'">'+Craft.t('site', tabs[i].name)+'</a>')
                                     .appendTo($tabLi)
                                     .data('spooned-tab-target', '#'+spoonedNamespace+'-pane-'+i);
                             }
@@ -471,7 +471,7 @@
                                     $('<hr/>').insertBefore($origUl);
                                 }
 
-                                var $groupHeading = $('<a class="fieldtoggle">' + spoonedBlockTypes[i].groupName + '</a>');
+                                var $groupHeading = $('<a class="fieldtoggle">' + Craft.t('site', spoonedBlockTypes[i].groupName) + '</a>');
                                 $groupHeading.insertBefore($origUl);
 
                                 $newUl.insertBefore($origUl);
@@ -494,7 +494,7 @@
                                 {
                                     $('<hr/>').insertBefore($origUl);
                                 }
-                                $('<h6>' + spoonedBlockTypes[i].groupName + '</h6>').insertBefore($origUl);
+                                $('<h6>' + Craft.t('site', spoonedBlockTypes[i].groupName) + '</h6>').insertBefore($origUl);
                                 $newUl.insertBefore($origUl);
                             }
 

@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+### Added
+- Added support for static translations ([#22](https://github.com/angell-co/Spoon/issues/22)).
+
 
 ## 3.2.0 - 2018-09-04
 

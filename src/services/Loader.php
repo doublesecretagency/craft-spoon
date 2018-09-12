@@ -189,6 +189,22 @@ class Loader extends Component
 
             $view->registerAssetBundle(SpoonFieldManipulator::class);
 
+            $translations = [];
+
+            foreach ($spoonedBlockTypes as $context => $spoonedBlockTypesInContext) {
+                foreach ($spoonedBlockTypesInContext as $spoonedBlockType) {
+                    $translations[] = $spoonedBlockType->groupName;
+                    $translations[] = $spoonedBlockType->matrixBlockType->name;
+
+                    foreach ($spoonedBlockType->fieldLayoutModel['tabs'] as $tab) {
+                        $translations[] = $tab->name;
+                    }
+
+                }
+            }
+
+            $view->registerTranslations('site', $translations);
+
             $settings = [
                 'blockTypes' => $spoonedBlockTypes,
                 'context' => $context,
