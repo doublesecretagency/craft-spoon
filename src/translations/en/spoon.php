@@ -22,4 +22,17 @@
  */
 return [
     'Spoon plugin loaded' => 'Spoon plugin loaded',
+    'Here you can set up default block type groups and field layouts for all your Matrix fields.' => 'Here you can set up default block type groups and field layouts for all your Matrix fields.',
+    'Matrix Field' => 'Matrix Field',
+    'Super Table' => 'Super Table',
+    'New Group' => 'New Group',
+    'Edit field layout' => 'Edit field layout',
+    'No Matrix fields have been added yet.' => 'No Matrix fields have been added yet.',
+    'Group your block types' => 'Group your block types',
+    'Group block types' => 'Group block types',
+    'Editing the “{name}” block field layout' => 'Editing the “{name}” block field layout',
+    'Block type groups deleted.' => 'Block type groups deleted.',
+    'Block type groups saved.' => 'Block type groups saved.',
+    'There was an unknown error saving some block type groups.' => 'There was an unknown error saving some block type groups.',
+    'Give your group a name.' => 'Give your group a name.'
 ];

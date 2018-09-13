@@ -1,14 +1,14 @@
 {% extends '_layouts/cp' %}
 
-{% set title = "Spoon"|t %}
+{% set title = "Spoon"|t('spoon') %}
 
 {% set content %}
-    <p>{{ "Here you can set up default block type groups and field layouts for all your Matrix fields."|t }}</p>
+    <p>{{ "Here you can set up default block type groups and field layouts for all your Matrix fields."|t('spoon') }}</p>
     {% if matrixFields|length %}
         <table id="spoon-global-context-table" class="data fullwidth">
             <thead>
                 <tr>
-                    <th>Matrix Field</th>
+                    <th>{{ 'Matrix Field'|t('spoon') }}</th>
                     {% if superTableFields is defined %}
                         <th></th>
                     {% endif %}
@@ -24,16 +24,16 @@
                     {% set fieldData = superTableFields[field.context] %}
                         <ul class="structure">
                             <li>
-                                {{ fieldData.field.name }}
+                                {{ fieldData.field.name|t }}
                             </li>
                             {% if fieldData.child %}
                                 <li>
                                     <ul>
                                         <li>
-                                            {{ fieldData.child.field.name }}
+                                            {{ fieldData.child.field.name|t }}
                                             <ul>
                                                 <li>
-                                                    <a title="{{ 'Edit'|t }}" role="button" class="edit" data-spoon-field-id="{{ field.id }}">{{ field.name }}</a>
+                                                    <a title="{{ 'Edit'|t('app') }}" role="button" class="edit" data-spoon-field-id="{{ field.id }}">{{ field.name|t }}</a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -43,7 +43,7 @@
                                 <li>
                                     <ul>
                                         <li>
-                                            <a title="{{ 'Edit'|t }}" role="button" class="edit" data-spoon-field-id="{{ field.id }}">{{ field.name }}</a>
+                                            <a title="{{ 'Edit'|t('app') }}" role="button" class="edit" data-spoon-field-id="{{ field.id }}">{{ field.name|t }}</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -56,15 +56,15 @@
 
                             {% if fieldData.child %}
                                 <li>
-                                    {{ fieldData.kind }}
+                                    {{ fieldData.kind|t('spoon') }}
                                 </li>
                                 <li>
                                     <ul>
                                         <li>
-                                            {{ fieldData.child.kind }}
+                                            {{ fieldData.child.kind|t('spoon') }}
                                             <ul>
                                                 <li>
-                                                    Matrix
+                                                    {{ 'Matrix'|t('app') }}
                                                 </li>
                                             </ul>
                                         </li>
@@ -72,10 +72,10 @@
                                 </li>
                             {% else %}
                                 <li>
-                                    {{ fieldData.kind }}
+                                    {{ fieldData.kind|t }}
                                     <ul>
                                         <li>
-                                            Matrix
+                                            {{ 'Matrix'|t('app') }}
                                         </li>
                                     </ul>
                                 </li>
@@ -84,7 +84,7 @@
 
                     </td>
                 {% else %}
-                        <a title="{{ 'Edit'|t }}" role="button" class="edit" data-spoon-field-id="{{ field.id }}">{{ field.name }}</a>
+                        <a title="{{ 'Edit'|t }}" role="button" class="edit" data-spoon-field-id="{{ field.id }}">{{ field.name|t }}</a>
                     </td>
                 {% endif %}
                     <td class="thin">
@@ -95,6 +95,6 @@
             </tbody>
         </table>
     {% else %}
-        <p class="error">{{ "No Matrix fields have been added yet."|t }}</p>
+        <p class="error">{{ "No Matrix fields have been added yet."|t('spoon') }}</p>
     {% endif %}
 {% endset %}

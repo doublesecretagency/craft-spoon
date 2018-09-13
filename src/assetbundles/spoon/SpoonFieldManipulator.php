@@ -13,6 +13,7 @@ namespace angellco\spoon\assetbundles\Spoon;
 use Craft;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
+use craft\web\View;
 
 /**
  * SpoonFieldManipulator AssetBundle
@@ -51,4 +52,23 @@ class SpoonFieldManipulator extends AssetBundle
 
         parent::init();
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function registerAssetFiles($view)
+    {
+
+        parent::registerAssetFiles($view);
+
+        if ($view instanceof View) {
+
+            $view->registerTranslations('app', [
+                "Add a block",
+            ]);
+
+        }
+
+    }
+
 }

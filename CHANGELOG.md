@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 
 
+## 3.2.1 - 2018-09-13
+
+### Added
+- Added support for static translations ([#22](https://github.com/angell-co/Spoon/issues/22)).
+
+### Fixed
+- Fixed an issue where the Settings model wasn’t referencing the correct array validator class and was throwing an error when using the Schematic plugin ([#26](https://github.com/angell-co/Spoon/pull/26) and [#14](https://github.com/angell-co/Spoon/pull/14)).
+
+
 ## 3.2.0 - 2018-09-04
 
 ### Added

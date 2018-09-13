@@ -1,17 +1,8 @@
-{% do view.registerTranslations('app', [
-    "Rename",
-    "Delete",
-    "Make required",
-    "Make not required",
-    "Remove",
-    "Give your tab a name.",
-]) %}
-
 {% macro tab(groupName, selectedBlockTypes) %}
     <div class="fld-tab">
         <div class="tabs">
             <div class="tab sel draggable">
-                <span>{{ groupName }}</span>
+                <span>{{ groupName|t }}</span>
                 <a class="settings icon" title="{{ 'Edit'|t('app') }}"></a>
             </div>
         </div>
@@ -31,7 +22,7 @@
 
     <input type="hidden" name="fieldId" value="{{ matrixField.id }}">
 
-    <h2 class="first">{{ "Group your block types"|t('app') }}</h2>
+    <h2 class="first">{{ "Group your block types"|t('spoon') }}</h2>
 
     <div class="fld-tabs">
         {% if spoonedBlockTypes and spoonedBlockTypes|length %}
@@ -44,7 +35,7 @@
     </div>
 
     <div class="newtabbtn-container">
-        <div class="btn add icon">{{ "New Group"|t('app') }}</div>
+        <div class="btn add icon">{{ "New Group"|t('spoon') }}</div>
     </div>
 
     <div class="unusedfields">
@@ -66,7 +57,7 @@
                 {% for blockType in blockTypes %}
                     {% set selected = blockType.id in unGroupedSelectedBlockTypeIds %}
                     <div class="fld-field unused{% if selected %} hidden{% endif %}" data-id="{{ blockType.id }}">
-                        <span>{{ blockType.name }}</span>
+                        <span>{{ blockType.name|t }}</span>
                     </div>
                 {% endfor %}
             </div>

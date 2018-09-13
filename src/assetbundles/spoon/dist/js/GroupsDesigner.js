@@ -30,7 +30,7 @@
                     $menu = $('<div class="menu" data-align="center"/>').insertAfter($editBtn),
                     $ul = $('<ul/>').appendTo($menu);
 
-                $('<li><a data-action="edit-field-layout">'+Craft.t('app', 'Edit field layout')+'</a></li>').appendTo($ul);
+                $('<li><a data-action="edit-field-layout">'+Craft.t('spoon', 'Edit field layout')+'</a></li>').appendTo($ul);
 
                 $('<li><a data-action="remove">'+Craft.t('app', 'Remove')+'</a></li>').appendTo($ul);
 
@@ -70,7 +70,7 @@
 
                 var $labelSpan = $tab.find('.tabs .tab span'),
                     oldName = $labelSpan.text(),
-                    newName = prompt(Craft.t('app', 'Give your group a name.'), oldName);
+                    newName = prompt(Craft.t('spoon', 'Give your group a name.'), oldName);
 
                 if (newName && newName != oldName)
                 {
@@ -90,7 +90,7 @@
                 var $tab = $('<div class="fld-tab">' +
                     '<div class="tabs">' +
                     '<div class="tab sel draggable">' +
-                    '<span>Group '+(this.tabGrid.$items.length+1)+'</span>' +
+                    '<span>'+Craft.t('app', 'Group')+' '+(this.tabGrid.$items.length+1)+'</span>' +
                     '<a class="settings icon" title="'+Craft.t('app', 'Rename')+'"></a>' +
                     '</div>' +
                     '</div>' +
@@ -210,6 +210,5 @@
             }
 
         });
-
 
 })(jQuery);

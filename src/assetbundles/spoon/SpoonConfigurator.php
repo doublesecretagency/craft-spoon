@@ -13,6 +13,7 @@ namespace angellco\spoon\assetbundles\Spoon;
 use Craft;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
+use craft\web\View;
 
 /**
  * SpoonConfigurator AssetBundle
@@ -53,4 +54,37 @@ class SpoonConfigurator extends AssetBundle
 
         parent::init();
     }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function registerAssetFiles($view)
+    {
+        parent::registerAssetFiles($view);
+
+        if ($view instanceof View) {
+
+            $view->registerTranslations('app', [
+                "Group",
+                "Rename",
+                "Delete",
+                "Make required",
+                "Make not required",
+                "Remove",
+                "Give your tab a name.",
+            ]);
+
+            $view->registerTranslations('spoon', [
+                "Edit field layout",
+                "Give your group a name.",
+                "Group block types",
+                "Block type groups deleted.",
+                "Block type groups saved.",
+                "There was an unknown error saving some block type groups.",
+            ]);
+        }
+
+    }
+
 }

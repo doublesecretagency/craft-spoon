@@ -1,17 +1,8 @@
-{% do view.registerTranslations('app', [
-    "Rename",
-    "Delete",
-    "Make required",
-    "Make not required",
-    "Remove",
-    "Give your tab a name.",
-]) %}
-
 {% macro tab(tabName, tabFields) %}
     <div class="fld-tab">
         <div class="tabs">
             <div class="tab sel draggable">
-                <span>{{ tabName }}</span>
+                <span>{{ tabName|t }}</span>
                 <a class="settings icon" title="{{ 'Edit'|t('app') }}"></a>
             </div>
         </div>
@@ -19,7 +10,7 @@
             {% for field in tabFields %}
                 <div class="fld-field" data-id="{{ field.id }}">
                     <a class="settings icon" title="{{ 'Edit'|t('app') }}"></a>
-                    <span>{{ field.name }}</span>
+                    <span>{{ field.name|t }}</span>
                     <input class="id-input" type="hidden" name="blockTypeFieldLayouts[{{ tabName|e('url') }}][]" value="{{ field.id }}">
                 </div>
             {% endfor %}
@@ -31,7 +22,7 @@
 
     <input type="hidden" name="spoonedBlockTypeId" value="{{ spoonedBlockType.id }}">
 
-    <h2>{{ "Editing the “"~spoonedBlockType.matrixBlockType.name~"” block field layout"|t('app') }}</h2>
+    <h2>{{ "Editing the “{name}” block field layout"|t('spoon', { 'name' : spoonedBlockType.matrixBlockType.name|t }) }}</h2>
 
     <div class="fld-tabs">
         {% if fieldLayout %}
@@ -66,7 +57,7 @@
                 {% for field in spoonedBlockType.matrixBlockType.getFields() %}
                     {% set selected = fieldLayout and field.id in fieldLayout.getFieldIds() %}
                     <div class="fld-field unused{% if selected %} hidden{% endif %}" data-id="{{ field.id }}">
-                        <span>{{ field.name|t('site') }}</span>
+                        <span>{{ field.name|t }}</span>
                     </div>
                 {% endfor %}
             </div>
