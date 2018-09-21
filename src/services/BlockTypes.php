@@ -351,7 +351,7 @@ class BlockTypes extends Component
      * for the given context and fieldId combination
      *
      * @param  string            $context required
-     * @param  int               $fieldId required
+     * @param  integer           $fieldId required
      * @return false|array
      */
     public function getFieldLayoutIds($context, $fieldId = false)
