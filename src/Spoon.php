@@ -87,7 +87,7 @@ class Spoon extends Plugin
         Event::on(
             Plugins::class,
             Plugins::EVENT_AFTER_LOAD_PLUGINS,
-            function () {
+            function() {
                 if ($this->isInstalled && !Craft::$app->plugins->doesPluginRequireDatabaseUpdate($this)) {
                     $this->loader->run();
                 }
