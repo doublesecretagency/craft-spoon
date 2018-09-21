@@ -120,8 +120,7 @@ class BlockTypes extends Component
 
             $blockTypeRecords = BlockTypeRecord::find()->where($condition)->all();
 
-        }
-        else
+        } else
         {
             $condition = [
                 'context' => $context
@@ -145,8 +144,7 @@ class BlockTypes extends Component
                 $this->_blockTypesByContext[$context][$blockType->id] = $blockType;
             }
 
-        }
-        else
+        } else
         {
             return [];
         }
@@ -160,8 +158,7 @@ class BlockTypes extends Component
                 $return[$blockType->$groupBy][] = $blockType;
             }
             return $return;
-        }
-        else
+        } else
         {
             return $this->_blockTypesByContext[$context];
         }
@@ -188,8 +185,7 @@ class BlockTypes extends Component
             {
                 throw new Exception(Craft::t('No Spoon Block Type exists with the ID “{id}”', ['id' => $blockType->id]));
             }
-        }
-        else
+        } else
         {
             $blockTypeRecord = new BlockTypeRecord();
         }
@@ -261,12 +257,12 @@ class BlockTypes extends Component
             }
 
             $affectedRows = Craft::$app->getDb()->createCommand()
-                ->delete('{{%spoon_blocktypes}}',$condition)
+                ->delete('{{%spoon_blocktypes}}', $condition)
                 ->execute();
 
             $transaction->commit();
 
-            return (bool) $affectedRows;
+            return (bool)$affectedRows;
         } catch (\Exception $e) {
             $transaction->rollBack();
             throw $e;
@@ -327,8 +323,7 @@ class BlockTypes extends Component
             // spooned blocktype model
             $spoonedBlockType->fieldLayoutId = $layout->id;
 
-        }
-        else
+        } else
         {
             $spoonedBlockType->fieldLayoutId = null;
         }
