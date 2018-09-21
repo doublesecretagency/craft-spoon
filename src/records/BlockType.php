@@ -17,6 +17,8 @@ use craft\db\ActiveRecord;
 use craft\records\Field;
 use craft\records\FieldLayout;
 
+use yii\db\ActiveQueryInterface;
+
 /**
  * BlockType Record
  *

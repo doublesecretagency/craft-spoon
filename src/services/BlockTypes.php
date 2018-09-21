@@ -13,6 +13,7 @@ namespace angellco\spoon\services;
 use angellco\spoon\Spoon;
 use angellco\spoon\models\BlockType;
 use angellco\spoon\records\BlockType as BlockTypeRecord;
+use angellco\spoon\errors\BlockTypeNotFoundException;
 
 use Craft;
 use craft\base\Component;
@@ -60,7 +61,7 @@ class BlockTypes extends Component
         $blockTypeRecord = BlockTypeRecord::findOne($id);
 
         if (!$blockTypeRecord) {
-            throw new Exception(Craft::t('No Spoon block type exists with the ID “{id}”', ['id' => $id]));
+            throw new BlockTypeNotFoundException(Craft::t('No Spoon block type exists with the ID “{id}”', ['id' => $id]));
         }
 
         return $this->_populateBlockTypeFromRecord($blockTypeRecord);
@@ -94,14 +95,14 @@ class BlockTypes extends Component
     /**
      * Returns a block type by its context.
      *
-     * @param      $context
-     * @param bool $groupBy Group by an optional model attribute to group by
-     * @param bool $ignoreSubContext Optionally ignore the sub context (id)
-     * @param bool $fieldId
+     * @param string       $context
+     * @param null|string  $groupBy Group by an optional model attribute to group by
+     * @param bool         $ignoreSubContext Optionally ignore the sub context (id)
+     * @param null|integer $fieldId Optinally filter by fieldId
      *
      * @return array
      */
-    public function getByContext($context, $groupBy = false, $ignoreSubContext = false, $fieldId = false)
+    public function getByContext($context, $groupBy = null, $ignoreSubContext = false, $fieldId = null)
     {
 
         if ($ignoreSubContext)
@@ -345,7 +346,7 @@ class BlockTypes extends Component
      * for the given context and fieldId combination
      *
      * @param  string            $context required
-     * @param  int               $fieldId required
+     * @param  integer           $fieldId required
      * @return false|array
      */
     public function getFieldLayoutIds($context, $fieldId = false)

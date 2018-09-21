@@ -7,6 +7,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 
 
+## 3.2.2 - 2018-09-21
+
+### Fixed
+- Fixed a bunch of bugs and spacing issues picked up by Scrutinizer
+- Corrected the core craftcms/cms requirement in composer.json
+
+
 ## 3.2.1 - 2018-09-13
 
 ### Added

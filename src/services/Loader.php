@@ -102,7 +102,7 @@ class Loader extends Component
                     $entryType = reset($sectionEntryTypes);
                 } else
                 {
-                    $entryId = explode('-', $segments[2])[0];
+                    $entryId = (integer) explode('-', $segments[2])[0];
                     $entry = Craft::$app->entries->getEntryById($entryId);
 
                     if ($entry)
@@ -190,7 +190,7 @@ class Loader extends Component
 
             $translations = [];
 
-            foreach ($spoonedBlockTypes as $context => $spoonedBlockTypesInContext) {
+            foreach ($spoonedBlockTypes as $spoonedBlockTypesInContext) {
                 foreach ($spoonedBlockTypesInContext as $spoonedBlockType) {
                     $translations[] = $spoonedBlockType->groupName;
                     $translations[] = $spoonedBlockType->matrixBlockType->name;
