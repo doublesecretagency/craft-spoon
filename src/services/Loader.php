@@ -102,7 +102,7 @@ class Loader extends Component
                     $entryType = reset($sectionEntryTypes);
                 } else
                 {
-                    $entryId = (integer) explode('-', $segments[2])[0];
+                    $entryId = (integer)explode('-', $segments[2])[0];
                     $entry = Craft::$app->entries->getEntryById($entryId);
 
                     if ($entry)

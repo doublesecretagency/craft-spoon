@@ -60,8 +60,8 @@ class BlockTypesController extends Controller
         // delete the rows matching that context before proceeding with the save.
         $blockTypesPostData = Craft::$app->getRequest()->getParam('spoonedBlockTypes');
 
-        $context = (string) Craft::$app->getRequest()->getParam('context');
-        $fieldId = (integer) Craft::$app->getRequest()->getParam('fieldId');
+        $context = (string)Craft::$app->getRequest()->getParam('context');
+        $fieldId = (integer)Craft::$app->getRequest()->getParam('fieldId');
 
         // Get any existing field layouts so we don’t lose them
         $fieldLayoutIds = Spoon::$plugin->blockTypes->getFieldLayoutIds($context, $fieldId);
