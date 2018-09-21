@@ -1,8 +1,10 @@
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/angell-co/Spoon/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/angell-co/Spoon/?branch=master) [![Build Status](https://scrutinizer-ci.com/g/angell-co/Spoon/badges/build.png?b=master)](https://scrutinizer-ci.com/g/angell-co/Spoon/build-status/master) [![Code Intelligence Status](https://scrutinizer-ci.com/g/angell-co/Spoon/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
+
 # Spoon
 
 Enhance your Matrix fields with groups, tabs and more!
 
-![Icon](resources/img/banner.png)
+![Banner](resources/img/banner.png)
 
 Use Spoon to group Matrix blocks, hide blocks and / or fields, and organise your block layouts with tabs.
 
