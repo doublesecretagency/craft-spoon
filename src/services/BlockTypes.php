@@ -13,6 +13,7 @@ namespace angellco\spoon\services;
 use angellco\spoon\Spoon;
 use angellco\spoon\models\BlockType;
 use angellco\spoon\records\BlockType as BlockTypeRecord;
+use angellco\spoon\errors\BlockTypeNotFoundException;
 
 use Craft;
 use craft\base\Component;
@@ -60,7 +61,7 @@ class BlockTypes extends Component
         $blockTypeRecord = BlockTypeRecord::findOne($id);
 
         if (!$blockTypeRecord) {
-            throw new Exception(Craft::t('No Spoon block type exists with the ID “{id}”', ['id' => $id]));
+            throw new BlockTypeNotFoundException(Craft::t('No Spoon block type exists with the ID “{id}”', ['id' => $id]));
         }
 
         return $this->_populateBlockTypeFromRecord($blockTypeRecord);
