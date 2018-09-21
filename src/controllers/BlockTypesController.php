@@ -118,8 +118,8 @@ class BlockTypesController extends Controller
         $this->requirePostRequest();
         $this->requireAcceptsJson();
 
-        $context = Craft::$app->getRequest()->getParam('context');
-        $fieldId = Craft::$app->getRequest()->getParam('fieldId');
+        $context = (string)Craft::$app->getRequest()->getParam('context');
+        $fieldId = (integer)Craft::$app->getRequest()->getParam('fieldId');
 
         if (!Spoon::$plugin->blockTypes->deleteByContext($context, $fieldId))
         {
