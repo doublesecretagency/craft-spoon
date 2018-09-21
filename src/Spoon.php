@@ -145,7 +145,7 @@ class Spoon extends Plugin
                             if (isset($nestedParts[1])) {
 
                                 /** @var craft\models\MatrixBlockType $matrixBlockType */
-                                $matrixBlockType = \Craft::$app->matrix->getBlockTypeById($nestedParts[1]);
+                                $matrixBlockType = \Craft::$app->matrix->getBlockTypeById((integer) $nestedParts[1]);
 
                                 /** @var craft\fields\Matrix $globalField */
                                 $globalField = \Craft::$app->fields->getFieldById($matrixBlockType->fieldId);
