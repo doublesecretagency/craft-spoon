@@ -233,14 +233,13 @@ class BlockTypes extends Component
     /**
      * Deletes all the block types for a given context
      *
-     * @param bool $context
-     * @param bool $fieldId
+     * @param null|string  $context
+     * @param null|integer $fieldId
      *
      * @return bool
-     * @throws \Exception
      * @throws \yii\db\Exception
      */
-    public function deleteByContext($context = false, $fieldId = false)
+    public function deleteByContext($context = null, $fieldId = null)
     {
 
         if (!$context)
