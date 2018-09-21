@@ -154,8 +154,7 @@ class BlockTypesController extends Controller
             if (!$spoonedBlockType = Spoon::$plugin->blockTypes->getById($spoonedBlockTypeId)) {
                 return false;
             }
-        }
-        else
+        } else
         {
             return false;
         }
