@@ -95,14 +95,14 @@ class BlockTypes extends Component
     /**
      * Returns a block type by its context.
      *
-     * @param      $context
-     * @param bool $groupBy Group by an optional model attribute to group by
-     * @param bool $ignoreSubContext Optionally ignore the sub context (id)
-     * @param bool $fieldId
+     * @param string       $context
+     * @param null|string  $groupBy Group by an optional model attribute to group by
+     * @param bool         $ignoreSubContext Optionally ignore the sub context (id)
+     * @param null|integer $fieldId Optinally filter by fieldId
      *
      * @return array
      */
-    public function getByContext($context, $groupBy = false, $ignoreSubContext = false, $fieldId = false)
+    public function getByContext($context, $groupBy = null, $ignoreSubContext = false, $fieldId = null)
     {
 
         if ($ignoreSubContext)
