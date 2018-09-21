@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+## 3.2.3 - 2018-09-21
+
+### Fixed
+- Fixed typing issues introduced in 3.2.2
+
 
 ## 3.2.2 - 2018-09-21
 
