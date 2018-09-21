@@ -103,7 +103,7 @@ class Loader extends Component
                 }
                 else
                 {
-                    $entryId = explode('-',$segments[2])[0];
+                    $entryId = (integer) explode('-',$segments[2])[0];
                     $entry = Craft::$app->entries->getEntryById($entryId);
 
                     if ($entry)
