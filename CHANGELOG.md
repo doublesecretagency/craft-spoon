@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+### Fixed
+- Fixed a bunch of spacing issues
+- Corrected the core craftcms/cms requirement in composer.json
+
 
 ## 3.2.1 - 2018-09-13
 
