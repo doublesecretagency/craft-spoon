@@ -191,7 +191,7 @@ class Loader extends Component
 
             $translations = [];
 
-            foreach ($spoonedBlockTypes as $context => $spoonedBlockTypesInContext) {
+            foreach ($spoonedBlockTypes as $spoonedBlockTypesInContext) {
                 foreach ($spoonedBlockTypesInContext as $spoonedBlockType) {
                     $translations[] = $spoonedBlockType->groupName;
                     $translations[] = $spoonedBlockType->matrixBlockType->name;
