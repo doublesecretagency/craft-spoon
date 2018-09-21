@@ -123,7 +123,7 @@ class BlockTypesController extends Controller
 
         if (!Spoon::$plugin->blockTypes->deleteByContext($context, $fieldId))
         {
-            $this->returnJson([
+            $this->asJson([
                 'success' => false
             ]);
         }
