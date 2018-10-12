@@ -7,10 +7,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+
+## 3.2.4 - 2018-10-12
+
 ### Changed
 - Highlighted the tab if a field inside it has an error ([#27](https://github.com/angell-co/Spoon/issues/27)).
 - Improved the asset bundle structure and minified all of the resources ([#21](https://github.com/angell-co/Spoon/issues/21)).
-
 
 
 ## 3.2.3 - 2018-09-21
