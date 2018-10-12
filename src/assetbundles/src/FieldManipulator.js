@@ -25,69 +25,54 @@
     Spoon.FieldManipulator = Garnish.Base.extend(
         {
 
-            $matrixContainer: null,
+            // _matrixInputsNeedReinit: false,
+
+            _handleMatrixInputInitProxy: null,
+            _handleMatrixInputBlockAddedProxy: null,
 
             init: function(settings)
             {
 
                 // Set up
                 this.setSettings(settings, Spoon.FieldManipulator.defaults);
-                this.refreshMatrixContainers();
 
                 // Work out if we’re in the 'entrytype' context so we can keep things up to date
                 if (this.settings.context.split(':')[0] === 'entrytype')
                 {
                     // Listen to entry type switch
-                    Garnish.on(Craft.EntryTypeSwitcher, 'typeChange', $.proxy(function(ev)
+                    Garnish.on(Craft.EntryTypeSwitcher, 'beforeTypeChange', $.proxy(function(ev)
                     {
-                        this.settings.context = 'entrytype:' + $('#entryType').val();
-                        this.processMatrixFields();
+                        this.settings.context = 'entrytype:' + ev.target.$typeSelect.val();
                     }, this));
                 }
 
-                // Debounced resize event
-                this.addListener(Garnish.$win, 'resize', $.proxy(function()
-                {
-                    if (this.resizeTimeout)
-                    {
-                        clearTimeout(this.resizeTimeout);
-                    }
+                this._handleMatrixInputInitProxy = $.proxy(this, 'handleMatrixInputInit');
+                this._handleMatrixInputBlockAddedProxy = $.proxy(this, 'handleMatrixInputBlockAdded');
 
-                    this.resizeTimeout = setTimeout($.proxy(this, 'processMatrixFields'), 25);
+                Garnish.on(Craft.MatrixInput, 'afterInit', this._handleMatrixInputInitProxy);
+                Garnish.on(Craft.MatrixInput, 'blockAdded', this._handleMatrixInputBlockAddedProxy);
+            },
+
+            handleMatrixInputInit: function(ev)
+            {
+                console.log('m init');
+                var $matrixField = ev.target.$container,
+                    $blocks = ev.target.$blockContainer.children();
+
+                this.initBlockTypeGroups($matrixField);
+
+                $blocks.each($.proxy(function(key,block)
+                {
+                    this.initBlocks($(block), $matrixField);
                 }, this));
-
             },
 
-            // Update our copy of all the Matrix containers
-            refreshMatrixContainers: function()
+            handleMatrixInputBlockAdded: function(ev)
             {
-                this.$matrixContainer = Garnish.$doc.find('.matrix-field');
-            },
+                var $matrixField = ev.target.$container,
+                    $block = $(ev.data.block);
 
-            processMatrixFields: function()
-            {
-
-                this.refreshMatrixContainers();
-
-                var _this = this;
-
-                // loop each matrix field
-                this.$matrixContainer.each(function()
-                {
-
-                    var $matrixField = $(this);
-
-                    // sort out the button groups
-                    _this.initBlockTypeGroups($matrixField);
-
-                    // initialize the blocks
-                    $matrixField.find('> .blocks > .matrixblock').each(function()
-                    {
-                        _this.initBlocks($(this), $matrixField);
-                    });
-
-                });
-
+                this.initBlocks($block, $matrixField);
             },
 
             initBlockTypeGroups: function($matrixField)
@@ -339,72 +324,65 @@
                         $fields = $matrixBlock.find('> .fields');
                     $fields.css({ 'opacity' : 0 });
 
-                    // Wait a bit for the add block animation to finish
-                    setTimeout($.proxy(function()
+                    // Loop the tabs
+                    for (var i = 0; i < tabs.length; i++)
                     {
 
-                        // Loop the tabs
-                        for (var i = 0; i < tabs.length; i++)
+                        // Set up the first one to be active
+                        var navClasses = '',
+                            paneClasses = '';
+
+                        if (i==0)
                         {
-
-                            // Set up the first one to be active
-                            var navClasses = '',
-                                paneClasses = '';
-
-                            if (i==0)
-                            {
-                                navClasses = ' sel';
-                            }
-                            else
-                            {
-                                paneClasses = ' hidden';
-                            }
-
-                            // Add the tab nav, if there is more than one
-                            if (tabs.length > 1)
-                            {
-                                var $tabLi = $('<li/>').appendTo($tabs),
-                                    $tabA = $('<a id="'+spoonedNamespace+'-'+i+'" class="tab'+navClasses+'">'+Craft.t('site', tabs[i].name)+'</a>')
-                                        .appendTo($tabLi)
-                                        .data('spooned-tab-target', '#'+spoonedNamespace+'-pane-'+i);
-                            }
-
-                            // Make a tab pane
-                            var $pane = $('<div id="'+spoonedNamespace+'-pane-'+i+'" class="'+paneClasses+'"/>').appendTo($spoonedFields);
-
-                            // Filter the fields array by their associated tabId and loop over them
-                            var tabFields = $.grep(fields, function(e){ return e.tabId === tabs[i].id; });
-                            for (var n = 0; n < tabFields.length; n++)
-                            {
-                                // Move the required field to our new container
-                                $fields.find('#' + namespace + '-fields-' + tabFields[n].handle + '-field').appendTo($pane);
-                            }
-
-                            // Now check for errors and update the tab if needed
-                            if ($pane.find('.field.has-errors').length > 0) {
-                                $tabA.addClass('error');
-                                $tabA.append(' <span data-icon="alert" />');
-                            }
-
+                            navClasses = ' sel';
+                        }
+                        else
+                        {
+                            paneClasses = ' hidden';
                         }
 
-                        // Bind events to tab nav clicks
+                        // Add the tab nav, if there is more than one
                         if (tabs.length > 1)
                         {
-                            this.addListener($tabs.find('a'), 'click', 'onTabClick');
+                            var $tabLi = $('<li/>').appendTo($tabs),
+                                $tabA = $('<a id="'+spoonedNamespace+'-'+i+'" class="tab'+navClasses+'">'+Craft.t('site', tabs[i].name)+'</a>')
+                                    .appendTo($tabLi)
+                                    .data('spooned-tab-target', '#'+spoonedNamespace+'-pane-'+i);
                         }
 
-                        // Force the fields to be removed from the layout
-                        $fields.hide();
+                        // Make a tab pane
+                        var $pane = $('<div id="'+spoonedNamespace+'-pane-'+i+'" class="'+paneClasses+'"/>').appendTo($spoonedFields);
 
-                        $spoonedFields.velocity({opacity: 1}, 'fast', $.proxy(function()
+                        // Filter the fields array by their associated tabId and loop over them
+                        var tabFields = $.grep(fields, function(e){ return e.tabId === tabs[i].id; });
+                        for (var n = 0; n < tabFields.length; n++)
                         {
-                            // Re-initialize the Craft UI
-                            Craft.initUiElements($spoonedFields);
-                        }, this));
+                            // Move the required field to our new container
+                            $fields.find('#' + namespace + '-fields-' + tabFields[n].handle + '-field').appendTo($pane);
+                        }
 
+                        // Now check for errors and update the tab if needed
+                        if ($pane.find('.field.has-errors').length > 0) {
+                            $tabA.addClass('error');
+                            $tabA.append(' <span data-icon="alert" />');
+                        }
 
-                    }, this), 110);
+                    }
+
+                    // Bind events to tab nav clicks
+                    if (tabs.length > 1)
+                    {
+                        this.addListener($tabs.find('a'), 'click', 'onTabClick');
+                    }
+
+                    // Force the fields to be removed from the layout
+                    $fields.hide();
+
+                    $spoonedFields.velocity({opacity: 1}, 'fast', $.proxy(function()
+                    {
+                        // Re-initialize the Craft UI
+                        Craft.initUiElements($spoonedFields);
+                    }, this));
 
                 }
 
@@ -433,7 +411,7 @@
 
             initSettingsMenu: function($settingsBtn, spoonedBlockTypes, $matrixField)
             {
-                setTimeout($.proxy(function()
+                Garnish.requestAnimationFrame($.proxy(function()
                 {
                     // Get the Garnish.MenuBtn object
                     var menuBtn = $settingsBtn.data('menubtn') || false;
@@ -513,7 +491,7 @@
                         $li.removeClass('hidden');
                     }
 
-                }, this), 0);
+                }, this));
             },
 
             /**
@@ -573,20 +551,5 @@
                 nestedSettingsHandles: []
             }
         });
-
-
-    // Load event has to be here otherwise Safari doesn’t see it
-    Garnish.$win.on('load', function() {
-
-        // Check if the Spoon.fieldmanipulator has been created or not yet
-        if (typeof Spoon.fieldmanipulator == 'undefined') {
-            setTimeout(function() {
-                Spoon.fieldmanipulator.processMatrixFields();
-            }, 250);
-        } else {
-            Spoon.fieldmanipulator.processMatrixFields();
-        }
-
-    });
 
 })(jQuery);
