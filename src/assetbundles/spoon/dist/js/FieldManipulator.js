@@ -363,10 +363,10 @@
                             // Add the tab nav, if there is more than one
                             if (tabs.length > 1)
                             {
-                                var $tabLi = $('<li/>').appendTo($tabs);
-                                $('<a id="'+spoonedNamespace+'-'+i+'" class="tab'+navClasses+'">'+Craft.t('site', tabs[i].name)+'</a>')
-                                    .appendTo($tabLi)
-                                    .data('spooned-tab-target', '#'+spoonedNamespace+'-pane-'+i);
+                                var $tabLi = $('<li/>').appendTo($tabs),
+                                    $tabA = $('<a id="'+spoonedNamespace+'-'+i+'" class="tab'+navClasses+'">'+Craft.t('site', tabs[i].name)+'</a>')
+                                        .appendTo($tabLi)
+                                        .data('spooned-tab-target', '#'+spoonedNamespace+'-pane-'+i);
                             }
 
                             // Make a tab pane
@@ -378,6 +378,12 @@
                             {
                                 // Move the required field to our new container
                                 $fields.find('#' + namespace + '-fields-' + tabFields[n].handle + '-field').appendTo($pane);
+                            }
+
+                            // Now check for errors and update the tab if needed
+                            if ($pane.find('.field.has-errors').length > 0) {
+                                $tabA.addClass('error');
+                                $tabA.append(' <span data-icon="alert" />');
                             }
 
                         }
