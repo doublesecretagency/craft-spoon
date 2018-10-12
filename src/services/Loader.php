@@ -10,8 +10,8 @@
 
 namespace angellco\spoon\services;
 
-use angellco\spoon\assetbundles\Spoon\SpoonConfigurator;
-use angellco\spoon\assetbundles\Spoon\SpoonFieldManipulator;
+use angellco\spoon\assetbundles\ConfiguratorAsset;
+use angellco\spoon\assetbundles\FieldManipulatorAsset;
 use angellco\spoon\Spoon;
 
 use Craft;
@@ -155,7 +155,7 @@ class Loader extends Component
 
         $view = Craft::$app->getView();
 
-        $view->registerAssetBundle(SpoonConfigurator::class);
+        $view->registerAssetBundle(ConfiguratorAsset::class);
 
         $settings = [
             'matrixFieldIds' => Spoon::$plugin->fields->getMatrixFieldIds(),
@@ -186,7 +186,7 @@ class Loader extends Component
 
             $view = Craft::$app->getView();
 
-            $view->registerAssetBundle(SpoonFieldManipulator::class);
+            $view->registerAssetBundle(FieldManipulatorAsset::class);
 
             $translations = [];
 
