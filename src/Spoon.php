@@ -17,6 +17,7 @@ use angellco\spoon\services\Loader as LoaderService;
 
 use Craft;
 use craft\base\Plugin;
+use craft\helpers\Db;
 use craft\services\Plugins;
 use craft\events\PluginEvent;
 
@@ -144,8 +145,10 @@ class Spoon extends Plugin
                             $nestedParts = explode(':', $superTableField->context);
                             if (isset($nestedParts[1])) {
 
+                                $matrixBlockTypeId = Db::idByUid('{{%matrixblocktypes}}', $nestedParts[1]);
+
                                 /** @var craft\models\MatrixBlockType $matrixBlockType */
-                                $matrixBlockType = \Craft::$app->matrix->getBlockTypeById((integer)$nestedParts[1]);
+                                $matrixBlockType = \Craft::$app->matrix->getBlockTypeById($matrixBlockTypeId);
 
                                 /** @var craft\fields\Matrix $globalField */
                                 $globalField = \Craft::$app->fields->getFieldById($matrixBlockType->fieldId);
