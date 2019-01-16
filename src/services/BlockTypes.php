@@ -17,6 +17,7 @@ use angellco\spoon\errors\BlockTypeNotFoundException;
 
 use Craft;
 use craft\base\Component;
+use craft\helpers\Db;
 use craft\records\FieldLayout as FieldLayoutRecord;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
@@ -431,8 +432,10 @@ class BlockTypes extends Component
                         $nestedParts = explode(':', $superTableField->context);
                         if (isset($nestedParts[1])) {
 
+                            $matrixBlockTypeId = Db::idByUid('{{%matrixblocktypes}}', $nestedParts[1]);
+
                             /** @var craft\models\MatrixBlockType $matrixBlockType */
-                            $matrixBlockType = \Craft::$app->matrix->getBlockTypeById($nestedParts[1]);
+                            $matrixBlockType = \Craft::$app->matrix->getBlockTypeById($matrixBlockTypeId);
 
                             /** @var craft\fields\Matrix $globalField */
                             $globalField = \Craft::$app->fields->getFieldById($matrixBlockType->fieldId);
