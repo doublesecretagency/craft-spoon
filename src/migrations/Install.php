@@ -242,6 +242,14 @@ class Install extends Migration
      */
     private function _upgradeFromCraft2()
     {
+
+        // If this install is 3.1 then the settings column won’t be there,
+        // so we need to bail. However, if upgrading from 2.x then we should
+        // hopefully be on 3.0.x first.
+        if (substr( Craft::$app->getVersion(), 0, 3 ) !== "3.0") {
+            return false;
+        }
+
         // Fetch the old plugin row, if it was installed
         $row = (new Query())
             ->select(['id', 'settings'])
