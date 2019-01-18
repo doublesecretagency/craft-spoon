@@ -69,7 +69,7 @@
             handleMatrixInputBlockAdded: function(ev)
             {
                 var $matrixField = ev.target.$container,
-                    $block = $(ev.data.block);
+                    $block = $(ev.$block);
 
                 this.initBlocks($block, $matrixField);
             },
