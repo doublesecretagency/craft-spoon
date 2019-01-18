@@ -7,10 +7,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+
+## 3.2.5 - 2019-01-16
+
+### Fixed
+- Fixed a bunch of issues when upgrading to Craft 3.1 ([#43](https://github.com/angell-co/Spoon/issues/43) & [#40](https://github.com/angell-co/Spoon/issues/40))
+- Fixed a layout issue where the tabs would overlap with the disabled block icon ([#42](https://github.com/angell-co/Spoon/issues/42)).
+- Stopped tracking node_modules ([#35](https://github.com/angell-co/Spoon/issues/35)).
+
+
+## 3.2.4 - 2018-10-12
+
 ### Changed
 - Highlighted the tab if a field inside it has an error ([#27](https://github.com/angell-co/Spoon/issues/27)).
 - Improved the asset bundle structure and minified all of the resources ([#21](https://github.com/angell-co/Spoon/issues/21)).
-
 
 
 ## 3.2.3 - 2018-09-21
