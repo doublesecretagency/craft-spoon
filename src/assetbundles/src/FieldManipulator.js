@@ -55,7 +55,6 @@
 
             handleMatrixInputInit: function(ev)
             {
-                console.log('m init');
                 var $matrixField = ev.target.$container,
                     $blocks = ev.target.$blockContainer.children();
 
