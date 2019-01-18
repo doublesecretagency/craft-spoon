@@ -394,13 +394,15 @@ class BlockTypes extends Component
             'context'
         ]));
 
-        if (!$blockTypeRecord)
-        {
+        if (!$blockTypeRecord) {
             return null;
         }
 
         // Use the fieldId to get the field and save the handle on to the model
         $matrixField = Craft::$app->fields->getFieldById($blockType->fieldId);
+        if (!$matrixField) {
+            return null;
+        }
         $blockType->fieldHandle = $matrixField->handle;
 
 
