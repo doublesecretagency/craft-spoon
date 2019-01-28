@@ -128,8 +128,10 @@ class Spoon extends Plugin
                     $parts = explode(':', $matrixField->context);
                     if (isset($parts[1])) {
 
+                        $superTableBlockTypeId = Db::idByUid('{{%supertableblocktypes}}', $parts[1]);
+
                         /** @var \verbb\supertable\models\SuperTableBlockTypeModel $superTableBlockType */
-                        $superTableBlockType = $superTableService->getBlockTypeById($parts[1]);
+                        $superTableBlockType = $superTableService->getBlockTypeById($superTableBlockTypeId);
 
                         /** @var \verbb\supertable\fields\SuperTableField $superTableField */
                         $superTableField = \Craft::$app->fields->getFieldById($superTableBlockType->fieldId);
