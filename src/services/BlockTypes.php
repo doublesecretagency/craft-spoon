@@ -99,7 +99,7 @@ class BlockTypes extends Component
      * @param string       $context
      * @param null|string  $groupBy Group by an optional model attribute to group by
      * @param bool         $ignoreSubContext Optionally ignore the sub context (id)
-     * @param null|integer $fieldId Optinally filter by fieldId
+     * @param null|integer $fieldId Optionally filter by fieldId
      *
      * @return array
      */
