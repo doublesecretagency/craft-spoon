@@ -210,7 +210,7 @@ class Loader extends Component
                 'nestedSettingsHandles' => Spoon::$plugin->getSettings()->nestedSettings
             ];
 
-            $view->registerJs('Spoon.fieldmanipulator = new Spoon.FieldManipulator('.Json::encode($settings, JSON_UNESCAPED_UNICODE).');');
+            $view->registerJs('if (typeof Craft.MatrixInput !== "undefined") { Spoon.fieldmanipulator = new Spoon.FieldManipulator('.Json::encode($settings, JSON_UNESCAPED_UNICODE).') };');
 
         }
 
