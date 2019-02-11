@@ -52,8 +52,10 @@
                 Garnish.on(Craft.MatrixInput, 'afterInit', this._handleMatrixInputInitProxy);
                 Garnish.on(Craft.MatrixInput, 'blockAdded', this._handleMatrixInputBlockAddedProxy);
 
-                Garnish.on(Craft.SuperTable.MatrixInputAlt, 'afterInit', this._handleMatrixInputInitProxy);
-                Garnish.on(Craft.SuperTable.MatrixInputAlt, 'blockAdded', this._handleMatrixInputBlockAddedProxy);
+                if (typeof Craft.SuperTable !== "undefined") {
+                    Garnish.on(Craft.SuperTable.MatrixInputAlt, 'afterInit', this._handleMatrixInputInitProxy);
+                    Garnish.on(Craft.SuperTable.MatrixInputAlt, 'blockAdded', this._handleMatrixInputBlockAddedProxy);
+                }
             },
 
             handleMatrixInputInit: function(ev)
