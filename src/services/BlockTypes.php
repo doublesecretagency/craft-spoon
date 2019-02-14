@@ -398,6 +398,9 @@ class BlockTypes extends Component
             return null;
         }
 
+        // Refresh field cache
+        Craft::$app->fields->refreshFields();
+        
         // Use the fieldId to get the field and save the handle on to the model
         $matrixField = Craft::$app->fields->getFieldById($blockType->fieldId);
         if (!$matrixField) {
