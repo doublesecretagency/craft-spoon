@@ -17,6 +17,7 @@ use angellco\spoon\errors\BlockTypeNotFoundException;
 
 use Craft;
 use craft\base\Component;
+use craft\base\Field;
 use craft\helpers\Db;
 use craft\records\FieldLayout as FieldLayoutRecord;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
@@ -402,6 +403,7 @@ class BlockTypes extends Component
         Craft::$app->fields->refreshFields();
         
         // Use the fieldId to get the field and save the handle on to the model
+        /** @var Field $matrixField */
         $matrixField = Craft::$app->fields->getFieldById($blockType->fieldId);
         if (!$matrixField) {
             return null;
