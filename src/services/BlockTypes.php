@@ -17,6 +17,7 @@ use angellco\spoon\errors\BlockTypeNotFoundException;
 
 use Craft;
 use craft\base\Component;
+use craft\base\Field;
 use craft\helpers\Db;
 use craft\records\FieldLayout as FieldLayoutRecord;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
@@ -99,7 +100,7 @@ class BlockTypes extends Component
      * @param string       $context
      * @param null|string  $groupBy Group by an optional model attribute to group by
      * @param bool         $ignoreSubContext Optionally ignore the sub context (id)
-     * @param null|integer $fieldId Optinally filter by fieldId
+     * @param null|integer $fieldId Optionally filter by fieldId
      *
      * @return array
      */
@@ -402,6 +403,7 @@ class BlockTypes extends Component
         Craft::$app->fields->refreshFields();
         
         // Use the fieldId to get the field and save the handle on to the model
+        /** @var Field $matrixField */
         $matrixField = Craft::$app->fields->getFieldById($blockType->fieldId);
         if (!$matrixField) {
             return null;

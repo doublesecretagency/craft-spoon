@@ -8,6 +8,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 
 
+## 3.3.0 - 2019-02-14
+
+### Changed
+- Changed the way the JavaScript attaches to Matrix to use an event-based method rather than polling the page ([#20](https://github.com/angell-co/Spoon/issues/20))
+
+### Fixed
+- Fixed a PHP notice that would sometimes occur due to fields not being refreshed ([#46](https://github.com/angell-co/Spoon/pull/46))
+
+
 ## 3.2.7 - 2019-01-28
 
 ### Fixed
