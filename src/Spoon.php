@@ -17,9 +17,11 @@ use angellco\spoon\services\Loader as LoaderService;
 
 use Craft;
 use craft\base\Plugin;
+use craft\events\RegisterUrlRulesEvent;
 use craft\helpers\Db;
 use craft\services\Plugins;
 use craft\events\PluginEvent;
+use craft\web\UrlManager;
 
 use yii\base\Event;
 
@@ -65,6 +67,12 @@ class Spoon extends Plugin
      */
     public $schemaVersion = '3.0.0';
 
+    /**
+     * @var bool Whether the plugin has its own section in the CP
+     */
+    public $hasCpSection = true;
+
+
     // Public Methods
     // =========================================================================
 
@@ -105,77 +113,77 @@ class Spoon extends Plugin
         );
     }
 
-    /**
-     * Loads the edit page for the global context.
-     *
-     * @return mixed|\yii\web\Response
-     */
-    public function getSettingsResponse()
-    {
-        $variables = [];
-
-        $variables['matrixFields'] = $this->fields->getMatrixFields();
-
-        $variables['globalSpoonedBlockTypes'] = $this->blockTypes->getByContext('global', 'fieldId', true);
-
-        // If Super Table is installed get all of the ST fields and store by child field context
-        $superTablePlugin = \Craft::$app->plugins->getPlugin('super-table');
-        if ($superTablePlugin && $variables['matrixFields']) {
-            $superTableService = new \verbb\supertable\services\SuperTableService();
-
-            foreach ($variables['matrixFields'] as $matrixField) {
-                if (strpos($matrixField->context, 'superTableBlockType') === 0) {
-                    $parts = explode(':', $matrixField->context);
-                    if (isset($parts[1])) {
-
-                        $superTableBlockTypeId = Db::idByUid('{{%supertableblocktypes}}', $parts[1]);
-
-                        /** @var \verbb\supertable\models\SuperTableBlockTypeModel $superTableBlockType */
-                        $superTableBlockType = $superTableService->getBlockTypeById($superTableBlockTypeId);
-
-                        /** @var \verbb\supertable\fields\SuperTableField $superTableField */
-                        $superTableField = \Craft::$app->fields->getFieldById($superTableBlockType->fieldId);
-
-                        $variables['superTableFields'][$matrixField->context] = [
-                            'kind' => 'Super Table',
-                            'field' => $superTableField,
-                            'child' => false
-                        ];
-
-                        // If the context of _this_ field is inside a Matrix block ... then we need to do more inception
-                        if (strpos($superTableField->context, 'matrixBlockType') === 0) {
-                            $nestedParts = explode(':', $superTableField->context);
-                            if (isset($nestedParts[1])) {
-
-                                $matrixBlockTypeId = Db::idByUid('{{%matrixblocktypes}}', $nestedParts[1]);
-
-                                /** @var craft\models\MatrixBlockType $matrixBlockType */
-                                $matrixBlockType = \Craft::$app->matrix->getBlockTypeById($matrixBlockTypeId);
-
-                                /** @var craft\fields\Matrix $globalField */
-                                $globalField = \Craft::$app->fields->getFieldById($matrixBlockType->fieldId);
-
-                                $variables['superTableFields'][$matrixField->context] = [
-                                    'kind' => 'Matrix',
-                                    'field' => $globalField,
-                                    'child' => [
-                                        'kind' => 'Super Table',
-                                        'field' => $superTableField
-                                    ]
-                                ];
-
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
-
-        $this->loader->configurator('#spoon-global-context-table', 'global');
-
-        return \Craft::$app->controller->renderTemplate('spoon/_settings/edit-global-context', $variables);
-    }
+//    /**
+//     * Loads the edit page for the global context.
+//     *
+//     * @return mixed|\yii\web\Response
+//     */
+//    public function getSettingsResponse()
+//    {
+//        $variables = [];
+//
+//        $variables['matrixFields'] = $this->fields->getMatrixFields();
+//
+//        $variables['globalSpoonedBlockTypes'] = $this->blockTypes->getByContext('global', 'fieldId', true);
+//
+//        // If Super Table is installed get all of the ST fields and store by child field context
+//        $superTablePlugin = \Craft::$app->plugins->getPlugin('super-table');
+//        if ($superTablePlugin && $variables['matrixFields']) {
+//            $superTableService = new \verbb\supertable\services\SuperTableService();
+//
+//            foreach ($variables['matrixFields'] as $matrixField) {
+//                if (strpos($matrixField->context, 'superTableBlockType') === 0) {
+//                    $parts = explode(':', $matrixField->context);
+//                    if (isset($parts[1])) {
+//
+//                        $superTableBlockTypeId = Db::idByUid('{{%supertableblocktypes}}', $parts[1]);
+//
+//                        /** @var \verbb\supertable\models\SuperTableBlockTypeModel $superTableBlockType */
+//                        $superTableBlockType = $superTableService->getBlockTypeById($superTableBlockTypeId);
+//
+//                        /** @var \verbb\supertable\fields\SuperTableField $superTableField */
+//                        $superTableField = \Craft::$app->fields->getFieldById($superTableBlockType->fieldId);
+//
+//                        $variables['superTableFields'][$matrixField->context] = [
+//                            'kind' => 'Super Table',
+//                            'field' => $superTableField,
+//                            'child' => false
+//                        ];
+//
+//                        // If the context of _this_ field is inside a Matrix block ... then we need to do more inception
+//                        if (strpos($superTableField->context, 'matrixBlockType') === 0) {
+//                            $nestedParts = explode(':', $superTableField->context);
+//                            if (isset($nestedParts[1])) {
+//
+//                                $matrixBlockTypeId = Db::idByUid('{{%matrixblocktypes}}', $nestedParts[1]);
+//
+//                                /** @var craft\models\MatrixBlockType $matrixBlockType */
+//                                $matrixBlockType = \Craft::$app->matrix->getBlockTypeById($matrixBlockTypeId);
+//
+//                                /** @var craft\fields\Matrix $globalField */
+//                                $globalField = \Craft::$app->fields->getFieldById($matrixBlockType->fieldId);
+//
+//                                $variables['superTableFields'][$matrixField->context] = [
+//                                    'kind' => 'Matrix',
+//                                    'field' => $globalField,
+//                                    'child' => [
+//                                        'kind' => 'Super Table',
+//                                        'field' => $superTableField
+//                                    ]
+//                                ];
+//
+//                            }
+//                        }
+//
+//                    }
+//                }
+//            }
+//        }
+//
+//        $this->loader->configurator('#spoon-global-context-table', 'global');
+//
+//        return \Craft::$app->controller->renderTemplate('spoon/_settings/edit-global-context', $variables);
+//    }
 
     // Protected Methods
     // =========================================================================
