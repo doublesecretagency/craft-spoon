@@ -88,7 +88,7 @@ You can override your defaults for a specific context by going to the field layo
 
 ### Setting up defaults
 
-To create default block type groups and field layouts for all your Matrix fields go to Settings → Spoon. Here you will find a list of your current Matrix fields.
+To create default block type groups and field layouts for all your Matrix fields go to Spoon in the main navigation. Here you will find a list of your current Matrix fields.
 
 Click a field name to launch the block type groups editor. It should look something like this:
 

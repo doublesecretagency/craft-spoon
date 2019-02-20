@@ -10,6 +10,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Added
 - Added support for [Solspace Calendar](https://solspace.com/craft/calendar/) specific contexts ([#36](https://github.com/angell-co/Spoon/issues/36))
 
+### Changed
+- Moved the global block type context out of the plugin settings section ([#51](https://github.com/angell-co/Spoon/issues/51))
+
 
 ## 3.3.0 - 2019-02-14
 
