@@ -45,6 +45,7 @@ class Loader extends Component
             /**
              * Check third party plugin support
              */
+            $commercePlugin = \Craft::$app->plugins->getPlugin('commerce');
             $calendarPlugin = \Craft::$app->plugins->getPlugin('calendar');
 
             /**
@@ -107,6 +108,23 @@ class Loader extends Component
                 }
             }
 
+            // Commerce
+            if (count($segments) === 4
+                && $segments[0] === 'commerce'
+                && $segments[1] === 'settings'
+                && $segments[2] === 'producttypes'
+                && $segments[3] !== 'new'
+                && $commercePlugin
+            ) {
+                $productTypesService = new \craft\commerce\services\ProductTypes();
+                if ($productTypesService) {
+                    $productType = $productTypesService->getProductTypeById($segments[3]);
+                    if ($productType) {
+                        $this->configurator('#fieldlayoutform', 'productType:'.$productType->id);
+                    }
+                }
+            }
+
             /**
              * Work out the context for the Matrix field manipulation
              */
@@ -165,8 +183,8 @@ class Loader extends Component
             else if (count($segments) >= 4
                 && $segments[0] === 'calendar'
                 && $segments[1] === 'events'
-                && $calendarPlugin)
-            {
+                && $calendarPlugin
+            ) {
 
                 if ($segments[2] === 'new') {
                     $calendarService = new \Solspace\Calendar\Services\CalendarsService();
@@ -181,6 +199,20 @@ class Loader extends Component
                         if ($event) {
                             $context = 'calendar:'.$event->getCalendar()->id;
                         }
+                    }
+                }
+            }
+            // Commerce
+            else if (count($segments) >= 3
+                && $segments[0] === 'commerce'
+                && $segments[1] === 'products'
+                && $commercePlugin
+            ) {
+                $productTypesService = new \craft\commerce\services\ProductTypes();
+                if ($productTypesService) {
+                    $productType = $productTypesService->getProductTypeByHandle($segments[2]);
+                    if ($productType) {
+                        $context = 'productType:'.$productType->id;
                     }
                 }
             }
