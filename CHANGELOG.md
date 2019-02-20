@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 
 ### Added
-- Added support for Solspace Calendar specific contexts
+- Added support for [Solspace Calendar](https://solspace.com/craft/calendar/) specific contexts ([#36](https://github.com/angell-co/Spoon/issues/36))
 
 
 ## 3.3.0 - 2019-02-14
