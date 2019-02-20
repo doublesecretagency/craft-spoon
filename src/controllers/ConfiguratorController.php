@@ -80,11 +80,13 @@ class ConfiguratorController extends Controller
     /**
      * Returns the html for the individual block type fld.
      *
+     * @return \yii\web\Response
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionGetFieldsHtml()
     {
-
         $this->requirePostRequest();
         $this->requireAcceptsJson();
 
@@ -103,7 +105,6 @@ class ConfiguratorController extends Controller
         return $this->asJson([
             'html' => $fld
         ]);
-
     }
 
 }
