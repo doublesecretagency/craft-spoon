@@ -29,7 +29,7 @@ class Loader extends Component
 {
 
     /**
-     * Loads the configurator and field manupulator code in all the
+     * Loads the configurator and field manipulator code in all the
      * core supported contexts as well as providing a hook for
      * third-party contexts.
      */
@@ -43,46 +43,68 @@ class Loader extends Component
             $segments = Craft::$app->request->getSegments();
 
             /**
+             * Check third party plugin support
+             */
+            $calendarPlugin = \Craft::$app->plugins->getPlugin('calendar');
+
+            /**
              * Work out the context for the block type groups configuration
              */
             // Entry types
-            if (count($segments) == 5
-                && $segments[0] == 'settings'
-                && $segments[1] == 'sections'
-                && $segments[3] == 'entrytypes'
-                && $segments[4] != 'new'
+            if (count($segments) === 5
+                && $segments[0] === 'settings'
+                && $segments[1] === 'sections'
+                && $segments[3] === 'entrytypes'
+                && $segments[4] !== 'new'
             )
             {
                 $this->configurator('#fieldlayoutform', 'entrytype:'.$segments[4]);
             }
 
             // Category groups
-            if (count($segments) == 3
-                && $segments[0] == 'settings'
-                && $segments[1] == 'categories'
-                && $segments[2] != 'new'
+            if (count($segments) === 3
+                && $segments[0] === 'settings'
+                && $segments[1] === 'categories'
+                && $segments[2] !== 'new'
             )
             {
                 $this->configurator('#fieldlayoutform', 'categorygroup:'.$segments[2]);
             }
 
             // Global sets
-            if (count($segments) == 3
-                && $segments[0] == 'settings'
-                && $segments[1] == 'globals'
-                && $segments[2] != 'new'
+            if (count($segments) === 3
+                && $segments[0] === 'settings'
+                && $segments[1] === 'globals'
+                && $segments[2] !== 'new'
             )
             {
                 $this->configurator('#fieldlayoutform', 'globalset:'.$segments[2]);
             }
 
             // Users
-            if (count($segments) == 2
-                && $segments[0] == 'settings'
-                && $segments[1] == 'users'
+            if (count($segments) === 2
+                && $segments[0] === 'settings'
+                && $segments[1] === 'users'
             )
             {
                 $this->configurator('#fieldlayoutform', 'users');
+            }
+
+            // Solpace Calendar
+            if (count($segments) === 3
+                && $segments[0] === 'calendar'
+                && $segments[1] === 'calendars'
+                && $segments[2] !== 'new'
+                && $calendarPlugin
+            )
+            {
+                $calendarService = new \Solspace\Calendar\Services\CalendarsService();
+                if ($calendarService) {
+                    $calendar = $calendarService->getCalendarByHandle(end($segments));
+                    if ($calendar) {
+                        $this->configurator('#fieldlayoutform', 'calendar:'.$calendar->id);
+                    }
+                }
             }
 
             /**
@@ -92,10 +114,10 @@ class Loader extends Component
             $context = 'global';
 
             // Entry types
-            if (count($segments) >= 3 && $segments[0] == 'entries')
+            if (count($segments) >= 3 && $segments[0] === 'entries')
             {
 
-                if ($segments[2] == 'new')
+                if ($segments[2] === 'new')
                 {
                     $section = Craft::$app->sections->getSectionByHandle($segments[1]);
                     $sectionEntryTypes = $section->getEntryTypes();
@@ -117,7 +139,7 @@ class Loader extends Component
 
             }
             // Category groups
-            else if (count($segments) >= 3 && $segments[0] == 'categories')
+            else if (count($segments) >= 3 && $segments[0] === 'categories')
             {
                 $group = Craft::$app->categories->getGroupByHandle($segments[1]);
                 if ($group)
@@ -126,7 +148,7 @@ class Loader extends Component
                 }
             }
             // Global sets
-            else if (count($segments) >= 2 && $segments[0] == 'globals')
+            else if (count($segments) >= 2 && $segments[0] === 'globals')
             {
                 $set = Craft::$app->globals->getSetByHandle(end($segments));
                 if ($set)
@@ -135,9 +157,32 @@ class Loader extends Component
                 }
             }
             // Users
-            else if ((count($segments) == 1 && $segments[0] == 'myaccount') || (count($segments) == 2 && $segments[0] == 'users'))
+            else if ((count($segments) === 1 && $segments[0] === 'myaccount') || (count($segments) == 2 && $segments[0] === 'users'))
             {
                 $context = 'users';
+            }
+            // Solspace Calendar
+            else if (count($segments) >= 4
+                && $segments[0] === 'calendar'
+                && $segments[1] === 'events'
+                && $calendarPlugin)
+            {
+
+                if ($segments[2] === 'new') {
+                    $calendarService = new \Solspace\Calendar\Services\CalendarsService();
+                    $calendar = $calendarService->getCalendarByHandle($segments[3]);
+                    if ($calendar) {
+                        $context = 'calendar:'.$calendar->id;
+                    }
+                } else {
+                    $calendarEventsService = new \Solspace\Calendar\Services\EventsService();
+                    if ($calendarEventsService) {
+                        $event = $calendarEventsService->getEventById($segments[2]);
+                        if ($event) {
+                            $context = 'calendar:'.$event->getCalendar()->id;
+                        }
+                    }
+                }
             }
 
             // Run the field manipulation code
