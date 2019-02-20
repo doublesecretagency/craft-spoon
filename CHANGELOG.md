@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+### Added
+- Added support for Solspace Calendar specific contexts
+
 
 ## 3.3.0 - 2019-02-14
 
