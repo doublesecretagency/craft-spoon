@@ -107,8 +107,7 @@ class BlockTypes extends Component
     public function getByContext($context, $groupBy = null, $ignoreSubContext = false, $fieldId = null)
     {
 
-        if ($ignoreSubContext)
-        {
+        if ($ignoreSubContext) {
 
             if ($fieldId !== null) {
                 $condition = [
@@ -123,8 +122,7 @@ class BlockTypes extends Component
 
             $blockTypeRecords = BlockTypeRecord::find()->where($condition)->all();
 
-        } else
-        {
+        } else {
             $condition = [
                 'context' => $context
             ];
@@ -138,22 +136,18 @@ class BlockTypes extends Component
 
         }
 
-        if ($blockTypeRecords)
-        {
+        if ($blockTypeRecords) {
 
-            foreach ($blockTypeRecords as $blockTypeRecord)
-            {
+            foreach ($blockTypeRecords as $blockTypeRecord) {
                 $blockType = $this->_populateBlockTypeFromRecord($blockTypeRecord);
                 $this->_blockTypesByContext[$context][$blockType->id] = $blockType;
             }
 
-        } else
-        {
+        } else {
             return [];
         }
 
-        if ($groupBy !== null)
-        {
+        if ($groupBy !== null) {
             $return = [];
 
             foreach ($this->_blockTypesByContext[$context] as $blockType)
@@ -161,10 +155,9 @@ class BlockTypes extends Component
                 $return[$blockType->$groupBy][] = $blockType;
             }
             return $return;
-        } else
-        {
-            return $this->_blockTypesByContext[$context];
         }
+
+        return $this->_blockTypesByContext[$context];
 
     }
 
@@ -398,9 +391,6 @@ class BlockTypes extends Component
         if (!$blockTypeRecord) {
             return null;
         }
-
-        // Refresh field cache
-        Craft::$app->fields->refreshFields();
         
         // Use the fieldId to get the field and save the handle on to the model
         /** @var Field $matrixField */

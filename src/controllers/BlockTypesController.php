@@ -11,10 +11,10 @@
 namespace angellco\spoon\controllers;
 
 use angellco\spoon\models\BlockType;
-use angellco\spoon\records\BlockType as BlockTypeRecord;
 use angellco\spoon\Spoon;
 
 use Craft;
+use craft\helpers\Db;
 use craft\web\Controller;
 
 /**
@@ -41,6 +41,78 @@ class BlockTypesController extends Controller
     // =========================================================================
 
     /**
+     * Loads the edit page for the global context.
+     *
+     * @param array $variables
+     *
+     * @return \yii\web\Response
+     */
+    public function actionIndex($variables = [])
+    {
+        $variables['matrixFields'] = Spoon::$plugin->fields->getMatrixFields();
+
+        $variables['globalSpoonedBlockTypes'] = Spoon::$plugin->blockTypes->getByContext('global', 'fieldId', true);
+
+        // If Super Table is installed get all of the ST fields and store by child field context
+        $superTablePlugin = \Craft::$app->plugins->getPlugin('super-table');
+        if ($superTablePlugin && $variables['matrixFields']) {
+            $superTableService = new \verbb\supertable\services\SuperTableService();
+
+            foreach ($variables['matrixFields'] as $matrixField) {
+                if (strpos($matrixField->context, 'superTableBlockType') === 0) {
+                    $parts = explode(':', $matrixField->context);
+                    if (isset($parts[1])) {
+
+                        $superTableBlockTypeId = Db::idByUid('{{%supertableblocktypes}}', $parts[1]);
+
+                        /** @var \verbb\supertable\models\SuperTableBlockTypeModel $superTableBlockType */
+                        $superTableBlockType = $superTableService->getBlockTypeById($superTableBlockTypeId);
+
+                        /** @var \verbb\supertable\fields\SuperTableField $superTableField */
+                        $superTableField = \Craft::$app->fields->getFieldById($superTableBlockType->fieldId);
+
+                        $variables['superTableFields'][$matrixField->context] = [
+                            'kind' => 'Super Table',
+                            'field' => $superTableField,
+                            'child' => false
+                        ];
+
+                        // If the context of _this_ field is inside a Matrix block ... then we need to do more inception
+                        if (strpos($superTableField->context, 'matrixBlockType') === 0) {
+                            $nestedParts = explode(':', $superTableField->context);
+                            if (isset($nestedParts[1])) {
+
+                                $matrixBlockTypeId = Db::idByUid('{{%matrixblocktypes}}', $nestedParts[1]);
+
+                                /** @var craft\models\MatrixBlockType $matrixBlockType */
+                                $matrixBlockType = \Craft::$app->matrix->getBlockTypeById($matrixBlockTypeId);
+
+                                /** @var craft\fields\Matrix $globalField */
+                                $globalField = \Craft::$app->fields->getFieldById($matrixBlockType->fieldId);
+
+                                $variables['superTableFields'][$matrixField->context] = [
+                                    'kind' => 'Matrix',
+                                    'field' => $globalField,
+                                    'child' => [
+                                        'kind' => 'Super Table',
+                                        'field' => $superTableField
+                                    ]
+                                ];
+
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        Spoon::$plugin->loader->configurator('#spoon-global-context-table', 'global');
+
+        return $this->renderTemplate('spoon/edit-global-context', $variables);
+    }
+
+    /**
      * Saves a Spoon block type
      *
      * @return \yii\web\Response
@@ -49,7 +121,6 @@ class BlockTypesController extends Controller
      */
     public function actionSave()
     {
-
         $this->requirePostRequest();
         $this->requireAcceptsJson();
 
@@ -103,7 +174,6 @@ class BlockTypesController extends Controller
         return $this->asJson([
             'success' => true
         ]);
-
     }
 
     /**
@@ -131,18 +201,17 @@ class BlockTypesController extends Controller
         return $this->asJson([
             'success' => true
         ]);
-
     }
 
     /**
      * Saves a field layout for a given Spoon block type
      *
      * @return bool|\yii\web\Response
+     * @throws \angellco\spoon\errors\BlockTypeNotFoundException
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveFieldLayout()
     {
-
         $this->requirePostRequest();
         $this->requireAcceptsJson();
 
@@ -175,7 +244,6 @@ class BlockTypesController extends Controller
         return $this->asJson([
             'success' => true
         ]);
-
     }
 
 }
