@@ -327,6 +327,10 @@
                     // Add a class so we can style
                     $matrixBlock.addClass('matrixblock-spooned');
 
+                    if (this.settings.versioned) {
+                        $matrixBlock.addClass('matrixblock-spooned--disabled');
+                    }
+
                     // Get a namespaced id
                     var namespace = $matrixField.prop('id') + '-' + $matrixBlock.data('id'),
                         spoonedNamespace = 'spoon-' + namespace;
