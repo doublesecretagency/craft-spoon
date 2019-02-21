@@ -13,6 +13,7 @@ namespace angellco\spoon\assetbundles;
 use Craft;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
+use craft\web\assets\matrix\MatrixAsset;
 use craft\web\View;
 
 /**
@@ -38,6 +39,7 @@ class FieldManipulatorAsset extends AssetBundle
         // define the dependencies
         $this->depends = [
             CpAsset::class,
+            MatrixAsset::class
         ];
 
         // define the relative path to CSS/JS files that should be registered with the page
