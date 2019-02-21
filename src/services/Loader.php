@@ -120,7 +120,7 @@ class Loader extends Component
                 if ($productTypesService) {
                     $productType = $productTypesService->getProductTypeById($segments[3]);
                     if ($productType) {
-                        $this->configurator('#fieldlayoutform', 'productType:'.$productType->id);
+                        $this->configurator('#fieldlayoutform', 'producttype:'.$productType->id);
                     }
                 }
             }
@@ -212,7 +212,7 @@ class Loader extends Component
                 if ($productTypesService) {
                     $productType = $productTypesService->getProductTypeByHandle($segments[2]);
                     if ($productType) {
-                        $context = 'productType:'.$productType->id;
+                        $context = 'producttype:'.$productType->id;
                     }
                 }
             }
