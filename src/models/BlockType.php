@@ -101,13 +101,11 @@ class BlockType extends Model
      */
     public function getBlockType()
     {
-        if ($this->matrixBlockType)
-        {
+        if ($this->matrixBlockType) {
             return $this->matrixBlockType;
-        } else
-        {
-            return Craft::$app->matrix->getBlockTypeById($this->matrixBlockTypeId);
         }
+
+        return Craft::$app->matrix->getBlockTypeById($this->matrixBlockTypeId);
     }
 
     /**
