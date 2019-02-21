@@ -17,6 +17,7 @@ use angellco\spoon\Spoon;
 use Craft;
 use craft\base\Component;
 use craft\helpers\Json;
+use craft\models\Section;
 
 /**
  * Loader methods
@@ -32,6 +33,8 @@ class Loader extends Component
      * Loads the configurator and field manipulator code in all the
      * core supported contexts as well as providing a hook for
      * third-party contexts.
+     *
+     * @throws \yii\base\InvalidConfigException
      */
     public function run()
     {
@@ -130,18 +133,17 @@ class Loader extends Component
              */
             // Global
             $context = 'global';
+            $versioned = false;
 
             // Entry types
-            if (count($segments) >= 3 && $segments[0] === 'entries')
-            {
+            if (count($segments) >= 3 && $segments[0] === 'entries') {
 
-                if ($segments[2] === 'new')
-                {
+                if ($segments[2] === 'new') {
+                    /** @var Section $section */
                     $section = Craft::$app->sections->getSectionByHandle($segments[1]);
                     $sectionEntryTypes = $section->getEntryTypes();
                     $entryType = reset($sectionEntryTypes);
-                } else
-                {
+                } else {
                     $entryId = (integer)explode('-', $segments[2])[0];
                     $entry = Craft::$app->entries->getEntryById($entryId);
 
@@ -149,6 +151,10 @@ class Loader extends Component
                     {
                         $entryType = $entry->type;
                     }
+                }
+
+                if (isset($segments[3]) && $segments[3] === 'versions') {
+                    $versioned = true;
                 }
 
                 if (isset($entryType) && $entryType) {
@@ -218,7 +224,7 @@ class Loader extends Component
             }
 
             // Run the field manipulation code
-            $this->fieldManipulator($context);
+            $this->fieldManipulator($context, $versioned);
 
         }
 
@@ -226,6 +232,11 @@ class Loader extends Component
 
     /**
      * Loads a Spoon.Configurator() for the correct context
+     *
+     * @param $container
+     * @param $context
+     *
+     * @throws \yii\base\InvalidConfigException
      */
     public function configurator($container, $context)
     {
@@ -244,9 +255,14 @@ class Loader extends Component
     }
 
     /**
-     * Loads a Spoon.FieldManipulator() for the corrext context
+     * Loads a Spoon.FieldManipulator() for the correct context
+     *
+     * @param      $context
+     * @param bool $versioned
+     *
+     * @throws \yii\base\InvalidConfigException
      */
-    public function fieldManipulator($context)
+    public function fieldManipulator($context, $versioned = false)
     {
 
         // Get global data
@@ -260,7 +276,6 @@ class Loader extends Component
 
         if ($spoonedBlockTypes)
         {
-
             $view = Craft::$app->getView();
 
             $view->registerAssetBundle(FieldManipulatorAsset::class);
@@ -284,11 +299,11 @@ class Loader extends Component
             $settings = [
                 'blockTypes' => $spoonedBlockTypes,
                 'context' => $context,
+                'versioned' => $versioned,
                 'nestedSettingsHandles' => Spoon::$plugin->getSettings()->nestedSettings
             ];
 
             $view->registerJs('if (typeof Craft.MatrixInput !== "undefined") { Spoon.fieldmanipulator = new Spoon.FieldManipulator('.Json::encode($settings, JSON_UNESCAPED_UNICODE).') };');
-
         }
 
     }
