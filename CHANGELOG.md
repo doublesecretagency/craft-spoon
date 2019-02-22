@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 
 
+## 3.3.3 - 2019-02-22
+
+### Fixed
+- Fixed a couple more cases where the Matrix blocktype might not exist for some reason ([#52](https://github.com/angell-co/Spoon/issues/52)) 
+
+
 ## 3.3.2 - 2019-02-21
 
 ### Changed
