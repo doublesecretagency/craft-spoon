@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 
 
+## 3.3.4 - 2019-03-01
+
+### Fixed
+- Fixed an issue where sometimes the fields cache needs refreshing ([#46](https://github.com/angell-co/Spoon/pull/46))
+
+
 ## 3.3.3 - 2019-02-22
 
 ### Fixed
