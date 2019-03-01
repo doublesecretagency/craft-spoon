@@ -56,7 +56,8 @@ class BlockTypes extends Component
      *
      * @param $id
      *
-     * @return null
+     * @return BlockType|null
+     * @throws BlockTypeNotFoundException
      */
     public function getById($id)
     {
@@ -374,7 +375,7 @@ class BlockTypes extends Component
      *
      * @param BlockTypeRecord $blockTypeRecord
      *
-     * @return null
+     * @return BlockType|null
      */
     private function _populateBlockTypeFromRecord(BlockTypeRecord $blockTypeRecord)
     {
