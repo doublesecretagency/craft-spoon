@@ -381,7 +381,7 @@
                         }
 
                         // Now check for errors and update the tab if needed
-                        if ($pane.find('.field.has-errors').length > 0) {
+                        if ($pane.find('.field.has-errors').length > 0 && tabs.length > 1) {
                             $tabA.addClass('error');
                             $tabA.append(' <span data-icon="alert" />');
                         }

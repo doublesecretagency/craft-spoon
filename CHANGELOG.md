@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+## 3.3.5 - 2019-03-06
+
+### Fixed
+- Fixed an issue where spooned blocks with no field layout wouldn’t render if there was a validation error ([#53](https://github.com/angell-co/Spoon/issues/53))
+
 
 ## 3.3.4 - 2019-03-01
 
