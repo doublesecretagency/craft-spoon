@@ -145,7 +145,15 @@ class Loader extends Component
                     $entryType = reset($sectionEntryTypes);
                 } else {
                     $entryId = (integer)explode('-', $segments[2])[0];
-                    $entry = Craft::$app->entries->getEntryById($entryId);
+
+                    // Check if we have a site handle in the URL
+                    if (isset($segments[3])) {
+                        // If we do, get the site and fetch the entry with it
+                        $site = Craft::$app->sites->getSiteByHandle($segments[3]);
+                        $entry = Craft::$app->entries->getEntryById($entryId, $site !== null ? $site->id : null);
+                    } else {
+                        $entry = Craft::$app->entries->getEntryById($entryId);
+                    }
 
                     if ($entry)
                     {
