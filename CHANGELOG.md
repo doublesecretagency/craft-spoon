@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+
+## 3.3.6 - 2019-04-05
+
 ### Changed
 - Qualified the Loader count() calls for opcode speed improvements
 
