@@ -119,14 +119,25 @@ class BlockTypes extends Component
         if ($ignoreSubContext) {
 
             if ($fieldId !== null) {
-                $condition = [
-                    'fieldId' => $fieldId,
-                    ['like', 'context', $context.'%', false]
-                ];
+                if ($context === 'global') {
+                    $condition = [
+                        'fieldId' => $fieldId,
+                        'context' => 'global'
+                    ];
+                } else {
+                    $condition = [
+                        'fieldId' => $fieldId,
+                        ['like', 'context', $context.'%', false]
+                    ];
+                }
             } else {
-                $condition = [
-                    'like', 'context', $context.'%', false
-                ];
+                if ($context === 'global') {
+                    $condition = [
+                        'context' => 'global'
+                    ];
+                } else {
+                    $condition = ['like', 'context', $context.'%', false];
+                }
             }
 
             $blockTypeRecords = BlockTypeRecord::find()->where($condition)->all();
