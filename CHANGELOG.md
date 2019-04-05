@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+### Changed
+- Qualified the Loader count() calls for opcode speed improvements
+
+### Fixed
+- Fixed an issue with the configurations not being loaded on existing entries for non-default sites ([#54](https://github.com/angell-co/Spoon/issues/54))
+- Fixed an issue where the global block types settings page would still show deleted global configs if there was a global set with a contextual config for that field 
+
+
 ## 3.3.5 - 2019-03-06
 
 ### Fixed
