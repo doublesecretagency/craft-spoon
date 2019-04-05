@@ -48,14 +48,14 @@ class Loader extends Component
             /**
              * Check third party plugin support
              */
-            $commercePlugin = \Craft::$app->plugins->getPlugin('commerce');
-            $calendarPlugin = \Craft::$app->plugins->getPlugin('calendar');
+            $commercePlugin = Craft::$app->plugins->getPlugin('commerce');
+            $calendarPlugin = Craft::$app->plugins->getPlugin('calendar');
 
             /**
              * Work out the context for the block type groups configuration
              */
             // Entry types
-            if (count($segments) === 5
+            if (\count($segments) === 5
                 && $segments[0] === 'settings'
                 && $segments[1] === 'sections'
                 && $segments[3] === 'entrytypes'
@@ -66,7 +66,7 @@ class Loader extends Component
             }
 
             // Category groups
-            if (count($segments) === 3
+            if (\count($segments) === 3
                 && $segments[0] === 'settings'
                 && $segments[1] === 'categories'
                 && $segments[2] !== 'new'
@@ -76,7 +76,7 @@ class Loader extends Component
             }
 
             // Global sets
-            if (count($segments) === 3
+            if (\count($segments) === 3
                 && $segments[0] === 'settings'
                 && $segments[1] === 'globals'
                 && $segments[2] !== 'new'
@@ -86,7 +86,7 @@ class Loader extends Component
             }
 
             // Users
-            if (count($segments) === 2
+            if (\count($segments) === 2
                 && $segments[0] === 'settings'
                 && $segments[1] === 'users'
             )
@@ -95,7 +95,7 @@ class Loader extends Component
             }
 
             // Solpace Calendar
-            if (count($segments) === 3
+            if (\count($segments) === 3
                 && $segments[0] === 'calendar'
                 && $segments[1] === 'calendars'
                 && $segments[2] !== 'new'
@@ -112,7 +112,7 @@ class Loader extends Component
             }
 
             // Commerce
-            if (count($segments) === 4
+            if (\count($segments) === 4
                 && $segments[0] === 'commerce'
                 && $segments[1] === 'settings'
                 && $segments[2] === 'producttypes'
@@ -136,7 +136,7 @@ class Loader extends Component
             $versioned = false;
 
             // Entry types
-            if (count($segments) >= 3 && $segments[0] === 'entries') {
+            if (\count($segments) >= 3 && $segments[0] === 'entries') {
 
                 if ($segments[2] === 'new') {
                     /** @var Section $section */
@@ -145,7 +145,15 @@ class Loader extends Component
                     $entryType = reset($sectionEntryTypes);
                 } else {
                     $entryId = (integer)explode('-', $segments[2])[0];
-                    $entry = Craft::$app->entries->getEntryById($entryId);
+
+                    // Check if we have a site handle in the URL
+                    if (isset($segments[3])) {
+                        // If we do, get the site and fetch the entry with it
+                        $site = Craft::$app->sites->getSiteByHandle($segments[3]);
+                        $entry = Craft::$app->entries->getEntryById($entryId, $site !== null ? $site->id : null);
+                    } else {
+                        $entry = Craft::$app->entries->getEntryById($entryId);
+                    }
 
                     if ($entry)
                     {
@@ -163,7 +171,7 @@ class Loader extends Component
 
             }
             // Category groups
-            else if (count($segments) >= 3 && $segments[0] === 'categories')
+            else if (\count($segments) >= 3 && $segments[0] === 'categories')
             {
                 $group = Craft::$app->categories->getGroupByHandle($segments[1]);
                 if ($group)
@@ -172,7 +180,7 @@ class Loader extends Component
                 }
             }
             // Global sets
-            else if (count($segments) >= 2 && $segments[0] === 'globals')
+            else if (\count($segments) >= 2 && $segments[0] === 'globals')
             {
                 $set = Craft::$app->globals->getSetByHandle(end($segments));
                 if ($set)
@@ -181,12 +189,12 @@ class Loader extends Component
                 }
             }
             // Users
-            else if ((count($segments) === 1 && $segments[0] === 'myaccount') || (count($segments) == 2 && $segments[0] === 'users'))
+            else if ((\count($segments) === 1 && $segments[0] === 'myaccount') || (\count($segments) == 2 && $segments[0] === 'users'))
             {
                 $context = 'users';
             }
             // Solspace Calendar
-            else if (count($segments) >= 4
+            else if (\count($segments) >= 4
                 && $segments[0] === 'calendar'
                 && $segments[1] === 'events'
                 && $calendarPlugin
@@ -209,7 +217,7 @@ class Loader extends Component
                 }
             }
             // Commerce
-            else if (count($segments) >= 3
+            else if (\count($segments) >= 3
                 && $segments[0] === 'commerce'
                 && $segments[1] === 'products'
                 && $commercePlugin
