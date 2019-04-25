@@ -305,8 +305,7 @@ class BlockTypes extends Component
 
         // Second save the layout - replicated from FieldsService::saveLayout()
         // to allow us to retain the $layout->id for our own use
-        if ($layout->getTabs())
-        {
+        if ($layout->getTabs()) {
             $layoutRecord = new FieldLayoutRecord();
             $layoutRecord->type = 'Spoon_BlockType';
             $layoutRecord->save(false);
@@ -338,8 +337,7 @@ class BlockTypes extends Component
             // spooned blocktype model
             $spoonedBlockType->fieldLayoutId = $layout->id;
 
-        } else
-        {
+        } else {
             $spoonedBlockType->fieldLayoutId = null;
         }
 

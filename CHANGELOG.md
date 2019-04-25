@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 
 
+## 3.3.7 - 2019-04-25
+
+### Fixed
+- Fixed an error that occurred when trying to remove existing field layouts ([#57](https://github.com/angell-co/Spoon/issues/57))
+
+
 ## 3.3.6 - 2019-04-05
 
 ### Changed
