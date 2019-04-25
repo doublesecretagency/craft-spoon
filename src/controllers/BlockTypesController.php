@@ -232,15 +232,28 @@ class BlockTypesController extends Controller
 
         // Set the field layout on the model
         $postedFieldLayout = Craft::$app->getRequest()->getParam('blockTypeFieldLayouts');
-        $assembledLayout = Craft::$app->fields->assembleLayout($postedFieldLayout);
-        $spoonedBlockType->setFieldLayout($assembledLayout);
 
-        // Save it
-        if (!Spoon::$plugin->blockTypes->saveFieldLayout($spoonedBlockType))
-        {
-            return $this->asJson([
-                'success' => false
-            ]);
+        // Check if we have one
+        if ($postedFieldLayout) {
+            $assembledLayout = Craft::$app->fields->assembleLayout($postedFieldLayout);
+            $spoonedBlockType->setFieldLayout($assembledLayout);
+
+            // Save it
+            if (!Spoon::$plugin->blockTypes->saveFieldLayout($spoonedBlockType)) {
+                return $this->asJson([
+                    'success' => false
+                ]);
+            }
+        } else if ($spoonedBlockType->fieldLayoutId) {
+
+            // We don’t have a new field layout, so remove the old one if there is one
+            $oldFieldLayoutId = $spoonedBlockType->fieldLayoutId;
+            $spoonedBlockType->fieldLayoutId = null;
+            if (!Spoon::$plugin->blockTypes->save($spoonedBlockType) || !Craft::$app->fields->deleteLayoutById($oldFieldLayoutId)) {
+                return $this->asJson([
+                    'success' => false
+                ]);
+            }
         }
 
         return $this->asJson([
