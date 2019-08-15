@@ -69,7 +69,7 @@ class BlockTypes extends Component
         $blockTypeRecord = BlockTypeRecord::findOne($id);
 
         if (!$blockTypeRecord) {
-            throw new BlockTypeNotFoundException(Craft::t('No Spoon block type exists with the ID “{id}”', ['id' => $id]));
+            throw new BlockTypeNotFoundException(Craft::t('spoon', 'No Spoon block type exists with the ID “{id}”', ['id' => $id]));
         }
 
         return $this->_populateBlockTypeFromRecord($blockTypeRecord);
@@ -189,7 +189,6 @@ class BlockTypes extends Component
      *
      * @return bool
      * @throws \Exception
-     * @throws \yii\db\Exception
      */
     public function save(BlockType $blockType): bool
     {
@@ -200,7 +199,7 @@ class BlockTypes extends Component
 
             if (!$blockTypeRecord)
             {
-                throw new Exception(Craft::t('No Spoon Block Type exists with the ID “{id}”', ['id' => $blockType->id]));
+                throw new BlockTypeNotFoundException(Craft::t('spoon', 'No Spoon Block Type exists with the ID “{id}”', ['id' => $blockType->id]));
             }
         } else
         {
@@ -296,7 +295,7 @@ class BlockTypes extends Component
      * @param BlockType $spoonedBlockType
      *
      * @return bool
-     * @throws \yii\db\Exception
+     * @throws \Exception
      */
     public function saveFieldLayout(BlockType $spoonedBlockType): bool
     {
@@ -309,7 +308,7 @@ class BlockTypes extends Component
         // to allow us to retain the $layout->id for our own use
         if ($layout->getTabs()) {
             $layoutRecord = new FieldLayoutRecord();
-            $layoutRecord->type = 'Spoon_BlockType';
+            $layoutRecord->type = BlockType::class;
             $layoutRecord->save(false);
             $layout->id = $layoutRecord->id;
 
