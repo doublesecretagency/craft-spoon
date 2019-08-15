@@ -26,12 +26,6 @@ use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 /**
  * BlockTypes Service
  *
- * All of your plugin’s business logic should go in services, including saving data,
- * retrieving data, etc. They provide APIs that your controllers, template variables,
- * and other plugins can interact with.
- *
- * https://craftcms.com/docs/plugins/services
- *
  * @author    Angell & Co
  * @package   Spoon
  * @since     3.0.0
@@ -53,8 +47,11 @@ class BlockTypes extends Component
 
     /**
      * BlockTypes constructor.
+     *
+     * @param array $config
      */
-    public function __construct() {
+    public function __construct($config = []) {
+        parent::__construct($config);
         // Refresh fields cache in case something has gone awry
         Craft::$app->fields->refreshFields();
     }
@@ -67,7 +64,7 @@ class BlockTypes extends Component
      * @return BlockType|null
      * @throws BlockTypeNotFoundException
      */
-    public function getById($id)
+    public function getById($id): ?BlockType
     {
         $blockTypeRecord = BlockTypeRecord::findOne($id);
 
@@ -84,7 +81,7 @@ class BlockTypes extends Component
      * @param bool $context
      * @param bool $matrixBlockTypeId
      *
-     * @return bool|null
+     * @return BlockType|bool|null
      */
     public function getBlockType($context = false, $matrixBlockTypeId = false)
     {
@@ -98,6 +95,10 @@ class BlockTypes extends Component
             'context'           => $context,
             'matrixBlockTypeId' => $matrixBlockTypeId
         ]);
+
+        if (!$blockTypeRecord) {
+            return null;
+        }
 
         return $this->_populateBlockTypeFromRecord($blockTypeRecord);
 
@@ -113,7 +114,7 @@ class BlockTypes extends Component
      *
      * @return array
      */
-    public function getByContext($context, $groupBy = null, $ignoreSubContext = false, $fieldId = null)
+    public function getByContext($context, $groupBy = null, $ignoreSubContext = false, $fieldId = null): array
     {
 
         if ($ignoreSubContext) {
@@ -190,7 +191,7 @@ class BlockTypes extends Component
      * @throws \Exception
      * @throws \yii\db\Exception
      */
-    public function save(BlockType $blockType)
+    public function save(BlockType $blockType): bool
     {
 
         if ($blockType->id)
@@ -248,13 +249,13 @@ class BlockTypes extends Component
     /**
      * Deletes all the block types for a given context
      *
-     * @param null|string  $context
-     * @param null|integer $fieldId
+     * @param null $context
+     * @param null $fieldId
      *
-     * @return bool
-     * @throws \yii\db\Exception
+     * @return bool|null
+     * @throws \Exception
      */
-    public function deleteByContext($context = null, $fieldId = null)
+    public function deleteByContext($context = null, $fieldId = null): ?bool
     {
 
         if (!$context)
@@ -295,8 +296,9 @@ class BlockTypes extends Component
      * @param BlockType $spoonedBlockType
      *
      * @return bool
+     * @throws \yii\db\Exception
      */
-    public function saveFieldLayout(BlockType $spoonedBlockType)
+    public function saveFieldLayout(BlockType $spoonedBlockType): bool
     {
 
         // First, get the layout and save the old field layout id for later
@@ -357,8 +359,8 @@ class BlockTypes extends Component
      * Returns an array of fieldLayoutIds indexed by matrixBlockTypeIds
      * for the given context and fieldId combination
      *
-     * @param  string            $context required
-     * @param  integer           $fieldId required
+     * @param  string       $context required
+     * @param  bool|integer $fieldId required
      * @return false|array
      */
     public function getFieldLayoutIds($context, $fieldId = false)
@@ -394,9 +396,8 @@ class BlockTypes extends Component
      *
      * @return BlockType|null
      */
-    private function _populateBlockTypeFromRecord(BlockTypeRecord $blockTypeRecord)
+    private function _populateBlockTypeFromRecord(BlockTypeRecord $blockTypeRecord): ?BlockType
     {
-
         $blockType = new BlockType($blockTypeRecord->toArray([
             'id',
             'fieldId',
@@ -405,10 +406,6 @@ class BlockTypes extends Component
             'groupName',
             'context'
         ]));
-
-        if (!$blockTypeRecord) {
-            return null;
-        }
         
         // Use the fieldId to get the field and save the handle on to the model
         /** @var Field $matrixField */
