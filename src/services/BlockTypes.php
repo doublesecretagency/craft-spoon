@@ -18,6 +18,8 @@ use angellco\spoon\errors\BlockTypeNotFoundException;
 use Craft;
 use craft\base\Component;
 use craft\base\Field;
+use craft\db\Query;
+use craft\events\ConfigEvent;
 use craft\helpers\Db;
 use craft\records\FieldLayout as FieldLayoutRecord;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
@@ -284,6 +286,61 @@ class BlockTypes extends Component
         }
 
     }
+
+
+    // Project config methods
+    // =========================================================================
+
+//    public function handleChangedBlockType(ConfigEvent $event)
+//    {
+//        // Get the UID that was matched in the config path
+//        $uid = $event->tokenMatches[0];
+//
+//        // Does this product type exist?
+//        $id = (new Query())
+//            ->select(['id'])
+//            ->from('{{%spoon_blocktypes}}')
+//            ->where(['uid' => $uid])
+//            ->scalar();
+//
+//        $isNew = empty($id);
+//
+//        // Insert or update its row
+//        if ($isNew) {
+//            Craft::$app->db->createCommand()
+//                ->insert('{{%spoon_blocktypes}}', [
+//                    'name' => $event->newValue['name'],
+//                    // ...
+//                ])
+//                ->execute();
+//        } else {
+//            Craft::$app->db->createCommand()
+//                ->update('{{%spoon_blocktypes}}', [
+//                    'name' => $event->newValue['name'],
+//                    // ...
+//                ], ['id' => $id])
+//                ->execute();
+//        }
+//    }
+//
+//    public function handleDeletedBlockType(ConfigEvent $event)
+//    {
+//        // Get the UID that was matched in the config path
+//        $uid = $event->tokenMatches[0];
+//
+//        // Get the block type
+//        $blockType = $this->getBlockTypeByUid($uid);
+//
+//        // If that came back empty, we're done!
+//        if (!$blockType) {
+//            return;
+//        }
+//
+//        // Delete its row
+//        Craft::$app->db->createCommand()
+//            ->delete('{{%spoon_blocktypes}}', ['id' => $blockType->id])
+//            ->execute();
+//    }
 
 
     // Public Methods for FLDs on our Block Types

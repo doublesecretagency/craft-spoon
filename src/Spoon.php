@@ -90,6 +90,7 @@ class Spoon extends Plugin
         parent::init();
         self::$plugin = $this;
 
+        // Register CP URLs
         Event::on(
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
@@ -109,6 +110,13 @@ class Spoon extends Plugin
             }
         );
 
+        // Project config listeners
+//        Craft::$app->projectConfig
+//            ->onAdd('blockTypes.{uid}', [$this->blockTypes, 'handleChangedBlockType'])
+//            ->onUpdate('blockTypes.{uid}', [$this->blockTypes, 'handleChangedBlockType'])
+//            ->onRemove('blockTypes.{uid}', [$this->blockTypes, 'handleDeletedBlockType']);
+
+        // Log on load for debugging
         Craft::info(
             Craft::t(
                 'spoon',
