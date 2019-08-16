@@ -18,9 +18,10 @@ use angellco\spoon\errors\BlockTypeNotFoundException;
 use Craft;
 use craft\base\Component;
 use craft\base\Field;
-use craft\db\Query;
 use craft\events\ConfigEvent;
 use craft\helpers\Db;
+use craft\helpers\ProjectConfig as ProjectConfigHelper;
+use craft\helpers\StringHelper;
 use craft\records\FieldLayout as FieldLayoutRecord;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
@@ -194,56 +195,84 @@ class BlockTypes extends Component
      */
     public function save(BlockType $blockType): bool
     {
+        $isNew = !$blockType->id;
 
-        if ($blockType->id)
-        {
-            $blockTypeRecord = BlockTypeRecord::findOne($blockType->id);
+        // Ensure the block type has a UID
+        if ($isNew) {
+            $blockType->uid = StringHelper::UUID();
+            // TODO fieldId, matrixBlockTypeId, fieldLayoutId ??
+        } else if (!$blockType->uid) {
+            $existingBlockTypeRecord = BlockTypeRecord::findOne($blockType->id);
 
-            if (!$blockTypeRecord)
-            {
-                throw new BlockTypeNotFoundException(Craft::t('spoon', 'No Spoon Block Type exists with the ID “{id}”', ['id' => $blockType->id]));
-            }
-        } else
-        {
-            $blockTypeRecord = new BlockTypeRecord();
-        }
-
-        $blockTypeRecord->fieldId           = $blockType->fieldId;
-        $blockTypeRecord->matrixBlockTypeId = $blockType->matrixBlockTypeId;
-        $blockTypeRecord->fieldLayoutId     = $blockType->fieldLayoutId;
-        $blockTypeRecord->groupName         = $blockType->groupName;
-        $blockTypeRecord->context           = $blockType->context;
-
-        $blockTypeRecord->validate();
-        $blockType->addErrors($blockTypeRecord->getErrors());
-
-        if (!$blockType->hasErrors())
-        {
-
-            $transaction = Craft::$app->getDb()->beginTransaction();
-            try {
-
-                // Save it!
-                $isNew = $blockTypeRecord->getIsNewRecord();
-                $blockTypeRecord->save(false);
-                if ($isNew) {
-                    $blockType->id = $blockTypeRecord->id;
-                }
-
-                // Might as well update our cache of the block type group while we have it.
-                $this->_blockTypesByContext[$blockType->context][$blockType->id] = $blockType;
-
-                $transaction->commit();
-
-            } catch (\Exception $e) {
-                $transaction->rollBack();
-                throw $e;
+            if (!$existingBlockTypeRecord) {
+                throw new BlockTypeNotFoundException("No Spoon Block Type exists with the ID “{$blockType->id}”");
             }
 
-            return true;
+            $blockType->uid = $existingBlockTypeRecord->uid;
+            // TODO fieldId, matrixBlockTypeId, fieldLayoutId ??
         }
 
-        return false;
+        // Make sure it validates
+        if (!$blockType->validate()) {
+            return false;
+        }
+
+        // Save it to the project config
+        $path = "spoon-block-types.{$blockType->uid}";
+        Craft::$app->projectConfig->set($path, [
+            'groupName' => $blockType->groupName,
+            'context' => $blockType->context,
+// TODO ??
+//            'field'
+//            'matrixBlock'
+//            'fieldLayout'
+        ]);
+
+        if ($isNew) {
+            $blockType->id = Db::idByUid('{{%spoon_blocktypes}}', $blockType->uid);
+        }
+
+        return true;
+
+
+//
+//
+//        $blockTypeRecord->fieldId           = $blockType->fieldId;
+//        $blockTypeRecord->matrixBlockTypeId = $blockType->matrixBlockTypeId;
+//        $blockTypeRecord->fieldLayoutId     = $blockType->fieldLayoutId;
+//        $blockTypeRecord->groupName         = $blockType->groupName;
+//        $blockTypeRecord->context           = $blockType->context;
+//
+//        $blockTypeRecord->validate();
+//        $blockType->addErrors($blockTypeRecord->getErrors());
+//
+//        if (!$blockType->hasErrors())
+//        {
+//
+//            $transaction = Craft::$app->getDb()->beginTransaction();
+//            try {
+//
+//                // Save it!
+//                $isNew = $blockTypeRecord->getIsNewRecord();
+//                $blockTypeRecord->save(false);
+//                if ($isNew) {
+//                    $blockType->id = $blockTypeRecord->id;
+//                }
+//
+//                // Might as well update our cache of the block type group while we have it.
+//                $this->_blockTypesByContext[$blockType->context][$blockType->id] = $blockType;
+//
+//                $transaction->commit();
+//
+//            } catch (\Exception $e) {
+//                $transaction->rollBack();
+//                throw $e;
+//            }
+//
+//            return true;
+//        }
+//
+//        return false;
 
     }
 
@@ -287,61 +316,76 @@ class BlockTypes extends Component
 
     }
 
-
     // Project config methods
     // =========================================================================
 
-//    public function handleChangedBlockType(ConfigEvent $event)
-//    {
-//        // Get the UID that was matched in the config path
-//        $uid = $event->tokenMatches[0];
-//
-//        // Does this product type exist?
-//        $id = (new Query())
-//            ->select(['id'])
-//            ->from('{{%spoon_blocktypes}}')
-//            ->where(['uid' => $uid])
-//            ->scalar();
-//
-//        $isNew = empty($id);
-//
-//        // Insert or update its row
-//        if ($isNew) {
-//            Craft::$app->db->createCommand()
-//                ->insert('{{%spoon_blocktypes}}', [
-//                    'name' => $event->newValue['name'],
-//                    // ...
-//                ])
-//                ->execute();
-//        } else {
-//            Craft::$app->db->createCommand()
-//                ->update('{{%spoon_blocktypes}}', [
-//                    'name' => $event->newValue['name'],
-//                    // ...
-//                ], ['id' => $id])
-//                ->execute();
-//        }
-//    }
-//
-//    public function handleDeletedBlockType(ConfigEvent $event)
-//    {
-//        // Get the UID that was matched in the config path
-//        $uid = $event->tokenMatches[0];
-//
-//        // Get the block type
-//        $blockType = $this->getBlockTypeByUid($uid);
-//
-//        // If that came back empty, we're done!
-//        if (!$blockType) {
-//            return;
-//        }
-//
-//        // Delete its row
-//        Craft::$app->db->createCommand()
-//            ->delete('{{%spoon_blocktypes}}', ['id' => $blockType->id])
-//            ->execute();
-//    }
+    /**
+     * @param ConfigEvent $event
+     *
+     * @throws \Throwable
+     */
+    public function handleChangedBlockType(ConfigEvent $event): void
+    {
+        $uid = $event->tokenMatches[0];
+        $data = $event->newValue;
 
+        // Make sure fields and sites are processed
+        ProjectConfigHelper::ensureAllSitesProcessed();
+        ProjectConfigHelper::ensureAllFieldsProcessed();
+
+        $db = Craft::$app->getDb();
+        $transaction = $db->beginTransaction();
+
+        try {
+            // Get the record
+            $blockTypeRecord = $this->_getBlockTypeRecord($uid);
+
+            // Prep the record with the new data
+            $blockTypeRecord->fieldId = $data['fieldId'];
+            $blockTypeRecord->matrixBlockTypeId = $data['matrixBlockTypeId'];
+            $blockTypeRecord->fieldLayoutId = $data['fieldLayoutId'];
+            $blockTypeRecord->groupName = $data['groupName'];
+            $blockTypeRecord->context = $data['context'];
+            $blockTypeRecord->uid = $uid;
+
+            // Save the record
+            $blockTypeRecord->save(false);
+
+            $transaction->commit();
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     * @param ConfigEvent $event
+     *
+     * @throws \Throwable
+     */
+    public function handleDeletedBlockType(ConfigEvent $event): void
+    {
+        $uid = $event->tokenMatches[0];
+        $blockTypeRecord = $this->_getBlockTypeRecord($uid);
+
+        if (!$blockTypeRecord->id) {
+            return;
+        }
+
+        $db = Craft::$app->getDb();
+        $transaction = $db->beginTransaction();
+        try {
+            // Delete the block type record
+            $db->createCommand()
+                ->delete('{{%spoon_blocktypes}}', ['id' => $blockTypeRecord->id])
+                ->execute();
+
+            $transaction->commit();
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
 
     // Public Methods for FLDs on our Block Types
     // =========================================================================
@@ -444,6 +488,19 @@ class BlockTypes extends Component
 
     // Private Methods
     // =========================================================================
+
+    /**
+     * Gets a block type's record by uid.
+     *
+     * @param string $uid
+     *
+     * @return BlockTypeRecord
+     */
+    private function _getBlockTypeRecord(string $uid): BlockTypeRecord
+    {
+        $record = BlockTypeRecord::findOne(['uid' => $uid]);
+        return $record ?? new BlockTypeRecord();
+    }
 
     /**
      * Populates a BlockTypeModel with attributes from a BlockTypeRecord.
