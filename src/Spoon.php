@@ -112,9 +112,9 @@ class Spoon extends Plugin
 
         // Project config listeners
         Craft::$app->projectConfig
-            ->onAdd('blockTypes.{uid}', [$this->blockTypes, 'handleChangedBlockType'])
-            ->onUpdate('blockTypes.{uid}', [$this->blockTypes, 'handleChangedBlockType'])
-            ->onRemove('blockTypes.{uid}', [$this->blockTypes, 'handleDeletedBlockType']);
+            ->onAdd($this->blockTypes::CONFIG_BLOCKTYPE_KEY.'.{uid}', [$this->blockTypes, 'handleChangedBlockType'])
+            ->onUpdate($this->blockTypes::CONFIG_BLOCKTYPE_KEY.'.{uid}', [$this->blockTypes, 'handleChangedBlockType'])
+            ->onRemove($this->blockTypes::CONFIG_BLOCKTYPE_KEY.'.{uid}', [$this->blockTypes, 'handleDeletedBlockType']);
 
         // Log on load for debugging
         Craft::info(
