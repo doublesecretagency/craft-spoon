@@ -23,9 +23,7 @@ use craft\events\ConfigEvent;
 use craft\helpers\Db;
 use craft\helpers\ProjectConfig as ProjectConfigHelper;
 use craft\helpers\StringHelper;
-use craft\records\FieldLayout as FieldLayoutRecord;
-use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
-use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
+use craft\models\FieldLayout;
 
 /**
  * BlockTypes Service
@@ -188,7 +186,7 @@ class BlockTypes extends Component
     }
 
     /**
-     * Saves our version of a block type
+     * Saves our version of a block type into the project config
      *
      * @param BlockType $blockType
      *
@@ -225,6 +223,22 @@ class BlockTypes extends Component
             'matrixBlockType' => $blockType->getBlockType()->uid,
         ];
 
+        // Handle any currently attached field layouts
+        /** @var FieldLayout $fieldLayout */
+        $fieldLayout = $blockType->getFieldLayout();
+
+        if ($fieldLayout && $fieldLayout->uid) {
+            $fieldLayoutConfig = $fieldLayout->getConfig();
+
+            $layoutUid = $fieldLayout->uid;
+
+            $configData['fieldLayout'] = [
+                $layoutUid => $fieldLayoutConfig
+            ];
+        } else {
+            $configData['fieldLayout'] = null;
+        }
+
         $configPath = self::CONFIG_BLOCKTYPE_KEY . '.' . $blockType->uid;
 
         Craft::$app->projectConfig->set($configPath, $configData);
@@ -237,7 +251,7 @@ class BlockTypes extends Component
     }
 
     /**
-     * Deletes all the block types for a given context
+     * Deletes all the block types for a given context from the project config
      *
      * @param null $context
      * @param null $fieldId
@@ -264,12 +278,16 @@ class BlockTypes extends Component
     // =========================================================================
 
     /**
+     * Handles a changed block type and saves it to the database
+     *
      * @param ConfigEvent $event
      *
      * @throws \Throwable
      */
     public function handleChangedBlockType(ConfigEvent $event): void
     {
+        $fieldsService = Craft::$app->getFields();
+
         $uid = $event->tokenMatches[0];
         $data = $event->newValue;
 
@@ -293,10 +311,24 @@ class BlockTypes extends Component
             // Prep the record with the new data
             $blockTypeRecord->fieldId = $fieldId;
             $blockTypeRecord->matrixBlockTypeId = $matrixBlockTypeId;
-            $blockTypeRecord->fieldLayoutId = null;
             $blockTypeRecord->groupName = $data['groupName'];
             $blockTypeRecord->context = $data['context'];
             $blockTypeRecord->uid = $uid;
+
+            // Handle the field layout
+            if (!empty($data['fieldLayout'])) {
+                // Save the field layout
+                $layout = FieldLayout::createFromConfig(reset($data['fieldLayout']));
+                $layout->id = $blockTypeRecord->fieldLayoutId;
+                $layout->type = BlockType::class;
+                $layout->uid = key($data['fieldLayout']);
+                $fieldsService->saveLayout($layout);
+                $blockTypeRecord->fieldLayoutId = $layout->id;
+            } else if ($blockTypeRecord->fieldLayoutId) {
+                // Delete the field layout
+                $fieldsService->deleteLayoutById($blockTypeRecord->fieldLayoutId);
+                $blockTypeRecord->fieldLayoutId = null;
+            }
 
             // Save the record
             $blockTypeRecord->save(false);
@@ -309,6 +341,8 @@ class BlockTypes extends Component
     }
 
     /**
+     * Handles a deleted block type and removes it from the database
+     *
      * @param ConfigEvent $event
      *
      * @throws \Throwable
@@ -341,69 +375,36 @@ class BlockTypes extends Component
     // =========================================================================
 
     /**
-     * Saves a field layout and attaches it to the given spooned block type
+     * Saves a field layout into the project config nested under the block type config
      *
-     * @param BlockType $spoonedBlockType
+     * @param BlockType $blockType
      *
      * @return bool
      * @throws \Exception
      */
-    public function saveFieldLayout(BlockType $spoonedBlockType): bool
+    public function saveFieldLayout(BlockType $blockType): bool
     {
+        /** @var FieldLayout $fieldLayout */
+        $fieldLayout = $blockType->getFieldLayout();
+//        $oldFieldLayoutId = $blockType->fieldLayoutId;
 
-        // First, get the layout and save the old field layout id for later
-        $layout = $spoonedBlockType->getFieldLayout();
-        $oldFieldLayoutId = $spoonedBlockType->fieldLayoutId;
-
-        // Second save the layout - replicated from FieldsService::saveLayout()
-        // to allow us to retain the $layout->id for our own use
-        if ($layout->getTabs()) {
-            $layoutRecord = new FieldLayoutRecord();
-            $layoutRecord->type = BlockType::class;
-            $layoutRecord->save(false);
-            $layout->id = $layoutRecord->id;
-
-            foreach ($layout->getTabs() as $tab)
-            {
-                $tabRecord = new FieldLayoutTabRecord();
-                $tabRecord->layoutId  = $layout->id;
-                $tabRecord->name      = $tab->name;
-                $tabRecord->sortOrder = $tab->sortOrder;
-                $tabRecord->save(false);
-                $tab->id = $tabRecord->id;
-
-                foreach ($tab->getFields() as $field)
-                {
-                    /** @var Field $field */
-                    $fieldRecord = new FieldLayoutFieldRecord();
-                    $fieldRecord->layoutId  = $layout->id;
-                    $fieldRecord->tabId     = $tab->id;
-                    $fieldRecord->fieldId   = $field->id;
-                    $fieldRecord->required  = (bool)$field->required;
-                    $fieldRecord->sortOrder = $field->sortOrder;
-                    $fieldRecord->save(false);
-                }
-            }
-
-            // Now we have saved the layout, update the id on the given
-            // spooned blocktype model
-            $spoonedBlockType->fieldLayoutId = $layout->id;
-
+        if ($fieldLayout->uid) {
+            $layoutUid = $fieldLayout->uid;
         } else {
-            $spoonedBlockType->fieldLayoutId = null;
+            $layoutUid = StringHelper::UUID();
+            $fieldLayout->uid = $layoutUid;
         }
 
-        // Save our spooned block type again
-        if ($this->save($spoonedBlockType))
-        {
-            // Delete the old field layout
-            Craft::$app->fields->deleteLayoutById($oldFieldLayoutId);
-            return true;
-        }
+        $fieldLayoutConfig = $fieldLayout->getConfig();
 
-        return false;
+        $configPath = self::CONFIG_BLOCKTYPE_KEY . '.' . $blockType->uid . '.fieldLayout';
+
+        Craft::$app->projectConfig->set($configPath, [
+            $layoutUid => $fieldLayoutConfig
+        ]);
+
+        return true;
     }
-
 
     /**
      * Returns an array of fieldLayoutIds indexed by matrixBlockTypeIds
