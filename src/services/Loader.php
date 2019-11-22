@@ -40,11 +40,14 @@ class Loader extends Component
     public function run(): void
     {
 
+        $request = Craft::$app->getRequest();
+
         // Check the conditions are right to run
-        if (Craft::$app->request->isCpRequest && !Craft::$app->request->getAcceptsJson())
+        if ($request->isCpRequest && !$request->getAcceptsJson())
         {
 
             $segments = Craft::$app->request->getSegments();
+            $entries = Craft::$app->getEntries();
 
             /**
              * Check third party plugin support
@@ -144,7 +147,7 @@ class Loader extends Component
 
                 if ($segments[2] === 'new') {
                     /** @var Section $section */
-                    $section = Craft::$app->sections->getSectionByHandle($segments[1]);
+                    $section = Craft::$app->getSections()->getSectionByHandle($segments[1]);
                     $sectionEntryTypes = $section->getEntryTypes();
                     $entryType = reset($sectionEntryTypes);
                 } else {
@@ -153,10 +156,10 @@ class Loader extends Component
                     // Check if we have a site handle in the URL
                     if (isset($segments[3])) {
                         // If we do, get the site and fetch the entry with it
-                        $site = Craft::$app->sites->getSiteByHandle($segments[3]);
-                        $entry = Craft::$app->entries->getEntryById($entryId, $site !== null ? $site->id : null);
+                        $site = Craft::$app->getSites()->getSiteByHandle($segments[3]);
+                        $entry = $entries->getEntryById($entryId, $site !== null ? $site->id : null);
                     } else {
-                        $entry = Craft::$app->entries->getEntryById($entryId);
+                        $entry = $entries->getEntryById($entryId);
                     }
 
                     if ($entry)
@@ -165,7 +168,8 @@ class Loader extends Component
                     }
                 }
 
-                if (isset($segments[3]) && $segments[3] === 'versions') {
+                $revisionId = $request->getParam('revisionId');
+                if ($revisionId) {
                     $versioned = true;
                 }
 
@@ -177,7 +181,7 @@ class Loader extends Component
             // Category groups
             else if (\count($segments) >= 3 && $segments[0] === 'categories')
             {
-                $group = Craft::$app->categories->getGroupByHandle($segments[1]);
+                $group = Craft::$app->getCategories()->getGroupByHandle($segments[1]);
                 if ($group)
                 {
                     $context = 'categorygroup:'.$group->uid;
@@ -186,7 +190,7 @@ class Loader extends Component
             // Global sets
             else if (\count($segments) >= 2 && $segments[0] === 'globals')
             {
-                $set = Craft::$app->globals->getSetByHandle(end($segments));
+                $set = Craft::$app->getGlobals()->getSetByHandle(end($segments));
                 if ($set)
                 {
                     $context = 'globalset:'.$set->uid;
