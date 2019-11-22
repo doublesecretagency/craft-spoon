@@ -11,15 +11,19 @@
 namespace angellco\spoon;
 
 use angellco\spoon\models\Settings;
+use angellco\spoon\services\BlockTypes;
 use angellco\spoon\services\Fields as FieldsService;
 use angellco\spoon\services\BlockTypes as BlockTypesService;
 use angellco\spoon\services\Loader as LoaderService;
+use angellco\spoon\helpers\ProjectConfig as ProjectConfigHelper;
 
 use Craft;
 use craft\base\Plugin;
+use craft\events\RebuildConfigEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\services\Plugins;
 
+use craft\services\ProjectConfig;
 use craft\web\UrlManager;
 use yii\base\Event;
 
@@ -63,7 +67,7 @@ class Spoon extends Plugin
      *
      * @var string
      */
-    public $schemaVersion = '3.0.0';
+    public $schemaVersion = '3.4.0';
 
     /**
      * @var bool Whether the plugin has its own section in the CP
@@ -90,6 +94,7 @@ class Spoon extends Plugin
         parent::init();
         self::$plugin = $this;
 
+        // Register CP URLs
         Event::on(
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
@@ -109,6 +114,18 @@ class Spoon extends Plugin
             }
         );
 
+        // Project config listeners
+        Craft::$app->projectConfig
+            ->onAdd($this->blockTypes::CONFIG_BLOCKTYPE_KEY.'.{uid}', [$this->blockTypes, 'handleChangedBlockType'])
+            ->onUpdate($this->blockTypes::CONFIG_BLOCKTYPE_KEY.'.{uid}', [$this->blockTypes, 'handleChangedBlockType'])
+            ->onRemove($this->blockTypes::CONFIG_BLOCKTYPE_KEY.'.{uid}', [$this->blockTypes, 'handleDeletedBlockType']);
+
+        // Project config rebuild listener
+        Event::on(ProjectConfig::class, ProjectConfig::EVENT_REBUILD, function(RebuildConfigEvent $e) {
+            $e->config[BlockTypes::CONFIG_BLOCKTYPE_KEY] = ProjectConfigHelper::rebuildProjectConfig();
+        });
+
+        // Log on load for debugging
         Craft::info(
             Craft::t(
                 'spoon',

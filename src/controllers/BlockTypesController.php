@@ -139,7 +139,6 @@ class BlockTypesController extends Controller
         // Get any existing field layouts so we don’t lose them
         $fieldLayoutIds = Spoon::$plugin->blockTypes->getFieldLayoutIds($context, $fieldId);
 
-
         // Remove all current block types by context
         Spoon::$plugin->blockTypes->deleteByContext($context, $fieldId);
 
