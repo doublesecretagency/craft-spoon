@@ -2,6 +2,8 @@
 
 namespace angellco\spoon\migrations;
 
+use angellco\spoon\helpers\ProjectConfig as ProjectConfigHelper;
+use angellco\spoon\services\BlockTypes;
 use angellco\spoon\Spoon;
 use Craft;
 use craft\db\Migration;
@@ -18,13 +20,18 @@ class m191122_115434_UpgradeToSupportProjectConfig extends Migration
     public function safeUp()
     {
 
+        $projectConfig = Craft::$app->getProjectConfig();
+
         // Don't make the same config changes twice
-        $schemaVersion = Craft::$app->projectConfig
-            ->get('plugins.spoon.schemaVersion', true);
+        $schemaVersion = $projectConfig->get('plugins.spoon.schemaVersion', true);
 
         if (version_compare($schemaVersion, '3.4.0', '<')) {
-            // TODO Run the rebuild and commit it to project.yaml
+            // Run the rebuild and commit it to project.yaml
+            $projectConfig->muteEvents = true;
 
+            $projectConfig->set(BlockTypes::CONFIG_BLOCKTYPE_KEY, ProjectConfigHelper::rebuildProjectConfig());
+
+            $projectConfig->muteEvents = false;
         }
     }
 

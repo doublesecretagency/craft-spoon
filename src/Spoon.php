@@ -67,7 +67,7 @@ class Spoon extends Plugin
      *
      * @var string
      */
-    public $schemaVersion = '3.0.0';
+    public $schemaVersion = '3.4.0';
 
     /**
      * @var bool Whether the plugin has its own section in the CP
