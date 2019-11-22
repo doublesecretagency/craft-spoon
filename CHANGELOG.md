@@ -7,6 +7,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+## 3.4.0 - 2019-11-22
+
+### Added
+- Added project config support - at long last! ([#24](https://github.com/angell-co/Spoon/issues/24))
+
+### Changed
+- Moved the settings page to the standard plugin settings area ([#60](https://github.com/angell-co/Spoon/issues/60))
+
+### Fixed
+- Fixed a bug where all Matrix fields were getting hidden when viewing an entry revision ([#66](https://github.com/angell-co/Spoon/issues/66))
+
 
 ## 3.3.7 - 2019-04-25
 

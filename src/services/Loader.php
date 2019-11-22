@@ -16,6 +16,7 @@ use angellco\spoon\Spoon;
 
 use Craft;
 use craft\base\Component;
+use craft\helpers\Db;
 use craft\helpers\Json;
 use craft\models\Section;
 
@@ -36,14 +37,17 @@ class Loader extends Component
      *
      * @throws \yii\base\InvalidConfigException
      */
-    public function run()
+    public function run(): void
     {
 
+        $request = Craft::$app->getRequest();
+
         // Check the conditions are right to run
-        if (Craft::$app->request->isCpRequest && !Craft::$app->request->getAcceptsJson())
+        if ($request->isCpRequest && !$request->getAcceptsJson())
         {
 
             $segments = Craft::$app->request->getSegments();
+            $entries = Craft::$app->getEntries();
 
             /**
              * Check third party plugin support
@@ -62,7 +66,8 @@ class Loader extends Component
                 && $segments[4] !== 'new'
             )
             {
-                $this->configurator('#fieldlayoutform', 'entrytype:'.$segments[4]);
+                $uid = Db::uidById('{{%entrytypes}}', $segments[4]);
+                $this->configurator('#fieldlayoutform', 'entrytype:'.$uid);
             }
 
             // Category groups
@@ -72,7 +77,8 @@ class Loader extends Component
                 && $segments[2] !== 'new'
             )
             {
-                $this->configurator('#fieldlayoutform', 'categorygroup:'.$segments[2]);
+                $uid = Db::uidById('{{%categorygroups}}', $segments[2]);
+                $this->configurator('#fieldlayoutform', 'categorygroup:'.$uid);
             }
 
             // Global sets
@@ -82,7 +88,8 @@ class Loader extends Component
                 && $segments[2] !== 'new'
             )
             {
-                $this->configurator('#fieldlayoutform', 'globalset:'.$segments[2]);
+                $uid = Db::uidById('{{%globalsets}}', $segments[2]);
+                $this->configurator('#fieldlayoutform', 'globalset:'.$uid);
             }
 
             // Users
@@ -106,7 +113,7 @@ class Loader extends Component
                 if ($calendarService) {
                     $calendar = $calendarService->getCalendarByHandle(end($segments));
                     if ($calendar) {
-                        $this->configurator('#fieldlayoutform', 'calendar:'.$calendar->id);
+                        $this->configurator('#fieldlayoutform', 'calendar:'.$calendar->uid);
                     }
                 }
             }
@@ -123,7 +130,7 @@ class Loader extends Component
                 if ($productTypesService) {
                     $productType = $productTypesService->getProductTypeById($segments[3]);
                     if ($productType) {
-                        $this->configurator('#fieldlayoutform', 'producttype:'.$productType->id);
+                        $this->configurator('#fieldlayoutform', 'producttype:'.$productType->uid);
                     }
                 }
             }
@@ -140,7 +147,7 @@ class Loader extends Component
 
                 if ($segments[2] === 'new') {
                     /** @var Section $section */
-                    $section = Craft::$app->sections->getSectionByHandle($segments[1]);
+                    $section = Craft::$app->getSections()->getSectionByHandle($segments[1]);
                     $sectionEntryTypes = $section->getEntryTypes();
                     $entryType = reset($sectionEntryTypes);
                 } else {
@@ -149,10 +156,10 @@ class Loader extends Component
                     // Check if we have a site handle in the URL
                     if (isset($segments[3])) {
                         // If we do, get the site and fetch the entry with it
-                        $site = Craft::$app->sites->getSiteByHandle($segments[3]);
-                        $entry = Craft::$app->entries->getEntryById($entryId, $site !== null ? $site->id : null);
+                        $site = Craft::$app->getSites()->getSiteByHandle($segments[3]);
+                        $entry = $entries->getEntryById($entryId, $site !== null ? $site->id : null);
                     } else {
-                        $entry = Craft::$app->entries->getEntryById($entryId);
+                        $entry = $entries->getEntryById($entryId);
                     }
 
                     if ($entry)
@@ -161,31 +168,32 @@ class Loader extends Component
                     }
                 }
 
-                if (isset($segments[3]) && $segments[3] === 'versions') {
+                $revisionId = $request->getParam('revisionId');
+                if ($revisionId) {
                     $versioned = true;
                 }
 
                 if (isset($entryType) && $entryType) {
-                    $context = 'entrytype:'.$entryType->id;
+                    $context = 'entrytype:'.$entryType->uid;
                 }
 
             }
             // Category groups
             else if (\count($segments) >= 3 && $segments[0] === 'categories')
             {
-                $group = Craft::$app->categories->getGroupByHandle($segments[1]);
+                $group = Craft::$app->getCategories()->getGroupByHandle($segments[1]);
                 if ($group)
                 {
-                    $context = 'categorygroup:'.$group->id;
+                    $context = 'categorygroup:'.$group->uid;
                 }
             }
             // Global sets
             else if (\count($segments) >= 2 && $segments[0] === 'globals')
             {
-                $set = Craft::$app->globals->getSetByHandle(end($segments));
+                $set = Craft::$app->getGlobals()->getSetByHandle(end($segments));
                 if ($set)
                 {
-                    $context = 'globalset:'.$set->id;
+                    $context = 'globalset:'.$set->uid;
                 }
             }
             // Users
@@ -204,14 +212,14 @@ class Loader extends Component
                     $calendarService = new \Solspace\Calendar\Services\CalendarsService();
                     $calendar = $calendarService->getCalendarByHandle($segments[3]);
                     if ($calendar) {
-                        $context = 'calendar:'.$calendar->id;
+                        $context = 'calendar:'.$calendar->uid;
                     }
                 } else {
                     $calendarEventsService = new \Solspace\Calendar\Services\EventsService();
                     if ($calendarEventsService) {
                         $event = $calendarEventsService->getEventById($segments[2]);
                         if ($event) {
-                            $context = 'calendar:'.$event->getCalendar()->id;
+                            $context = 'calendar:'.$event->getCalendar()->uid;
                         }
                     }
                 }
@@ -226,7 +234,7 @@ class Loader extends Component
                 if ($productTypesService) {
                     $productType = $productTypesService->getProductTypeByHandle($segments[2]);
                     if ($productType) {
-                        $context = 'producttype:'.$productType->id;
+                        $context = 'producttype:'.$productType->uid;
                     }
                 }
             }
@@ -246,7 +254,7 @@ class Loader extends Component
      *
      * @throws \yii\base\InvalidConfigException
      */
-    public function configurator($container, $context)
+    public function configurator($container, $context): void
     {
 
         $view = Craft::$app->getView();
@@ -270,7 +278,7 @@ class Loader extends Component
      *
      * @throws \yii\base\InvalidConfigException
      */
-    public function fieldManipulator($context, $versioned = false)
+    public function fieldManipulator($context, $versioned = false): void
     {
 
         // Get global data

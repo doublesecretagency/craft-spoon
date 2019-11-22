@@ -32,8 +32,8 @@
     "extra": {
         "name": "Spoon",
         "handle": "spoon",
-        "hasCpSettings": false,
-        "hasCpSection": true,
+        "hasCpSettings": true,
+        "hasCpSection": false,
         "changelogUrl": "https://raw.githubusercontent.com/angell-co/spoon/master/CHANGELOG.md",
         "components": {
             "fields": "angellco\\spoon\\services\\Fields",

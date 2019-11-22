@@ -13,6 +13,7 @@ namespace angellco\spoon\models;
 use angellco\spoon\Spoon;
 
 use Craft;
+use craft\base\FieldInterface;
 use craft\base\Model;
 use craft\behaviors\FieldLayoutBehavior;
 use craft\elements\MatrixBlock;
@@ -44,6 +45,11 @@ class BlockType extends Model
      * @var int|null Field ID
      */
     public $fieldId;
+
+    /**
+     * @var FieldInterface|null Field
+     */
+    public $field;
 
     /**
      * @var int|null Field layout ID
@@ -80,6 +86,11 @@ class BlockType extends Model
      */
     public $context;
 
+    /**
+     * @var string|mixed
+     */
+    public $uid;
+
 
     // Public Methods
     // =========================================================================
@@ -93,6 +104,21 @@ class BlockType extends Model
     {
         return (string)$this->getBlockType()->name;
     }
+
+    /**
+     * Returns the Field instance
+     *
+     * @return FieldInterface|null
+     */
+    public function getField()
+    {
+        if ($this->field) {
+            return $this->field;
+        }
+
+        return Craft::$app->fields->getFieldById($this->fieldId);
+    }
+
 
     /**
      * Returns the Matrix Block Type model
@@ -136,7 +162,7 @@ class BlockType extends Model
         return [
             [['id', 'fieldId', 'matrixBlockTypeId', 'fieldLayoutId'], 'number', 'integerOnly' => true],
             [['fieldHandle', 'groupName', 'context'], 'string'],
-            ['matrixBlockType', MatrixBlockType::class]
+//            ['matrixBlockType', MatrixBlockType::className()]
         ];
     }
 
