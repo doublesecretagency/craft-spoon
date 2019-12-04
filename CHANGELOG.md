@@ -7,6 +7,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+
+## 3.4.1 - 2019-12-04
+
+### Changed
+- Bumped the PHP requirement to >= 7.1 ([#72](https://github.com/angell-co/Spoon/issues/72))
+
+### Fixed
+- Fixed a couple of bad references to the `uid` field on a Solspace Calendar model ([#73](https://github.com/angell-co/Spoon/issues/73))
+- Fixed the collapsed / expanded reflow issues ([#58](https://github.com/angell-co/Spoon/issues/58) & [#67](https://github.com/angell-co/Spoon/issues/67)) - hat tip to [@jsunsawyer](https://github.com/jsunsawyer) for pinpointing the specific circumstances that cause this to pop up
+
+
 ## 3.4.0 - 2019-11-22
 
 ### Added

@@ -113,7 +113,8 @@ class Loader extends Component
                 if ($calendarService) {
                     $calendar = $calendarService->getCalendarByHandle(end($segments));
                     if ($calendar) {
-                        $this->configurator('#fieldlayoutform', 'calendar:'.$calendar->uid);
+                        $uid = Db::uidById(\Solspace\Calendar\Records\CalendarRecord::TABLE, $calendar->id);
+                        $this->configurator('#fieldlayoutform', 'calendar:'.$uid);
                     }
                 }
             }
@@ -212,14 +213,16 @@ class Loader extends Component
                     $calendarService = new \Solspace\Calendar\Services\CalendarsService();
                     $calendar = $calendarService->getCalendarByHandle($segments[3]);
                     if ($calendar) {
-                        $context = 'calendar:'.$calendar->uid;
+                        $uid = Db::uidById(\Solspace\Calendar\Records\CalendarRecord::TABLE, $calendar->id);
+                        $context = 'calendar:'.$uid;
                     }
                 } else {
                     $calendarEventsService = new \Solspace\Calendar\Services\EventsService();
                     if ($calendarEventsService) {
                         $event = $calendarEventsService->getEventById($segments[2]);
                         if ($event) {
-                            $context = 'calendar:'.$event->getCalendar()->uid;
+                            $uid = Db::uidById(\Solspace\Calendar\Records\CalendarRecord::TABLE, $event->getCalendar()->id);
+                            $context = 'calendar:'.$uid;
                         }
                     }
                 }
