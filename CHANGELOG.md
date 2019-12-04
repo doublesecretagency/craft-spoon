@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changed
 - Bumped the PHP requirement to >= 7.1 ([#72](https://github.com/angell-co/Spoon/issues/72))
 
+### Fixed
+- Fixed a couple of bad references to the `uid` field on a Solspace Calendar model ([#73](https://github.com/angell-co/Spoon/issues/73))
 
 ## 3.4.0 - 2019-11-22
 
