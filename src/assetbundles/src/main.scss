@@ -92,6 +92,7 @@ body.rtl .buttons-spooned > .btn, body.rtl .buttons-spooned > .btngroup { margin
     -webkit-opacity: 0 !important;
     -moz-opacity: 0 !important;
     opacity: 0 !important;
+    overflow: hidden;
 }
 
 /* tabs */
