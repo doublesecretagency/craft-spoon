@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+### Changed
+- Bumped the PHP requirement to >= 7.1 ([#72](https://github.com/angell-co/Spoon/issues/72))
+
+
 ## 3.4.0 - 2019-11-22
 
 ### Added
