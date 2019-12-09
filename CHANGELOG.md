@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 
 
+## 3.4.2 - 2019-12-04
+
+### Fixed
+- Refactored the codebase to not rely on PHP >= 7.1.0 and removed the composer requirement ([#74](https://github.com/angell-co/Spoon/issues/74))
+
+
 ## 3.4.1 - 2019-12-04
 
 ### Changed
