@@ -67,7 +67,7 @@ class BlockTypes extends Component
      * @return BlockType|null
      * @throws BlockTypeNotFoundException
      */
-    public function getById($id): ?BlockType
+    public function getById($id)
     {
         $blockTypeRecord = BlockTypeRecord::findOne($id);
 
@@ -259,7 +259,7 @@ class BlockTypes extends Component
      * @return bool|null
      * @throws \Exception
      */
-    public function deleteByContext($context = null, $fieldId = null): ?bool
+    public function deleteByContext($context = null, $fieldId = null)
     {
         if (!$context) {
             return false;
@@ -460,7 +460,7 @@ class BlockTypes extends Component
      *
      * @return BlockType|null
      */
-    private function _populateBlockTypeFromRecord(BlockTypeRecord $blockTypeRecord): ?BlockType
+    private function _populateBlockTypeFromRecord(BlockTypeRecord $blockTypeRecord)
     {
         $blockType = new BlockType($blockTypeRecord->toArray([
             'id',
