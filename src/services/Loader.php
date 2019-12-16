@@ -37,7 +37,7 @@ class Loader extends Component
      *
      * @throws \yii\base\InvalidConfigException
      */
-    public function run(): void
+    public function run()
     {
 
         $request = Craft::$app->getRequest();
@@ -257,7 +257,7 @@ class Loader extends Component
      *
      * @throws \yii\base\InvalidConfigException
      */
-    public function configurator($container, $context): void
+    public function configurator($container, $context)
     {
 
         $view = Craft::$app->getView();
@@ -281,7 +281,7 @@ class Loader extends Component
      *
      * @throws \yii\base\InvalidConfigException
      */
-    public function fieldManipulator($context, $versioned = false): void
+    public function fieldManipulator($context, $versioned = false)
     {
 
         // Get global data

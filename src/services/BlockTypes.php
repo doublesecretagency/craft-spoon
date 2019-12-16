@@ -284,7 +284,7 @@ class BlockTypes extends Component
      *
      * @throws \Throwable
      */
-    public function handleChangedBlockType(ConfigEvent $event): void
+    public function handleChangedBlockType(ConfigEvent $event)
     {
         $fieldsService = Craft::$app->getFields();
 
@@ -347,7 +347,7 @@ class BlockTypes extends Component
      *
      * @throws \Throwable
      */
-    public function handleDeletedBlockType(ConfigEvent $event): void
+    public function handleDeletedBlockType(ConfigEvent $event)
     {
         $uid = $event->tokenMatches[0];
         $blockTypeRecord = $this->_getBlockTypeRecord($uid);
