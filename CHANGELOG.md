@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 
 
+## 3.4.3 - 2019-12-16
+
+### Fixed
+- Removed a few more return type declarations that rely on PHP >= 7.1.0 ([#78](https://github.com/angell-co/Spoon/issues/78))
+
+
 ## 3.4.2 - 2019-12-04
 
 ### Fixed
