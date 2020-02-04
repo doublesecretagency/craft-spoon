@@ -2,6 +2,7 @@
 
 namespace angellco\spoon\migrations;
 
+use angellco\spoon\records\BlockType;
 use Craft;
 use craft\db\Migration;
 
@@ -24,8 +25,36 @@ class m200204_132923_FixBlockTypeSorting extends Migration
             $this->addColumn('{{%spoon_blocktypes}}', 'sortOrder', $this->smallInteger()->unsigned()->after('groupSortOrder'));
         }
 
-        // TODO Work out the current state from the DB and update sort orders to match
+        // Update sort orders to match current state of the DB
+        $records = BlockType::find()->all();
 
+        $groupedByContext = [];
+        foreach ($records as $record) {
+            $groupedByContext[$record['context']][$record['groupName']][] = $record;
+        }
+
+        foreach ($groupedByContext as $recordGroups) {
+
+            $groupSortOrder = 1;
+            foreach ($recordGroups as $recordGroup) {
+
+                $sortOrder = 1;
+                /** @var BlockType $record */
+                foreach ($recordGroup as $record) {
+
+                    $record->groupSortOrder = $groupSortOrder;
+                    $record->sortOrder = $sortOrder;
+                    $record->save(false);
+
+                    $sortOrder++;
+                }
+
+                $groupSortOrder++;
+            }
+
+        }
+
+        Craft::$app->projectConfig->rebuild();
     }
 
     /**
