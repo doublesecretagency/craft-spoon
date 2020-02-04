@@ -91,6 +91,11 @@ class BlockType extends Model
      */
     public $uid;
 
+    /**
+     * @var int
+     */
+    public $sortOrder;
+
 
     // Public Methods
     // =========================================================================
@@ -160,7 +165,7 @@ class BlockType extends Model
     public function rules()
     {
         return [
-            [['id', 'fieldId', 'matrixBlockTypeId', 'fieldLayoutId'], 'number', 'integerOnly' => true],
+            [['id', 'fieldId', 'matrixBlockTypeId', 'fieldLayoutId', 'sortOrder'], 'number', 'integerOnly' => true],
             [['fieldHandle', 'groupName', 'context'], 'string'],
 //            ['matrixBlockType', MatrixBlockType::className()]
         ];

@@ -218,6 +218,7 @@ class BlockTypes extends Component
         // Save it to the project config
         $configData = [
             'groupName' => $blockType->groupName,
+            'sortOrder' => $blockType->sortOrder,
             'context' => $blockType->context,
             'field' => $blockType->getField()->uid,
             'matrixBlockType' => $blockType->getBlockType()->uid,
