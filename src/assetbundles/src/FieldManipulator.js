@@ -332,7 +332,7 @@
                     }
 
                     // Get a namespaced id
-                    var namespace = $matrixField.prop('id') + '-' + $matrixBlock.data('id'),
+                    var namespace = $matrixField.prop('id') + '-blocks-' + $matrixBlock.data('id'),
                         spoonedNamespace = 'spoon-' + namespace;
 
                     // Add the tabs container
