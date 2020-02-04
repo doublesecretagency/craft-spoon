@@ -52,8 +52,6 @@ class ProjectConfig
                 $layout = $fields->getLayoutById($blockType['fieldLayoutId']);
 
                 if ($layout) {
-
-
                     $layoutConfig = $layout->getConfig();
 
                     $layoutUid = $layout->uid;
