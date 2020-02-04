@@ -3,23 +3,23 @@ const gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     sass = require('gulp-sass');
 
-function jsTask() {
+gulp.task('js', function(){
     return gulp.src('src/**/*.js')
         .pipe(uglify())
         .pipe(rename({ extname: '.min.js' }))
         .pipe(gulp.dest('dist/js/'));
-}
+});
 
-function sassTask() {
+gulp.task('sass', function(){
     return gulp.src('src/**/*.scss')
         .pipe(sass({ outputStyle: 'compressed' }))
         .pipe(rename({ extname: '.min.css' }))
         .pipe(gulp.dest('dist/css/'));
-}
+});
 
-function watch() {
-    gulp.watch('src/**/*.js', ['jsTask']);
-    gulp.watch('src/**/*.scss', ['sassTask']);
-}
+gulp.task('watch', function(){
+    gulp.watch('src/**/*.js', gulp.series('js'));
+    gulp.watch('src/**/*.scss', gulp.series('sass'));
+});
 
-exports.default = gulp.series(jsTask, sassTask);
+gulp.task('default', gulp.parallel('js', 'sass'));
