@@ -170,7 +170,7 @@ class BlockType extends Model
     public function rules()
     {
         return [
-            [['id', 'fieldId', 'matrixBlockTypeId', 'fieldLayoutId', 'sortOrder'], 'number', 'integerOnly' => true],
+            [['id', 'fieldId', 'matrixBlockTypeId', 'fieldLayoutId', 'groupSortOrder', 'sortOrder'], 'number', 'integerOnly' => true],
             [['fieldHandle', 'groupName', 'context'], 'string'],
 //            ['matrixBlockType', MatrixBlockType::className()]
         ];
