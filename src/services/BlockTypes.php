@@ -144,8 +144,6 @@ class BlockTypes extends Component
                 }
             }
 
-            $blockTypeRecords = BlockTypeRecord::find()->where($condition)->all();
-
         } else {
             $condition = [
                 'context' => $context
@@ -155,10 +153,12 @@ class BlockTypes extends Component
             {
                 $condition['fieldId'] = $fieldId;
             }
-
-            $blockTypeRecords = BlockTypeRecord::findAll($condition);
-
         }
+
+        $blockTypeRecords = BlockTypeRecord::find()
+            ->where($condition)
+            ->orderBy(['groupSortOrder' => SORT_ASC, 'sortOrder' => SORT_ASC])
+            ->all();
 
         if ($blockTypeRecords) {
 
@@ -178,6 +178,7 @@ class BlockTypes extends Component
             {
                 $return[$blockType->$groupBy][] = $blockType;
             }
+
             return $return;
         }
 
@@ -218,6 +219,7 @@ class BlockTypes extends Component
         // Save it to the project config
         $configData = [
             'groupName' => $blockType->groupName,
+            'groupSortOrder' => $blockType->groupSortOrder,
             'sortOrder' => $blockType->sortOrder,
             'context' => $blockType->context,
             'field' => $blockType->getField()->uid,
@@ -314,6 +316,8 @@ class BlockTypes extends Component
             $blockTypeRecord->matrixBlockTypeId = $matrixBlockTypeId;
             $blockTypeRecord->groupName = $data['groupName'];
             $blockTypeRecord->context = $data['context'];
+            $blockTypeRecord->groupSortOrder = $data['groupSortOrder'];
+            $blockTypeRecord->sortOrder = $data['sortOrder'];
             $blockTypeRecord->uid = $uid;
 
             // Handle the field layout
@@ -470,7 +474,9 @@ class BlockTypes extends Component
             'matrixBlockTypeId',
             'fieldLayoutId',
             'groupName',
-            'context'
+            'context',
+            'groupSortOrder',
+            'sortOrder'
         ]));
         
         // Use the fieldId to get the field and save the handle on to the model

@@ -25,6 +25,8 @@ class ProjectConfig
                 'b.fieldLayoutId',
                 'b.groupName',
                 'b.context',
+                'b.groupSortOrder',
+                'b.sortOrder',
                 'b.uid',
                 'f.uid AS fieldUid',
                 'mbt.uid AS matrixBlockUid',
@@ -39,6 +41,8 @@ class ProjectConfig
             $data = [
                 'groupName' => $blockType['groupName'],
                 'context' => $blockType['context'],
+                'groupSortOrder' => $blockType['groupSortOrder'],
+                'sortOrder' => $blockType['sortOrder'],
                 'field' => $blockType['fieldUid'],
                 'matrixBlockType' => $blockType['matrixBlockUid'],
             ];

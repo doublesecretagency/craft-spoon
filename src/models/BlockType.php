@@ -94,6 +94,11 @@ class BlockType extends Model
     /**
      * @var int
      */
+    public $groupSortOrder;
+
+    /**
+     * @var int
+     */
     public $sortOrder;
 
 
