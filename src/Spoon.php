@@ -66,7 +66,7 @@ class Spoon extends Plugin
      *
      * @var string
      */
-    public $schemaVersion = '3.4.0';
+    public $schemaVersion = '3.5.0';
 
     // Public Methods
     // =========================================================================
