@@ -10,7 +10,6 @@
 
 namespace angellco\spoon\services;
 
-use angellco\spoon\Spoon;
 use angellco\spoon\models\BlockType;
 use angellco\spoon\records\BlockType as BlockTypeRecord;
 use angellco\spoon\errors\BlockTypeNotFoundException;
