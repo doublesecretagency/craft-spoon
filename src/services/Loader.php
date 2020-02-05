@@ -19,6 +19,7 @@ use craft\base\Component;
 use craft\helpers\Db;
 use craft\helpers\Json;
 use craft\models\Section;
+use yii\base\InvalidConfigException;
 
 /**
  * Loader methods
@@ -35,15 +36,14 @@ class Loader extends Component
      * core supported contexts as well as providing a hook for
      * third-party contexts.
      *
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function run()
     {
-
         $request = Craft::$app->getRequest();
 
         // Check the conditions are right to run
-        if ($request->isCpRequest && !$request->getAcceptsJson())
+        if ($request->getIsCpRequest() && !$request->getAcceptsJson())
         {
 
             $segments = Craft::$app->request->getSegments();
@@ -255,7 +255,7 @@ class Loader extends Component
      * @param $container
      * @param $context
      *
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function configurator($container, $context)
     {
@@ -279,11 +279,10 @@ class Loader extends Component
      * @param      $context
      * @param bool $versioned
      *
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function fieldManipulator($context, $versioned = false)
     {
-
         // Get global data
         $globalSpoonedBlockTypes = Spoon::$plugin->blockTypes->getByContext('global', 'context');
 

@@ -10,12 +10,12 @@
 
 namespace angellco\spoon;
 
+use angellco\spoon\base\PluginTrait;
+use angellco\spoon\helpers\ProjectConfig as ProjectConfigHelper;
 use angellco\spoon\models\Settings;
 use angellco\spoon\services\BlockTypes;
-use angellco\spoon\services\Fields as FieldsService;
-use angellco\spoon\services\BlockTypes as BlockTypesService;
-use angellco\spoon\services\Loader as LoaderService;
-use angellco\spoon\helpers\ProjectConfig as ProjectConfigHelper;
+use angellco\spoon\services\Fields;
+use angellco\spoon\services\Loader;
 
 use Craft;
 use craft\base\Plugin;
@@ -24,7 +24,11 @@ use craft\helpers\Db;
 use craft\services\Plugins;
 use craft\services\ProjectConfig;
 
+use verbb\supertable\fields\SuperTableField;
+use verbb\supertable\models\SuperTableBlockTypeModel;
 use yii\base\Event;
+use yii\base\InvalidConfigException;
+use yii\web\Response;
 
 /**
  * Craft plugins are very much like little applications in and of themselves. We’ve made
@@ -36,37 +40,37 @@ use yii\base\Event;
  *
  * https://craftcms.com/docs/plugins/introduction
  *
+ * @property BlockTypes     $blockTypes The block types component.
+ * @property Fields         $fields     The fields component.
+ * @property Loader         $loader     The loader component.
+ * @property Response|mixed $settingsResponse
+ * @method BlockTypes getBlockTypes() Returns the block types component.
+ * @method Fields     getFields()     Returns the fields component.
+ * @method Loader     getLoader()     Returns the loader component.
+ * @method Settings   getSettings()   Returns the settings model.
  * @author    Angell & Co
  * @package   Spoon
  * @since     3.0.0
- *
- * @property  FieldsService $fields
- * @property  BlockTypesService $blockTypes
- * @property  LoaderService $loader
- * @method    Settings getSettings()
  */
 class Spoon extends Plugin
 {
-    // Static Properties
+    // Traits
     // =========================================================================
 
-    /**
-     * Static property that is an instance of this plugin class so that it can be accessed via
-     * Spoon::$plugin
-     *
-     * @var Spoon
-     */
-    public static $plugin;
+    use PluginTrait;
 
     // Public Properties
     // =========================================================================
 
     /**
-     * To execute your plugin’s migrations, you’ll need to increase its schema version.
-     *
-     * @var string
+     * @inheritdoc
      */
-    public $schemaVersion = '3.4.0';
+    public $schemaVersion = '3.5.0';
+
+    /**
+     * @inheritdoc
+     */
+    public $hasCpSettings = true;
 
     // Public Methods
     // =========================================================================
@@ -85,7 +89,10 @@ class Spoon extends Plugin
     public function init()
     {
         parent::init();
+
         self::$plugin = $this;
+
+        $this->_setPluginComponents();
 
         // Wait until all the plugins have loaded before running the loader
         Event::on(
@@ -100,9 +107,9 @@ class Spoon extends Plugin
 
         // Project config listeners
         Craft::$app->projectConfig
-            ->onAdd($this->blockTypes::CONFIG_BLOCKTYPE_KEY.'.{uid}', [$this->blockTypes, 'handleChangedBlockType'])
-            ->onUpdate($this->blockTypes::CONFIG_BLOCKTYPE_KEY.'.{uid}', [$this->blockTypes, 'handleChangedBlockType'])
-            ->onRemove($this->blockTypes::CONFIG_BLOCKTYPE_KEY.'.{uid}', [$this->blockTypes, 'handleDeletedBlockType']);
+            ->onAdd(BlockTypes::CONFIG_BLOCKTYPE_KEY.'.{uid}', [$this->getBlockTypes(), 'handleChangedBlockType'])
+            ->onUpdate(BlockTypes::CONFIG_BLOCKTYPE_KEY.'.{uid}', [$this->getBlockTypes(), 'handleChangedBlockType'])
+            ->onRemove(BlockTypes::CONFIG_BLOCKTYPE_KEY.'.{uid}', [$this->getBlockTypes(), 'handleDeletedBlockType']);
 
         // Project config rebuild listener
         Event::on(ProjectConfig::class, ProjectConfig::EVENT_REBUILD, function(RebuildConfigEvent $e) {
@@ -123,17 +130,17 @@ class Spoon extends Plugin
     /**
      * Loads the edit page for the global context.
      *
-     * @return mixed|\yii\web\Response
-     * @throws \yii\base\InvalidConfigException
+     * @return mixed|Response
+     * @throws InvalidConfigException
      */
     public function getSettingsResponse()
     {
-        $variables['matrixFields'] = Spoon::$plugin->fields->getMatrixFields();
+        $variables['matrixFields'] = $this->fields->getMatrixFields();
 
-        $variables['globalSpoonedBlockTypes'] = Spoon::$plugin->blockTypes->getByContext('global', 'fieldId', true);
+        $variables['globalSpoonedBlockTypes'] = $this->blockTypes->getByContext('global', 'fieldId', true);
 
         // If Super Table is installed get all of the ST fields and store by child field context
-        $superTablePlugin = \Craft::$app->plugins->getPlugin('super-table');
+        $superTablePlugin = Craft::$app->plugins->getPlugin('super-table');
         if ($superTablePlugin && $variables['matrixFields']) {
             $superTableService = new \verbb\supertable\services\SuperTableService();
 
@@ -145,11 +152,11 @@ class Spoon extends Plugin
                         $superTableBlockTypeId = Db::idByUid('{{%supertableblocktypes}}', $parts[1]);
 
                         if ($superTableBlockTypeId) {
-                            /** @var \verbb\supertable\models\SuperTableBlockTypeModel $superTableBlockType */
+                            /** @var SuperTableBlockTypeModel $superTableBlockType */
                             $superTableBlockType = $superTableService->getBlockTypeById($superTableBlockTypeId);
 
-                            /** @var \verbb\supertable\fields\SuperTableField $superTableField */
-                            $superTableField = \Craft::$app->fields->getFieldById($superTableBlockType->fieldId);
+                            /** @var SuperTableField $superTableField */
+                            $superTableField = Craft::$app->fields->getFieldById($superTableBlockType->fieldId);
 
                             $variables['superTableFields'][$matrixField->context] = [
                                 'kind' => 'Super Table',
@@ -166,10 +173,10 @@ class Spoon extends Plugin
 
                                     if ($matrixBlockTypeId) {
                                         /** @var craft\models\MatrixBlockType $matrixBlockType */
-                                        $matrixBlockType = \Craft::$app->matrix->getBlockTypeById($matrixBlockTypeId);
+                                        $matrixBlockType = Craft::$app->matrix->getBlockTypeById($matrixBlockTypeId);
 
                                         /** @var craft\fields\Matrix $globalField */
-                                        $globalField = \Craft::$app->fields->getFieldById($matrixBlockType->fieldId);
+                                        $globalField = Craft::$app->fields->getFieldById($matrixBlockType->fieldId);
 
                                         $variables['superTableFields'][$matrixField->context] = [
                                             'kind' => 'Matrix',
@@ -188,7 +195,7 @@ class Spoon extends Plugin
             }
         }
 
-        Spoon::$plugin->loader->configurator('#spoon-global-context-table', 'global');
+        $this->getLoader()->configurator('#spoon-global-context-table', 'global');
 
         return Craft::$app->controller->renderTemplate('spoon/edit-global-context', $variables);
     }

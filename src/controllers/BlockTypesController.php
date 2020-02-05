@@ -72,8 +72,10 @@ class BlockTypesController extends Controller
         $errors = 0;
         if (is_array($blockTypesPostData))
         {
+            $groupSortOrder = 1;
             foreach ($blockTypesPostData as $groupName => $blockTypeIds)
             {
+                $sortOrder = 1;
                 foreach ($blockTypeIds as $blockTypeId)
                 {
                     $spoonedBlockType = new BlockType();
@@ -82,12 +84,17 @@ class BlockTypesController extends Controller
                     $spoonedBlockType->fieldLayoutId     = isset($fieldLayoutIds[$blockTypeId]) ? $fieldLayoutIds[$blockTypeId] : null;
                     $spoonedBlockType->groupName         = urldecode($groupName);
                     $spoonedBlockType->context           = $context;
+                    $spoonedBlockType->groupSortOrder    = $groupSortOrder;
+                    $spoonedBlockType->sortOrder         = $sortOrder;
 
                     if (!Spoon::$plugin->blockTypes->save($spoonedBlockType))
                     {
                         $errors++;
                     }
+
+                    $sortOrder++;
                 }
+                $groupSortOrder++;
             }
         }
 

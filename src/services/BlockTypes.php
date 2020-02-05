@@ -10,7 +10,6 @@
 
 namespace angellco\spoon\services;
 
-use angellco\spoon\Spoon;
 use angellco\spoon\models\BlockType;
 use angellco\spoon\records\BlockType as BlockTypeRecord;
 use angellco\spoon\errors\BlockTypeNotFoundException;
@@ -47,17 +46,6 @@ class BlockTypes extends Component
 
     // Public Methods
     // =========================================================================
-
-    /**
-     * BlockTypes constructor.
-     *
-     * @param array $config
-     */
-    public function __construct($config = []) {
-        parent::__construct($config);
-        // Refresh fields cache in case something has gone awry
-        Craft::$app->fields->refreshFields();
-    }
 
     /**
      * Returns a Spoon block type model by its ID
@@ -144,8 +132,6 @@ class BlockTypes extends Component
                 }
             }
 
-            $blockTypeRecords = BlockTypeRecord::find()->where($condition)->all();
-
         } else {
             $condition = [
                 'context' => $context
@@ -155,10 +141,12 @@ class BlockTypes extends Component
             {
                 $condition['fieldId'] = $fieldId;
             }
-
-            $blockTypeRecords = BlockTypeRecord::findAll($condition);
-
         }
+
+        $blockTypeRecords = BlockTypeRecord::find()
+            ->where($condition)
+            ->orderBy(['groupSortOrder' => SORT_ASC, 'sortOrder' => SORT_ASC])
+            ->all();
 
         if ($blockTypeRecords) {
 
@@ -178,6 +166,7 @@ class BlockTypes extends Component
             {
                 $return[$blockType->$groupBy][] = $blockType;
             }
+
             return $return;
         }
 
@@ -218,6 +207,8 @@ class BlockTypes extends Component
         // Save it to the project config
         $configData = [
             'groupName' => $blockType->groupName,
+            'groupSortOrder' => $blockType->groupSortOrder,
+            'sortOrder' => $blockType->sortOrder,
             'context' => $blockType->context,
             'field' => $blockType->getField()->uid,
             'matrixBlockType' => $blockType->getBlockType()->uid,
@@ -313,6 +304,8 @@ class BlockTypes extends Component
             $blockTypeRecord->matrixBlockTypeId = $matrixBlockTypeId;
             $blockTypeRecord->groupName = $data['groupName'];
             $blockTypeRecord->context = $data['context'];
+            $blockTypeRecord->groupSortOrder = $data['groupSortOrder'];
+            $blockTypeRecord->sortOrder = $data['sortOrder'];
             $blockTypeRecord->uid = $uid;
 
             // Handle the field layout
@@ -469,7 +462,9 @@ class BlockTypes extends Component
             'matrixBlockTypeId',
             'fieldLayoutId',
             'groupName',
-            'context'
+            'context',
+            'groupSortOrder',
+            'sortOrder'
         ]));
         
         // Use the fieldId to get the field and save the handle on to the model

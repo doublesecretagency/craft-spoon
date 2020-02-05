@@ -28,6 +28,9 @@ use yii\db\ActiveQueryInterface;
  * @property int    $fieldLayoutId
  * @property string $groupName
  * @property string $context
+ * @property int    $groupSortOrder
+ * @property int    $sortOrder
+ *
  * @property \yii\db\ActiveQueryInterface $field
  * @property \yii\db\ActiveQueryInterface $fieldLayout
  *
