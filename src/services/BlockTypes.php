@@ -49,17 +49,6 @@ class BlockTypes extends Component
     // =========================================================================
 
     /**
-     * BlockTypes constructor.
-     *
-     * @param array $config
-     */
-    public function __construct($config = []) {
-        parent::__construct($config);
-        // Refresh fields cache in case something has gone awry
-        Craft::$app->fields->refreshFields();
-    }
-
-    /**
      * Returns a Spoon block type model by its ID
      *
      * @param $id
