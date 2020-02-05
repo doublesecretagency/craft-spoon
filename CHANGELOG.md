@@ -7,11 +7,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+## 3.5.1 - 2020-02-05
+
+### Fixed
+- Fixed missing sort fields on new installs ([#86](https://github.com/angell-co/Spoon/issues/86))
+
 
 ## 3.5.0 - 2020-02-05
 
 ### Fixed
-- Fixed things not working with Craft 3.4 ([79](https://github.com/angell-co/Spoon/issues/79))
+- Fixed things not working with Craft 3.4 ([#79](https://github.com/angell-co/Spoon/issues/79))
 - Fixed an issue with block type configurations not keeping their order when deployed to another environment via project config ([#80](https://github.com/angell-co/Spoon/issues/80))
 - Fixed an issue where Craft’s info table was being updated on every CP request ([#82](https://github.com/angell-co/Spoon/issues/82))
 
