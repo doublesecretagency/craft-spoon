@@ -116,6 +116,8 @@ class Install extends Migration
                     'fieldLayoutId' => $this->integer(),
                     'groupName' => $this->string(255)->notNull()->defaultValue(''),
                     'context' => $this->string(255)->notNull()->defaultValue(''),
+                    'groupSortOrder' => $this->smallInteger()->unsigned(),
+                    'sortOrder' => $this->smallInteger()->unsigned(),
                     'dateCreated' => $this->dateTime()->notNull(),
                     'dateUpdated' => $this->dateTime()->notNull(),
                     'uid' => $this->uid(),
