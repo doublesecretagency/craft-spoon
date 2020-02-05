@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+## 3.5.1 - 2020-02-05
+
+### Fixed
+- Fixed missing sort fields on new installs ([#86](https://github.com/angell-co/Spoon/issues/86))
+
 
 ## 3.5.0 - 2020-02-05
 
