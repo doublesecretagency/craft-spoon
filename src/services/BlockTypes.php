@@ -526,11 +526,13 @@ class BlockTypes extends Component
         $blockType->matrixBlockType = $blockType->getBlockType();
 
         // Save the field layout content on to our model
-        $layout = $blockType->getFieldLayout();
-        $blockType->fieldLayoutModel = [
-            'tabs'   => $layout->getTabs(),
-            'fields' => $layout->getFields()
-        ];
+        if ($blockType->fieldLayoutId) {
+            $layout = $blockType->getFieldLayout();
+            $blockType->fieldLayoutModel = [
+                'tabs' => $layout->getTabs(),
+                'fields' => $layout->getFields()
+            ];
+        }
 
         return $blockType;
     }

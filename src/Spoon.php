@@ -211,4 +211,16 @@ class Spoon extends Plugin
         return new Settings();
     }
 
+    /**
+     * @inheritdoc
+     */
+    protected function afterUninstall()
+    {
+        // After uninstall drop project config keys
+        $projectConfig = Craft::$app->getProjectConfig();
+        $projectConfig->muteEvents = true;
+        $projectConfig->remove(BlockTypes::CONFIG_BLOCKTYPE_KEY);
+        $projectConfig->muteEvents = false;
+    }
+
 }

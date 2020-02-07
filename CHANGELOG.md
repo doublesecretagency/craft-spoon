@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+## 3.5.2 - 2020-02-07
+
+### Changed
+- Spoon-specific project config data is now wiped on uninstall ([#85](https://github.com/angell-co/Spoon/issues/85))
+
+### Fixed
+- Fixed an issue with updating to 3.5.x from 3.3.x ([#89](https://github.com/angell-co/Spoon/issues/89))
+- Fixed an issue with removing field layouts from current block type configurations ([#84](https://github.com/angell-co/Spoon/issues/84))
+
+
 ## 3.5.1 - 2020-02-05
 
 ### Fixed
@@ -14,6 +24,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 
 ## 3.5.0 - 2020-02-05
+
+> {note} Before updating to 3.5.0 or greater it is a good idea to update to 3.4.3 first.
 
 ### Fixed
 - Fixed things not working with Craft 3.4 ([#79](https://github.com/angell-co/Spoon/issues/79))

@@ -14,23 +14,32 @@ class ProjectConfig
      */
     public static function rebuildProjectConfig(): array
     {
+        $projectConfig = Craft::$app->getProjectConfig();
+        $schemaVersion = $projectConfig->get('plugins.spoon.schemaVersion', true);
+        $oldSchema = version_compare($schemaVersion, '3.4.0', '<');
+
         $fields = Craft::$app->getFields();
         $configData = [];
 
+        $selectArray = [
+            'b.uid',
+            'b.fieldId',
+            'b.matrixBlockTypeId',
+            'b.fieldLayoutId',
+            'b.groupName',
+            'b.context',
+            'b.uid',
+            'f.uid AS fieldUid',
+            'mbt.uid AS matrixBlockUid',
+        ];
+
+        if (!$oldSchema) {
+            $selectArray[] = 'b.groupSortOrder';
+            $selectArray[] = 'b.sortOrder';
+        }
+
         $blockTypes = (new Query())
-            ->select([
-                'b.uid',
-                'b.fieldId',
-                'b.matrixBlockTypeId',
-                'b.fieldLayoutId',
-                'b.groupName',
-                'b.context',
-                'b.groupSortOrder',
-                'b.sortOrder',
-                'b.uid',
-                'f.uid AS fieldUid',
-                'mbt.uid AS matrixBlockUid',
-            ])
+            ->select($selectArray)
             ->from(['{{%spoon_blocktypes}} b'])
             ->innerJoin('{{%fields}} f', '[[b.fieldId]] = [[f.id]]')
             ->innerJoin('{{%matrixblocktypes}} mbt', '[[b.matrixBlockTypeId]] = [[mbt.id]]')
@@ -41,8 +50,8 @@ class ProjectConfig
             $data = [
                 'groupName' => $blockType['groupName'],
                 'context' => $blockType['context'],
-                'groupSortOrder' => $blockType['groupSortOrder'],
-                'sortOrder' => $blockType['sortOrder'],
+                'groupSortOrder' => $oldSchema ? null : $blockType['groupSortOrder'],
+                'sortOrder' => $oldSchema ? null : $blockType['sortOrder'],
                 'field' => $blockType['fieldUid'],
                 'matrixBlockType' => $blockType['matrixBlockUid'],
             ];

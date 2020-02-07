@@ -305,8 +305,10 @@ class Loader extends Component
                     $translations[] = $spoonedBlockType->groupName;
                     $translations[] = $spoonedBlockType->matrixBlockType->name;
 
-                    foreach ($spoonedBlockType->fieldLayoutModel['tabs'] as $tab) {
-                        $translations[] = $tab->name;
+                    if ($spoonedBlockType->fieldLayoutModel) {
+                        foreach ($spoonedBlockType->fieldLayoutModel['tabs'] as $tab) {
+                            $translations[] = $tab->name;
+                        }
                     }
 
                 }
