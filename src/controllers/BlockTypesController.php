@@ -152,13 +152,11 @@ class BlockTypesController extends Controller
         $spoonedBlockTypeId = Craft::$app->getRequest()->getParam('spoonedBlockTypeId');
         $blockTypeFieldLayouts = Craft::$app->getRequest()->getParam('blockTypeFieldLayouts');
 
-        if ($spoonedBlockTypeId)
-        {
+        if ($spoonedBlockTypeId) {
             if (!$spoonedBlockType = Spoon::$plugin->blockTypes->getById($spoonedBlockTypeId)) {
                 return false;
             }
-        } else
-        {
+        } else {
             return false;
         }
 
@@ -180,12 +178,20 @@ class BlockTypesController extends Controller
 
             // We don’t have a new field layout, so remove the old one if there is one
             $oldFieldLayoutId = $spoonedBlockType->fieldLayoutId;
-            $spoonedBlockType->fieldLayoutId = null;
-            if (!Spoon::$plugin->blockTypes->save($spoonedBlockType) || !Craft::$app->fields->deleteLayoutById($oldFieldLayoutId)) {
+            if (!Craft::$app->fields->deleteLayoutById($oldFieldLayoutId)) {
                 return $this->asJson([
                     'success' => false
                 ]);
             }
+
+            // Also null the col on our block type row
+            $spoonedBlockType->fieldLayoutId = null;
+            if (!Spoon::$plugin->blockTypes->save($spoonedBlockType)) {
+                return $this->asJson([
+                    'success' => false
+                ]);
+            }
+
         }
 
         return $this->asJson([
