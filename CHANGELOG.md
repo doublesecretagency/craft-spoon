@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+## 3.5.2 - 2020-02-07
+
+### Changed
+- Spoon-specific project config data is now wiped on uninstall ([#85](https://github.com/angell-co/Spoon/issues/85))
+
+### Fixed
+- Fixed an issue with updating to 3.5.x from 3.3.x ([#89](https://github.com/angell-co/Spoon/issues/89))
+- Fixed an issue with removing field layouts from current block type configurations ([#84](https://github.com/angell-co/Spoon/issues/84))
+
+
 ## 3.5.1 - 2020-02-05
 
 ### Fixed
