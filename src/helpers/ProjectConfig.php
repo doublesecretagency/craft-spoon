@@ -50,8 +50,8 @@ class ProjectConfig
             $data = [
                 'groupName' => $blockType['groupName'],
                 'context' => $blockType['context'],
-                'groupSortOrder' => !$oldSchema ?? $blockType['groupSortOrder'],
-                'sortOrder' => !$oldSchema ?? $blockType['sortOrder'],
+                'groupSortOrder' => $oldSchema ? null : $blockType['groupSortOrder'],
+                'sortOrder' => $oldSchema ? null : $blockType['sortOrder'],
                 'field' => $blockType['fieldUid'],
                 'matrixBlockType' => $blockType['matrixBlockUid'],
             ];
