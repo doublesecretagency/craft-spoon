@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+### Fixed
+- Fixed an issue with the order of synchronization of matrix block types and spoon block types ([#90](https://github.com/angell-co/Spoon/issues/90))
+
 ## 3.5.2 - 2020-02-07
 
 ### Changed
