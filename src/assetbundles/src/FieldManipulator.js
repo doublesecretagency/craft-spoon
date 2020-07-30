@@ -30,7 +30,6 @@
 
             init: function(settings)
             {
-
                 // Set up
                 this.setSettings(settings, Spoon.FieldManipulator.defaults);
 
@@ -51,8 +50,13 @@
                 Garnish.on(Craft.MatrixInput, 'blockAdded', this._handleMatrixInputBlockAddedProxy);
 
                 if (typeof Craft.SuperTable !== "undefined") {
-                    Garnish.on(Craft.SuperTable.MatrixInputAlt, 'afterInit', this._handleMatrixInputInitProxy);
-                    Garnish.on(Craft.SuperTable.MatrixInputAlt, 'blockAdded', this._handleMatrixInputBlockAddedProxy);
+                    if (typeof Craft.SuperTable.Input !== "undefined") {
+                        Garnish.on(Craft.SuperTable.Input, 'afterInit', this._handleMatrixInputInitProxy);
+                        Garnish.on(Craft.SuperTable.Input, 'blockAdded', this._handleMatrixInputBlockAddedProxy);
+                    } else if (typeof Craft.SuperTable.MatrixInputAlt !== "undefined") {
+                        Garnish.on(Craft.SuperTable.MatrixInputAlt, 'afterInit', this._handleMatrixInputInitProxy);
+                        Garnish.on(Craft.SuperTable.MatrixInputAlt, 'blockAdded', this._handleMatrixInputBlockAddedProxy);
+                    }
                 }
 
                 // If we are versioned we need to scrape the page as no events will fire
