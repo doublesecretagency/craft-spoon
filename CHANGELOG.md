@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+### Fixed
+- Fixed an issue with newer versions of Super Table ([#98](https://github.com/angell-co/Spoon/issues/98))
+
+
 ## 3.5.2 - 2020-02-07
 
 ### Changed
