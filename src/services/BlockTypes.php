@@ -284,6 +284,10 @@ class BlockTypes extends Component
         $uid = $event->tokenMatches[0];
         $data = $event->newValue;
 
+        // Make sure fields and sites are processed
+        ProjectConfigHelper::ensureAllSitesProcessed();
+        ProjectConfigHelper::ensureAllFieldsProcessed();
+
         // Make sure the field has been synced
         $fieldId = Db::idByUid(Table::FIELDS, $data['field']);
         if ($fieldId === null) {
@@ -297,10 +301,6 @@ class BlockTypes extends Component
             Craft::$app->getProjectConfig()->defer($event, [$this, __FUNCTION__]);
             return;
         }
-
-        // Make sure fields and sites are processed
-        ProjectConfigHelper::ensureAllSitesProcessed();
-        ProjectConfigHelper::ensureAllFieldsProcessed();
 
         $db = Craft::$app->getDb();
         $transaction = $db->beginTransaction();
