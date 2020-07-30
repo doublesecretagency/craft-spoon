@@ -7,9 +7,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+## 3.5.3 - 2020-07-30
+
 ### Fixed
-- Fixed an issue with the order of synchronization of matrix block types and spoon block types ([#90](https://github.com/angell-co/Spoon/issues/90))
-- Fixed an issue with newer versions of Super Table ([#98](https://github.com/angell-co/Spoon/issues/98))
+- Fixed an issue where project config could fail with an "Integrity constraint violation" error - thanks to [@qrazi](https://github.com/qrazi) for pointing me in the right direction! ([#90](https://github.com/angell-co/Spoon/issues/90) & [PR #93](https://github.com/angell-co/Spoon/pull/93))
+- Fixed an issue with newer versions of Super Table which caused Matrix blocks to render empty if there was at least one Super Table configured inside the Matrix field ([#98](https://github.com/angell-co/Spoon/issues/98))
 - Fixed an error that could occur when matrix fields don’t return properly by ID ([#92](https://github.com/angell-co/Spoon/issues/92))
 
 
