@@ -152,7 +152,9 @@ class BlockTypes extends Component
 
             foreach ($blockTypeRecords as $blockTypeRecord) {
                 $blockType = $this->_populateBlockTypeFromRecord($blockTypeRecord);
-                $this->_blockTypesByContext[$context][$blockType->id] = $blockType;
+                if ($blockType) {
+                    $this->_blockTypesByContext[$context][$blockType->id] = $blockType;
+                }
             }
 
         } else {
@@ -466,7 +468,7 @@ class BlockTypes extends Component
             'groupSortOrder',
             'sortOrder'
         ]));
-        
+
         // Use the fieldId to get the field and save the handle on to the model
         /** @var Field $matrixField */
         $matrixField = Craft::$app->fields->getFieldById($blockType->fieldId);

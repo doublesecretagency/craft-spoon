@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Fixed
 - Fixed an issue with newer versions of Super Table ([#98](https://github.com/angell-co/Spoon/issues/98))
+- Fixed an error that could occur when matrix fields don’t return properly by ID ([#92](https://github.com/angell-co/Spoon/issues/92))
 
 
 ## 3.5.2 - 2020-02-07
