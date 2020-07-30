@@ -152,7 +152,9 @@ class BlockTypes extends Component
 
             foreach ($blockTypeRecords as $blockTypeRecord) {
                 $blockType = $this->_populateBlockTypeFromRecord($blockTypeRecord);
-                $this->_blockTypesByContext[$context][$blockType->id] = $blockType;
+                if ($blockType) {
+                    $this->_blockTypesByContext[$context][$blockType->id] = $blockType;
+                }
             }
 
         } else {
@@ -282,15 +284,23 @@ class BlockTypes extends Component
         $uid = $event->tokenMatches[0];
         $data = $event->newValue;
 
-        $fieldUid = $data['field'];
-        $fieldId = Db::idByUid(Table::FIELDS, $fieldUid);
-
-        $matrixBlockTypeUid = $data['matrixBlockType'];
-        $matrixBlockTypeId = Db::idByUid(Table::MATRIXBLOCKTYPES, $matrixBlockTypeUid);
-
         // Make sure fields and sites are processed
         ProjectConfigHelper::ensureAllSitesProcessed();
         ProjectConfigHelper::ensureAllFieldsProcessed();
+
+        // Make sure the field has been synced
+        $fieldId = Db::idByUid(Table::FIELDS, $data['field']);
+        if ($fieldId === null) {
+            Craft::$app->getProjectConfig()->defer($event, [$this, __FUNCTION__]);
+            return;
+        }
+
+        // Make sure the matrix block type has been synced
+        $matrixBlockTypeId = Db::idByUid(Table::MATRIXBLOCKTYPES, $data['matrixBlockType']);
+        if ($matrixBlockTypeId === null) {
+            Craft::$app->getProjectConfig()->defer($event, [$this, __FUNCTION__]);
+            return;
+        }
 
         $db = Craft::$app->getDb();
         $transaction = $db->beginTransaction();
@@ -466,7 +476,7 @@ class BlockTypes extends Component
             'groupSortOrder',
             'sortOrder'
         ]));
-        
+
         // Use the fieldId to get the field and save the handle on to the model
         /** @var Field $matrixField */
         $matrixField = Craft::$app->fields->getFieldById($blockType->fieldId);
