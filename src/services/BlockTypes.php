@@ -152,7 +152,9 @@ class BlockTypes extends Component
 
             foreach ($blockTypeRecords as $blockTypeRecord) {
                 $blockType = $this->_populateBlockTypeFromRecord($blockTypeRecord);
-                $this->_blockTypesByContext[$context][$blockType->id] = $blockType;
+                if ($blockType) {
+                    $this->_blockTypesByContext[$context][$blockType->id] = $blockType;
+                }
             }
 
         } else {
