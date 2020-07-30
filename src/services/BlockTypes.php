@@ -284,11 +284,19 @@ class BlockTypes extends Component
         $uid = $event->tokenMatches[0];
         $data = $event->newValue;
 
-        $fieldUid = $data['field'];
-        $fieldId = Db::idByUid(Table::FIELDS, $fieldUid);
+        // Make sure the field has been synced
+        $fieldId = Db::idByUid(Table::FIELDS, $data['field']);
+        if ($fieldId === null) {
+            Craft::$app->getProjectConfig()->defer($event, [$this, __FUNCTION__]);
+            return;
+        }
 
-        $matrixBlockTypeUid = $data['matrixBlockType'];
-        $matrixBlockTypeId = Db::idByUid(Table::MATRIXBLOCKTYPES, $matrixBlockTypeUid);
+        // Make sure the matrix block type has been synced
+        $matrixBlockTypeId = Db::idByUid(Table::MATRIXBLOCKTYPES, $data['matrixBlockType']);
+        if ($matrixBlockTypeId === null) {
+            Craft::$app->getProjectConfig()->defer($event, [$this, __FUNCTION__]);
+            return;
+        }
 
         // Make sure fields and sites are processed
         ProjectConfigHelper::ensureAllSitesProcessed();

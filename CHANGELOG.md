@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 
 ### Fixed
+- Fixed an issue with the order of synchronization of matrix block types and spoon block types ([#90](https://github.com/angell-co/Spoon/issues/90))
 - Fixed an issue with newer versions of Super Table ([#98](https://github.com/angell-co/Spoon/issues/98))
 - Fixed an error that could occur when matrix fields don’t return properly by ID ([#92](https://github.com/angell-co/Spoon/issues/92))
 
