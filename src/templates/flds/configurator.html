@@ -27,7 +27,7 @@
         </div>
         <div class="fld-tabcontent">
             {% for blockType in selectedBlockTypes %}
-                <div class="fld-field fld-element" data-attribute="{{ blockType.getBlockType().handle }}" data-id="{{ blockType.matrixBlockTypeId }}" data-type="{{ className(blockType.getBlockType()) }}">
+                <div class="fld-field fld-element" data-attribute="{{ blockType.getBlockType().handle }}" data-id="{{ blockType.matrixBlockTypeId }}" data-type="{{ className(blockType.getBlockType()) }}" data-config='{ "blockTypeId":{{ blockType.matrixBlockTypeId}} }' data-keywords="{{ blockType.getBlockType().name }} {{ blockType.getBlockType().handle }}">
                     <div class="field-name">
                         <h4 class="fld-element-label" title="{{ blockType.getBlockType().name|t('site') }}">{{ blockType.getBlockType().name|t('site') }}</h4>
                         <div class="smalltext light code" title="{{ blockType.getBlockType().handle }}">{{ blockType.getBlockType().handle }}</div>
@@ -66,19 +66,6 @@
     }|merge(attr ?? {}, recursive=true)) }}
 {% endmacro %}
 
-{% macro fieldSelectors(groupName, groupFields, context) %}
-    {% set showGroup = groupFields|contains(f => not context.fieldLayout.isFieldIncluded(f.attribute())) %}
-    <div class="fld-field-group{% if not showGroup %} hidden{% endif %}" data-name="{{ groupName|replace('"', '')|lower }}">
-        <h6>{{ groupName }}</h6>
-        {% for field in groupFields %}
-            {{ _self.elementSelector(field, true, {
-                class: [
-                    context.fieldLayout.isFieldIncluded(field.attribute()) ? 'hidden',
-                ],
-            }) }}
-        {% endfor %}
-    </div>
-{% endmacro %}
 
 <h2 class="first">{{ "Group your block types"|t('spoon') }}</h2>
 
@@ -108,69 +95,31 @@
                 <div class="clear hidden" title="{{ 'Clear'|t('app') }}"></div>
             </div>
 
-            {{ _self.fieldSelectors('Standard Fields'|t('app'), fieldLayout.getAvailableStandardFields(), _context) }}
+            {% set unGroupedSelectedBlockTypeIds = [] %}
 
-            {% for groupName, groupFields in fieldLayout.getAvailableCustomFields() %}
-                {{ _self.fieldSelectors(groupName, groupFields, _context) }}
-            {% endfor %}
+            {% if spoonedBlockTypes and spoonedBlockTypes|length %}
+                {% for groupName,selectedBlockTypes in spoonedBlockTypes %}
+                    {% for selectedBlockType in selectedBlockTypes %}
+                        {% set unGroupedSelectedBlockTypeIds = unGroupedSelectedBlockTypeIds|merge([selectedBlockType.matrixBlockTypeId]) %}
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+
+            <div class="fld-field-group{#% if not showGroup %} hidden{% endif %#}" data-name="blocks">
+                <h6>{{ "Blocks"|t('app') }}</h6>
+                {% for blockType in blockTypes %}
+                    {% set selected = blockType.id in unGroupedSelectedBlockTypeIds %}
+
+                    <div class="fld-field fld-element unused{% if selected %} hidden{% endif %}" data-attribute="{{ blockType.handle }}" data-id="{{ blockType.id }}" data-type="{{ className(blockType) }}" data-config='{ "blockTypeId":{{ blockType.id }} }' data-keywords="{{ blockType.name }} {{ blockType.handle }}">
+                        <div class="field-name">
+                            <h4 class="fld-element-label" title="{{ blockType.name|t('site') }}">{{ blockType.name|t('site') }}</h4>
+                            <div class="smalltext light code" title="{{ blockType.handle }}">{{ blockType.handle }}</div>
+                        </div>
+                        <input class="placement-input" type="hidden" name="spoonedBlockTypes[__TAB_NAME__][]" value="{{ blockType.id }}">
+                        <a role="button" tabindex="0" class="settings icon" title="Edit"></a>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>
-
-{% set jsSettings = {
-    customizableTabs: true,
-    customizableUi: false,
-    elementPlacementInputName: 'spoonedBlockTypes[__TAB_NAME__][]'|namespaceInputName,
-    elementConfigInputName: 'spoonedBlockTypes[__ELEMENT_KEY__]'|namespaceInputName,
-} %}
-
-{% js %}
-    var initFLD = function() {
-    new Craft.FieldLayoutDesigner("#{{ 'fieldlayoutform'|namespaceInputId }}", {{ jsSettings|json_encode|raw }});
-    };
-
-    {% if tab is defined %}
-        var $fldTab = $('#{{ "tab-#{tab}"|namespaceInputId }}');
-
-        if ($fldTab.hasClass('sel')) {
-        initFLD();
-        } else {
-        $fldTab.on('activate.fld', function() {
-        initFLD();
-        $fldTab.off('activate.fld');
-        });
-        }
-    {% else %}
-        initFLD();
-    {% endif %}
-{% endjs %}
-
-
-
-
-{#    <div class="unusedfields">#}
-{#        {% set unGroupedSelectedBlockTypeIds = [] %}#}
-
-{#        {% if spoonedBlockTypes and spoonedBlockTypes|length %}#}
-{#            {% for groupName,selectedBlockTypes in spoonedBlockTypes %}#}
-{#                {% for selectedBlockType in selectedBlockTypes %}#}
-{#                    {% set unGroupedSelectedBlockTypeIds = unGroupedSelectedBlockTypeIds|merge([selectedBlockType.matrixBlockTypeId]) %}#}
-{#                {% endfor %}#}
-{#            {% endfor %}#}
-{#        {% endif %}#}
-
-{#        <div class="fld-tab unused{% if unGroupedSelectedBlockTypeIds|length == blockTypes|length %} hidden{% endif %}">#}
-{#            <div class="tabs">#}
-{#                <div class="tab sel"><span>{{ "Blocks"|t('app') }}</span></div>#}
-{#            </div>#}
-{#            <div class="fld-tabcontent">#}
-{#                {% for blockType in blockTypes %}#}
-{#                    {% set selected = blockType.id in unGroupedSelectedBlockTypeIds %}#}
-{#                    <div class="fld-field unused{% if selected %} hidden{% endif %}" data-id="{{ blockType.id }}">#}
-{#                        <span>{{ blockType.name|t }}</span>#}
-{#                    </div>#}
-{#                {% endfor %}#}
-{#            </div>#}
-{#        </div>#}
-
-{#    </div>#}
