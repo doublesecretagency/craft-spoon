@@ -65,39 +65,38 @@
             // cloned for language adjustments
             renameTab: function($tab)
             {
-                if (!this.settings.customizableTabs)
-                {
+                if (!this.settings.customizableTabs) {
                     return;
                 }
 
-                var $labelSpan = $tab.find('.tabs .tab span'),
-                    oldName = $labelSpan.text(),
-                    newName = prompt(Craft.t('spoon', 'Give your group a name.'), oldName);
+                var $labelSpan = $tab.find('.tabs .tab span');
+                var oldName = $labelSpan.text();
+                var newName = prompt(Craft.t('app', 'Give your group a name.'), oldName);
 
-                if (newName && newName != oldName)
-                {
+                if (newName && newName !== oldName) {
                     $labelSpan.text(newName);
-                    $tab.find('.id-input').attr('name', this.getFieldInputName(newName));
+                    $tab.find('.placement-input').attr('name', this.getElementPlacementInputName(newName));
                 }
             },
 
             // cloned for language adjustments
             addTab: function()
             {
-                if (!this.settings.customizableTabs)
-                {
+                if (!this.settings.customizableTabs) {
                     return;
                 }
 
-                var $tab = $('<div class="fld-tab">' +
-                    '<div class="tabs">' +
-                    '<div class="tab sel draggable">' +
-                    '<span>'+Craft.t('app', 'Group')+' '+(this.tabGrid.$items.length+1)+'</span>' +
-                    '<a class="settings icon" title="'+Craft.t('app', 'Rename')+'"></a>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="fld-tabcontent"></div>' +
-                    '</div>').appendTo(this.$tabContainer);
+                var $tab = $(
+'<div class="fld-tab">' +
+  '<div class="tabs">' +
+    '<div class="tab sel draggable">' +
+      '<span>Group '+ (this.tabGrid.$items.length + 1) +'</span>' +
+      '<a class="settings icon" title="'+Craft.t('app', 'Rename')+'"></a>' +
+    '</div>' +
+  '</div>' +
+  '<div class="fld-tabcontent"></div>' +
+'</div>')
+                    .appendTo(this.$tabContainer);
 
                 this.tabGrid.addItems($tab);
                 this.tabDrag.addItems($tab);

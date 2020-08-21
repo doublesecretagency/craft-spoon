@@ -255,7 +255,6 @@
                         this.$body.html(response.html);
                         this.$bigSpinner.addClass('hidden');
                         var fld = new Spoon.GroupsDesigner('#spoon-configurator', {
-                            elementPlacementInputName: 'spoonedBlockTypes[__TAB_NAME__][]',
                             customizableTabs: true,
                             customizableUi: false,
                             context : this.settings.context
