@@ -26,41 +26,60 @@
 
             modal: null,
 
-            initField: function($blockType)
-            {
-                var $editBtn = $blockType.find('.settings'),
-                    $menu = $('<div class="menu" data-align="center"/>').insertAfter($editBtn),
-                    $ul = $('<ul/>').appendTo($menu);
+            initElement: function($element) {
+                // Base init
+                new Craft.FieldLayoutDesigner.Element(this, $element);
 
-                $('<li><a data-action="edit-field-layout">'+Craft.t('spoon', 'Edit field layout')+'</a></li>').appendTo($ul);
-
-                $('<li><a data-action="remove">'+Craft.t('app', 'Remove')+'</a></li>').appendTo($ul);
-
-                new Garnish.MenuBtn($editBtn, {
-                    onOptionSelect: $.proxy(this, 'onFieldOptionSelect')
+                // Add our settings button
+                var $editBtn = $('<a/>', {
+                    role: 'button',
+                    tabindex: 0,
+                    class: 'settings icon',
+                    title: Craft.t('app', 'Edit')
                 });
+
+                $editBtn.on('click', $.proxy(function() {
+                    this.onEditFieldLayout($element);
+                }, this));
+
+                $editBtn.appendTo($element);
             },
 
-            onFieldOptionSelect: function(option)
-            {
-                var $option = $(option),
-                    $blockType = $option.data('menu').$anchor.parent(),
-                    action = $option.data('action');
-
-                switch (action)
-                {
-                    case 'edit-field-layout':
-                    {
-                        this.onEditFieldLayout($blockType);
-                        break;
-                    }
-                    case 'remove':
-                    {
-                        this.removeField($blockType);
-                        break;
-                    }
-                }
-            },
+            // initField: function($blockType)
+            // {
+            //     var $editBtn = $blockType.find('.settings'),
+            //         $menu = $('<div class="menu" data-align="center"/>').insertAfter($editBtn),
+            //         $ul = $('<ul/>').appendTo($menu);
+            //
+            //     $('<li><a data-action="edit-field-layout">'+Craft.t('spoon', 'Edit field layout')+'</a></li>').appendTo($ul);
+            //
+            //     $('<li><a data-action="remove">'+Craft.t('app', 'Remove')+'</a></li>').appendTo($ul);
+            //
+            //     new Garnish.MenuBtn($editBtn, {
+            //         onOptionSelect: $.proxy(this, 'onFieldOptionSelect')
+            //     });
+            // },
+            //
+            // onFieldOptionSelect: function(option)
+            // {
+            //     var $option = $(option),
+            //         $blockType = $option.data('menu').$anchor.parent(),
+            //         action = $option.data('action');
+            //
+            //     switch (action)
+            //     {
+            //         case 'edit-field-layout':
+            //         {
+            //             this.onEditFieldLayout($blockType);
+            //             break;
+            //         }
+            //         case 'remove':
+            //         {
+            //             this.removeField($blockType);
+            //             break;
+            //         }
+            //     }
+            // },
 
             // cloned for language adjustments
             renameTab: function($tab)
