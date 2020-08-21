@@ -45,42 +45,6 @@
                 $editBtn.appendTo($element);
             },
 
-            // initField: function($blockType)
-            // {
-            //     var $editBtn = $blockType.find('.settings'),
-            //         $menu = $('<div class="menu" data-align="center"/>').insertAfter($editBtn),
-            //         $ul = $('<ul/>').appendTo($menu);
-            //
-            //     $('<li><a data-action="edit-field-layout">'+Craft.t('spoon', 'Edit field layout')+'</a></li>').appendTo($ul);
-            //
-            //     $('<li><a data-action="remove">'+Craft.t('app', 'Remove')+'</a></li>').appendTo($ul);
-            //
-            //     new Garnish.MenuBtn($editBtn, {
-            //         onOptionSelect: $.proxy(this, 'onFieldOptionSelect')
-            //     });
-            // },
-            //
-            // onFieldOptionSelect: function(option)
-            // {
-            //     var $option = $(option),
-            //         $blockType = $option.data('menu').$anchor.parent(),
-            //         action = $option.data('action');
-            //
-            //     switch (action)
-            //     {
-            //         case 'edit-field-layout':
-            //         {
-            //             this.onEditFieldLayout($blockType);
-            //             break;
-            //         }
-            //         case 'remove':
-            //         {
-            //             this.removeField($blockType);
-            //             break;
-            //         }
-            //     }
-            // },
-
             // cloned for language adjustments
             renameTab: function($tab)
             {
@@ -178,8 +142,10 @@
                                 {
                                     $(response.html).appendTo($body);
                                     $bigSpinner.addClass('hidden');
-                                    var fld = new Spoon.BlockTypeFieldLayoutDesigner('#spoon-fields-configurator', {
-                                        fieldInputName: 'blockTypeFieldLayouts[__TAB_NAME__][]'
+
+                                    var fld = new Craft.FieldLayoutDesigner('#spoon-fields-configurator', {
+                                        customizableTabs: true,
+                                        customizableUi: false,
                                     });
                                 }
                             }, this));
