@@ -1,68 +1,176 @@
-{% macro tab(groupName, selectedBlockTypes) %}
+{% import '_includes/forms' as forms %}
+
+{% set pretendTabName = pretendTabName ?? 'Content'|t('app') %}
+{% set fieldLayout = fieldLayout ?? create('craft\\models\\FieldLayout') %}
+
+{% set groups = craft.app.fields.getAllGroups() %}
+
+{% do view.registerTranslations('app', [
+    'Apply',
+    'Delete',
+    'Give your tab a name.',
+    'Move to the left',
+    'Move to the right',
+    'Remove',
+    'Rename',
+    'Required',
+    '{pct} width',
+]) %}
+
+{% macro tab(tabName, selectedBlockTypes) %}
     <div class="fld-tab">
         <div class="tabs">
             <div class="tab sel draggable">
-                <span>{{ groupName|t }}</span>
+                <span>{{ tabName }}</span>
                 <a class="settings icon" title="{{ 'Edit'|t('app') }}"></a>
             </div>
         </div>
         <div class="fld-tabcontent">
             {% for blockType in selectedBlockTypes %}
-                <div class="fld-field" data-id="{{ blockType.matrixBlockTypeId }}">
-                    <a class="settings icon" title="{{ 'Edit'|t('app') }}"></a>
-                    <span>{{ blockType.getBlockType().name|t('site') }}</span>
-                    <input class="id-input" type="hidden" name="spoonedBlockTypes[{{ groupName|e('url') }}][]" value="{{ blockType.matrixBlockTypeId }}">
+                <div class="fld-field fld-element" data-attribute="{{ blockType.getBlockType().handle }}" data-id="{{ blockType.matrixBlockTypeId }}" data-type="{{ className(blockType.getBlockType()) }}">
+                    <div class="field-name">
+                        <h4 class="fld-element-label" title="{{ blockType.getBlockType().name|t('site') }}">{{ blockType.getBlockType().name|t('site') }}</h4>
+                        <div class="smalltext light code" title="{{ blockType.getBlockType().handle }}">{{ blockType.getBlockType().handle }}</div>
+                    </div>
+                    <input class="placement-input" type="hidden" name="spoonedBlockTypes[{{ tabName|e('url') }}][]" value="{{ blockType.matrixBlockTypeId }}">
+                    <a role="button" tabindex="0" class="settings icon" title="Edit"></a>
                 </div>
             {% endfor %}
         </div>
     </div>
 {% endmacro %}
 
-<div id="spoon-configurator" class="fieldlayoutform">
+{% macro elementSelector(element, forLibrary, attr) %}
+    {% if element is instance of('craft\\fieldlayoutelements\\BaseField') %}
+        {% set attr = {
+            class: [
+                not forLibrary and element.required ? 'fld-required',
+            ]|filter,
+            data: {
+                keywords: forLibrary ? element.keywords()|join(' ')|lower : false,
+            },
+        }|merge(attr ?? {}, recursive=true) %}
+    {% endif %}
+    {% set settingsHtml = element.settingsHtml() %}
+    {{ element.selectorHtml()|attr({
+        class: [
+            'fld-element',
+            forLibrary ? 'unused',
+        ]|filter,
+        data: {
+            type: className(element),
+            config: element.toArray(),
+            'has-custom-width': element.hasCustomWidth(),
+            'settings-html': settingsHtml ? settingsHtml|namespaceAttributes("element-#{random()}") ?: false,
+        },
+    }|merge(attr ?? {}, recursive=true)) }}
+{% endmacro %}
 
+{% macro fieldSelectors(groupName, groupFields, context) %}
+    {% set showGroup = groupFields|contains(f => not context.fieldLayout.isFieldIncluded(f.attribute())) %}
+    <div class="fld-field-group{% if not showGroup %} hidden{% endif %}" data-name="{{ groupName|replace('"', '')|lower }}">
+        <h6>{{ groupName }}</h6>
+        {% for field in groupFields %}
+            {{ _self.elementSelector(field, true, {
+                class: [
+                    context.fieldLayout.isFieldIncluded(field.attribute()) ? 'hidden',
+                ],
+            }) }}
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+<h2 class="first">{{ "Group your block types"|t('spoon') }}</h2>
+
+<div id="spoon-configurator" class="layoutdesigner">
     <input type="hidden" name="fieldId" value="{{ matrixField.id }}">
 
-    <h2 class="first">{{ "Group your block types"|t('spoon') }}</h2>
-
-    <div class="fld-tabs">
-        {% if spoonedBlockTypes and spoonedBlockTypes|length %}
-            {% import _self as macros %}
-
-            {% for groupName,selectedBlockTypes in spoonedBlockTypes %}
-                {{ macros.tab(groupName, selectedBlockTypes) }}
-            {% endfor %}
-        {% endif %}
-    </div>
-
-    <div class="newtabbtn-container">
-        <div class="btn add icon">{{ "New Group"|t('spoon') }}</div>
-    </div>
-
-    <div class="unusedfields">
-        {% set unGroupedSelectedBlockTypeIds = [] %}
-
-        {% if spoonedBlockTypes and spoonedBlockTypes|length %}
-            {% for groupName,selectedBlockTypes in spoonedBlockTypes %}
-                {% for selectedBlockType in selectedBlockTypes %}
-                    {% set unGroupedSelectedBlockTypeIds = unGroupedSelectedBlockTypeIds|merge([selectedBlockType.matrixBlockTypeId]) %}
+    <div class="fld-workspace">
+        <div class="fld-tabs">
+            {% if spoonedBlockTypes and spoonedBlockTypes|length %}
+                {% for groupName, selectedBlockTypes in spoonedBlockTypes %}
+                    {{ _self.tab(groupName, selectedBlockTypes) }}
                 {% endfor %}
-            {% endfor %}
-        {% endif %}
-
-        <div class="fld-tab unused{% if unGroupedSelectedBlockTypeIds|length == blockTypes|length %} hidden{% endif %}">
-            <div class="tabs">
-                <div class="tab sel"><span>{{ "Blocks"|t('app') }}</span></div>
-            </div>
-            <div class="fld-tabcontent">
-                {% for blockType in blockTypes %}
-                    {% set selected = blockType.id in unGroupedSelectedBlockTypeIds %}
-                    <div class="fld-field unused{% if selected %} hidden{% endif %}" data-id="{{ blockType.id }}">
-                        <span>{{ blockType.name|t }}</span>
-                    </div>
-                {% endfor %}
-            </div>
+            {% endif %}
         </div>
 
+        <div class="fld-new-tab-btn btn add icon">{{ "New Tab"|t('app') }}</div>
     </div>
 
+    <div class="fld-sidebar">
+        <div class="fld-field-library">
+            <div class="texticon search icon clearable">
+                {{ forms.text({
+                    class: 'fullwidth',
+                    inputmode: 'search',
+                    placeholder: "Search"|t('app')
+                }) }}
+                <div class="clear hidden" title="{{ 'Clear'|t('app') }}"></div>
+            </div>
+
+            {{ _self.fieldSelectors('Standard Fields'|t('app'), fieldLayout.getAvailableStandardFields(), _context) }}
+
+            {% for groupName, groupFields in fieldLayout.getAvailableCustomFields() %}
+                {{ _self.fieldSelectors(groupName, groupFields, _context) }}
+            {% endfor %}
+        </div>
+    </div>
 </div>
+
+{% set jsSettings = {
+    customizableTabs: true,
+    customizableUi: false,
+    elementPlacementInputName: 'spoonedBlockTypes[__TAB_NAME__][]'|namespaceInputName,
+    elementConfigInputName: 'spoonedBlockTypes[__ELEMENT_KEY__]'|namespaceInputName,
+} %}
+
+{% js %}
+    var initFLD = function() {
+    new Craft.FieldLayoutDesigner("#{{ 'fieldlayoutform'|namespaceInputId }}", {{ jsSettings|json_encode|raw }});
+    };
+
+    {% if tab is defined %}
+        var $fldTab = $('#{{ "tab-#{tab}"|namespaceInputId }}');
+
+        if ($fldTab.hasClass('sel')) {
+        initFLD();
+        } else {
+        $fldTab.on('activate.fld', function() {
+        initFLD();
+        $fldTab.off('activate.fld');
+        });
+        }
+    {% else %}
+        initFLD();
+    {% endif %}
+{% endjs %}
+
+
+
+
+{#    <div class="unusedfields">#}
+{#        {% set unGroupedSelectedBlockTypeIds = [] %}#}
+
+{#        {% if spoonedBlockTypes and spoonedBlockTypes|length %}#}
+{#            {% for groupName,selectedBlockTypes in spoonedBlockTypes %}#}
+{#                {% for selectedBlockType in selectedBlockTypes %}#}
+{#                    {% set unGroupedSelectedBlockTypeIds = unGroupedSelectedBlockTypeIds|merge([selectedBlockType.matrixBlockTypeId]) %}#}
+{#                {% endfor %}#}
+{#            {% endfor %}#}
+{#        {% endif %}#}
+
+{#        <div class="fld-tab unused{% if unGroupedSelectedBlockTypeIds|length == blockTypes|length %} hidden{% endif %}">#}
+{#            <div class="tabs">#}
+{#                <div class="tab sel"><span>{{ "Blocks"|t('app') }}</span></div>#}
+{#            </div>#}
+{#            <div class="fld-tabcontent">#}
+{#                {% for blockType in blockTypes %}#}
+{#                    {% set selected = blockType.id in unGroupedSelectedBlockTypeIds %}#}
+{#                    <div class="fld-field unused{% if selected %} hidden{% endif %}" data-id="{{ blockType.id }}">#}
+{#                        <span>{{ blockType.name|t }}</span>#}
+{#                    </div>#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#        </div>#}
+
+{#    </div>#}
