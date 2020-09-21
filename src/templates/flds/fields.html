@@ -117,23 +117,24 @@
 
             {% set unusedFieldIds = [] %}
             {% if fieldLayout %}
-                {% for field in spoonedBlockType.matrixBlockType.getFields() %}
-                    {# TODO #}
-{#                        {% if field.id not in fieldLayout.getFieldIds() %}#}
-{#                            {% set unusedFieldIds = unusedFieldIds|merge([field.id]) %}#}
-{#                        {% endif %}#}
+                {% for field in blockTypeFields %}
+                    {% set customField = field.getField() %}
+                    {# TODO this is wrong ... #}
+                    {% if customField.id in fieldLayout.getFieldIds() %}
+                        {% set unusedFieldIds = unusedFieldIds|merge([customField.id]) %}
+                    {% endif %}
                 {% endfor %}
             {% endif %}
 
             <div class="fld-field-group" data-name="blocktypefields">
                 <h6>{{ "Fields"|t('app') }}</h6>
-                {% for field in spoonedBlockType.matrixBlockType.getFields() %}
-                    {% set selected = field.id in unusedFieldIds %}
-
-                    <div class="fld-field fld-element unused{% if selected %} hidden{% endif %}" data-attribute="{{ field.handle }}" data-id="{{ field.id }}" data-type="{{ className(field) }}" data-config='{ "id":{{ field.id }} }' data-keywords="{{ field.name }} {{ field.handle }}">
+                {% for field in blockTypeFields %}
+                    {% set customField = field.getField() %}
+                    {% set selected = customField.id in unusedFieldIds %}
+                    <div class="fld-field fld-element unused{% if selected %} hidden{% endif %}" data-attribute="{{ customField.handle }}" data-id="{{ customField.id }}" data-type="{{ className(field) }}" data-config="{{ field.toArray|json_encode }}" data-keywords="{{ customField.name }} {{ customField.handle }}">
                         <div class="field-name">
-                            <h4 class="fld-element-label" title="{{ field.name|t('site') }}">{{ field.name|t('site') }}</h4>
-                            <div class="smalltext light code" title="{{ field.handle }}">{{ field.handle }}</div>
+                            <h4 class="fld-element-label" title="{{ customField.name|t('site') }}">{{ customField.name|t('site') }}</h4>
+                            <div class="smalltext light code" title="{{ customField.handle }}">{{ customField.handle }}</div>
                         </div>
                         <a class="move icon" title="{{ 'Reorder'|t('app') }}"></a>
                     </div>

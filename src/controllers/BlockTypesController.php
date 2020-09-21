@@ -155,7 +155,6 @@ class BlockTypesController extends Controller
         $this->requireAcceptsJson();
 
         $spoonedBlockTypeId = Craft::$app->getRequest()->getParam('spoonedBlockTypeId');
-        $blockTypeFieldLayouts = Craft::$app->getRequest()->getParam('blockTypeFieldLayouts');
 
         if ($spoonedBlockTypeId) {
             if (!$spoonedBlockType = Spoon::$plugin->blockTypes->getById($spoonedBlockTypeId)) {
@@ -165,13 +164,11 @@ class BlockTypesController extends Controller
             return false;
         }
 
-        // Set the field layout on the model
-        $postedFieldLayout = Craft::$app->getRequest()->getParam('blockTypeFieldLayouts');
+        $fieldLayout = Craft::$app->getFields()->assembleLayoutFromPost();
+        if ($fieldLayout) {
 
-        // Check if we have one
-        if ($postedFieldLayout) {
-            $assembledLayout = Craft::$app->fields->assembleLayout($postedFieldLayout);
-            $spoonedBlockType->setFieldLayout($assembledLayout);
+            $fieldLayout->type = BlockType::class;
+            $spoonedBlockType->setFieldLayout($fieldLayout);
 
             // Save it
             if (!Spoon::$plugin->blockTypes->saveFieldLayout($spoonedBlockType)) {

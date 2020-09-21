@@ -13,6 +13,7 @@ namespace angellco\spoon\controllers;
 use angellco\spoon\Spoon;
 
 use Craft;
+use craft\fieldlayoutelements\CustomField;
 use craft\web\Controller;
 
 /**
@@ -97,9 +98,15 @@ class ConfiguratorController extends Controller
 
         $fieldLayout = $spoonedBlockType->getFieldLayout();
 
+        $blockTypeFldFields = [];
+        foreach ($spoonedBlockType->matrixBlockType->getFields() as $field) {
+            $blockTypeFldFields[] = Craft::createObject(CustomField::class, [$field]);
+        }
+
         $fld = Craft::$app->view->renderTemplate('spoon/flds/fields', array(
             'spoonedBlockType' => $spoonedBlockType,
-            'fieldLayout' => $fieldLayout
+            'fieldLayout' => $fieldLayout,
+            'blockTypeFields' => $blockTypeFldFields
         ));
 
         return $this->asJson([
