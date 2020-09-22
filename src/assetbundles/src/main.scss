@@ -62,6 +62,10 @@ body.rtl .buttons-spooned > .btn, body.rtl .buttons-spooned > .btngroup { margin
     min-width: 560px;
     min-height: 360px;
 }
+.modal.spoon-fields-configurator .fld-field .settings,
+.modal.spoon-fields-configurator + .fld-field.draghelper .settings {
+    display: none;
+}
 
 
 /**

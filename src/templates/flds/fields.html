@@ -68,10 +68,6 @@
 <div id="spoon-fields-configurator" class="layoutdesigner">
     <div class="fld-workspace">
         <div class="fld-tabs">
-            {# TODO #}
-{#                {% for tab in fieldLayout.getTabs() %}#}
-{#                    {{ _self.tab(tab.name, tab.getFields(), _context) }}#}
-{#                {% endfor %}#}
             {% if customizableTabs %}
                 {% for tab in fieldLayout.getTabs() %}
                     {{ _self.tab(tab.name, tab.elements, _context) }}
@@ -93,12 +89,12 @@
     </div>
 
     <div class="fld-sidebar">
-        {% if customizableUi %}
-            <div class="btngroup small fullwidth" role="listbox" aria-label="{{ 'Layout element types'|t('app') }}" tabindex="0">
-                <div class="btn small active" role="option" aria-selected="true" data-library="field">{{ 'Fields'|t('app') }}</div>
-                <div class="btn small" role="option" aria-selected="false" data-library="ui">{{ 'UI Elements'|t('app') }}</div>
-            </div>
-        {% endif %}
+{#        {% if customizableUi %}#}
+{#            <div class="btngroup small fullwidth" role="listbox" aria-label="{{ 'Layout element types'|t('app') }}" tabindex="0">#}
+{#                <div class="btn small active" role="option" aria-selected="true" data-library="field">{{ 'Fields'|t('app') }}</div>#}
+{#                <div class="btn small" role="option" aria-selected="false" data-library="ui">{{ 'UI Elements'|t('app') }}</div>#}
+{#            </div>#}
+{#        {% endif %}#}
 
         <div class="fld-field-library">
             <div class="texticon search icon clearable">
@@ -136,12 +132,12 @@
             </div>
         </div>
 
-        {% if customizableUi %}
-            <div class="fld-ui-library hidden">
-                {% for element in fieldLayout.getAvailableUiElements() %}
-                    {{ _self.elementSelector(element, true) }}
-                {% endfor %}
-            </div>
-        {% endif %}
+{#        {% if customizableUi %}#}
+{#            <div class="fld-ui-library hidden">#}
+{#                {% for element in fieldLayout.getAvailableUiElements() %}#}
+{#                    {{ _self.elementSelector(element, true) }}#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#        {% endif %}#}
     </div>
 </div>
