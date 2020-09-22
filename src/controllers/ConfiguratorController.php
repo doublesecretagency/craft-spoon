@@ -106,7 +106,8 @@ class ConfiguratorController extends Controller
         $fld = Craft::$app->view->renderTemplate('spoon/flds/fields', array(
             'spoonedBlockType' => $spoonedBlockType,
             'fieldLayout' => $fieldLayout,
-            'blockTypeFields' => $blockTypeFldFields
+            'blockTypeFields' => $blockTypeFldFields,
+//            'customizableUi' => true
         ));
 
         return $this->asJson([

@@ -61,11 +61,6 @@
     }|merge(attr ?? {}, recursive=true)) }}
 {% endmacro %}
 
-{# TODO: need this? #}
-{#{% if fieldLayout.id %}#}
-{#    {{ hiddenInput('fieldLayoutId', fieldLayout.id) }}#}
-{#{% endif %}#}
-
 <input type="hidden" name="spoonedBlockTypeId" value="{{ spoonedBlockType.id }}">
 
 <h2>{{ "Editing the “{name}” block field layout"|t('spoon', { 'name' : spoonedBlockType.matrixBlockType.name|t }) }}</h2>
@@ -119,8 +114,7 @@
             {% if fieldLayout %}
                 {% for field in blockTypeFields %}
                     {% set customField = field.getField() %}
-                    {# TODO this is wrong ... #}
-                    {% if customField.id in fieldLayout.getFieldIds() %}
+                    {% if customField.id not in fieldLayout.getFieldIds() %}
                         {% set unusedFieldIds = unusedFieldIds|merge([customField.id]) %}
                     {% endif %}
                 {% endfor %}
@@ -130,7 +124,7 @@
                 <h6>{{ "Fields"|t('app') }}</h6>
                 {% for field in blockTypeFields %}
                     {% set customField = field.getField() %}
-                    {% set selected = customField.id in unusedFieldIds %}
+                    {% set selected = customField.id not in unusedFieldIds %}
                     <div class="fld-field fld-element unused{% if selected %} hidden{% endif %}" data-attribute="{{ customField.handle }}" data-id="{{ customField.id }}" data-type="{{ className(field) }}" data-config="{{ field.toArray|json_encode }}" data-keywords="{{ customField.name }} {{ customField.handle }}">
                         <div class="field-name">
                             <h4 class="fld-element-label" title="{{ customField.name|t('site') }}">{{ customField.name|t('site') }}</h4>
