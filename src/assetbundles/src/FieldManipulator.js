@@ -346,6 +346,7 @@
                     var $spoonedFields = $('<div class="spoon-fields"/>').css({ 'opacity' : 0 }).appendTo($matrixBlock),
                         $fields = $matrixBlock.find('> .fields');
                     $fields.css({ 'opacity' : 0 });
+                    $spoonedFields.addClass('fields');
 
                     // Loop the tabs
                     for (var i = 0; i < tabs.length; i++)
