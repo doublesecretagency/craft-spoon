@@ -220,7 +220,7 @@ class BlockTypes extends Component
         /** @var FieldLayout $fieldLayout */
         $fieldLayout = $blockType->getFieldLayout();
 
-        if ($fieldLayout && $fieldLayout->uid) {
+        if ($blockType->fieldLayoutId && $fieldLayout && $fieldLayout->uid) {
             $fieldLayoutConfig = $fieldLayout->getConfig();
 
             $layoutUid = $fieldLayout->uid;

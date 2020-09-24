@@ -165,7 +165,7 @@ class BlockTypesController extends Controller
         }
 
         $fieldLayout = Craft::$app->getFields()->assembleLayoutFromPost();
-        if ($fieldLayout) {
+        if ($fieldLayout && !empty($fieldLayout->getTabs())) {
 
             $fieldLayout->type = BlockType::class;
             $spoonedBlockType->setFieldLayout($fieldLayout);
@@ -178,15 +178,7 @@ class BlockTypesController extends Controller
             }
         } else if ($spoonedBlockType->fieldLayoutId) {
 
-            // We don’t have a new field layout, so remove the old one if there is one
-            $oldFieldLayoutId = $spoonedBlockType->fieldLayoutId;
-            if (!Craft::$app->fields->deleteLayoutById($oldFieldLayoutId)) {
-                return $this->asJson([
-                    'success' => false
-                ]);
-            }
-
-            // Also null the col on our block type row
+            // null the col on our block type so the fld gets removed
             $spoonedBlockType->fieldLayoutId = null;
             if (!Spoon::$plugin->blockTypes->save($spoonedBlockType)) {
                 return $this->asJson([
