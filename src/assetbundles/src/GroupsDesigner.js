@@ -39,7 +39,7 @@
                 });
 
                 $editBtn.on('click', $.proxy(function() {
-                    this.onEditFieldLayout($element);
+                    this.onEditFieldLayout($element, $editBtn);
                 }, this));
 
                 $editBtn.appendTo($element);
@@ -91,9 +91,16 @@
              * When trying to edit a field layout make sure the
              * block groups have saved first
              */
-            onEditFieldLayout: function($blockType)
+            onEditFieldLayout: function($blockType, $btn)
             {
+                if ($btn.hasClass('disabled')) {
+                    return;
+                }
+
+                $btn.addClass('disabled');
+
                 var $modalForm = $blockType.parents('.modal');
+
                 $modalForm.one('blockTypesSaved', $.proxy(function()
                 {
                     this.editFieldLayout($blockType);
@@ -119,10 +126,10 @@
                     $footer = $('<div class="footer"/>').appendTo(this.$form),
                     $buttons = $('<div class="buttons right"/>').appendTo($footer);
 
-                this.$spinner = $('<div class="spinner hidden"/>').appendTo($buttons);
-
                 var $cancelBtn = $('<div class="btn">'+Craft.t('app', 'Cancel')+'</div>').appendTo($buttons),
                     $submitBtn = $('<input type="submit" class="btn submit" value="'+Craft.t('app', 'Save')+'"/>').appendTo($buttons);
+
+                this.$spinner = $('<div class="spinner hidden"/>').appendTo($buttons);
 
                 this.modal = new Garnish.Modal(this.$form,
                     {
