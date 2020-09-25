@@ -15,6 +15,7 @@ use angellco\spoon\Spoon;
 
 use Craft;
 use craft\helpers\Db;
+use craft\helpers\Json;
 use craft\web\Controller;
 
 /**
@@ -52,12 +53,14 @@ class BlockTypesController extends Controller
         $this->requirePostRequest();
         $this->requireAcceptsJson();
 
-        // This will be an array of Tab Names with Block Type IDs.
+        // This will be two arrays, first of Tab Names with element keys, second with
+        // element keys and the config for those elements.
         // The order in which they appear is the order in which they should also
         // be returned in eventually, so we will just rely on the id to describe this
         // and make sure each time we are referencing a context that already exists to
         // delete the rows matching that context before proceeding with the save.
-        $blockTypesPostData = Craft::$app->getRequest()->getParam('spoonedBlockTypes');
+        $elementPlacements = Craft::$app->getRequest()->getParam('elementPlacements');
+        $elementConfigs = Craft::$app->getRequest()->getParam('elementConfigs');
 
         $context = (string)Craft::$app->getRequest()->getParam('context');
         $fieldId = (integer)Craft::$app->getRequest()->getParam('fieldId');
@@ -70,31 +73,33 @@ class BlockTypesController extends Controller
 
         // Loop over the data and save new rows for each block type / group combo
         $errors = 0;
-        if (is_array($blockTypesPostData))
+        if (is_array($elementPlacements) && is_array($elementConfigs))
         {
             $groupSortOrder = 1;
-            foreach ($blockTypesPostData as $groupName => $blockTypeIds)
+            foreach ($elementPlacements as $groupName => $elementKeys)
             {
                 $sortOrder = 1;
-                foreach ($blockTypeIds as $blockTypeId)
-                {
-                    $spoonedBlockType = new BlockType();
-                    $spoonedBlockType->fieldId           = $fieldId;
-                    $spoonedBlockType->matrixBlockTypeId = $blockTypeId;
-                    $spoonedBlockType->fieldLayoutId     = isset($fieldLayoutIds[$blockTypeId]) ? $fieldLayoutIds[$blockTypeId] : null;
-                    $spoonedBlockType->groupName         = urldecode($groupName);
-                    $spoonedBlockType->context           = $context;
-                    $spoonedBlockType->groupSortOrder    = $groupSortOrder;
-                    $spoonedBlockType->sortOrder         = $sortOrder;
+                foreach ($elementKeys as $i => $elementKey) {
+                    $elementConfig = Json::decode($elementConfigs[$elementKey]);
+                    $blockTypeId = $elementConfig['blockTypeId'];
 
-                    if (!Spoon::$plugin->blockTypes->save($spoonedBlockType))
-                    {
+                    $spoonedBlockType = new BlockType();
+                    $spoonedBlockType->fieldId = $fieldId;
+                    $spoonedBlockType->matrixBlockTypeId = $blockTypeId;
+                    $spoonedBlockType->fieldLayoutId = isset($fieldLayoutIds[$blockTypeId]) ? $fieldLayoutIds[$blockTypeId] : null;
+                    $spoonedBlockType->groupName = urldecode($groupName);
+                    $spoonedBlockType->context = $context;
+                    $spoonedBlockType->groupSortOrder = $groupSortOrder;
+                    $spoonedBlockType->sortOrder = $sortOrder;
+
+                    if (!Spoon::$plugin->blockTypes->save($spoonedBlockType)) {
                         $errors++;
                     }
 
                     $sortOrder++;
                 }
                 $groupSortOrder++;
+
             }
         }
 
@@ -150,7 +155,6 @@ class BlockTypesController extends Controller
         $this->requireAcceptsJson();
 
         $spoonedBlockTypeId = Craft::$app->getRequest()->getParam('spoonedBlockTypeId');
-        $blockTypeFieldLayouts = Craft::$app->getRequest()->getParam('blockTypeFieldLayouts');
 
         if ($spoonedBlockTypeId) {
             if (!$spoonedBlockType = Spoon::$plugin->blockTypes->getById($spoonedBlockTypeId)) {
@@ -160,13 +164,11 @@ class BlockTypesController extends Controller
             return false;
         }
 
-        // Set the field layout on the model
-        $postedFieldLayout = Craft::$app->getRequest()->getParam('blockTypeFieldLayouts');
+        $fieldLayout = Craft::$app->getFields()->assembleLayoutFromPost();
+        if ($fieldLayout && !empty($fieldLayout->getTabs())) {
 
-        // Check if we have one
-        if ($postedFieldLayout) {
-            $assembledLayout = Craft::$app->fields->assembleLayout($postedFieldLayout);
-            $spoonedBlockType->setFieldLayout($assembledLayout);
+            $fieldLayout->type = BlockType::class;
+            $spoonedBlockType->setFieldLayout($fieldLayout);
 
             // Save it
             if (!Spoon::$plugin->blockTypes->saveFieldLayout($spoonedBlockType)) {
@@ -176,15 +178,7 @@ class BlockTypesController extends Controller
             }
         } else if ($spoonedBlockType->fieldLayoutId) {
 
-            // We don’t have a new field layout, so remove the old one if there is one
-            $oldFieldLayoutId = $spoonedBlockType->fieldLayoutId;
-            if (!Craft::$app->fields->deleteLayoutById($oldFieldLayoutId)) {
-                return $this->asJson([
-                    'success' => false
-                ]);
-            }
-
-            // Also null the col on our block type row
+            // null the col on our block type so the fld gets removed
             $spoonedBlockType->fieldLayoutId = null;
             if (!Spoon::$plugin->blockTypes->save($spoonedBlockType)) {
                 return $this->asJson([

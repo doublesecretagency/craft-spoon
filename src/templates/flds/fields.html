@@ -1,68 +1,143 @@
-{% macro tab(tabName, tabFields) %}
+{% import '_includes/forms' as forms %}
+
+{% set customizableTabs = customizableTabs ?? true %}
+{% set customizableUi = customizableUi ?? true %}
+{% set pretendTabName = pretendTabName ?? 'Content'|t('app') %}
+{% set fieldLayout = fieldLayout ?? create('craft\\models\\FieldLayout') %}
+
+{% do view.registerTranslations('app', [
+    'Apply',
+    'Delete',
+    'Give your tab a name.',
+    'Move to the left',
+    'Move to the right',
+    'Remove',
+    'Rename',
+    'Required',
+    '{pct} width',
+]) %}
+
+{% macro tab(tabName, elements, context) %}
     <div class="fld-tab">
         <div class="tabs">
-            <div class="tab sel draggable">
-                <span>{{ tabName|t }}</span>
-                <a class="settings icon" title="{{ 'Edit'|t('app') }}"></a>
+            <div class="tab sel{% if context.customizableTabs %} draggable{% endif %}">
+                <span>{{ tabName }}</span>
+                {% if context.customizableTabs %}
+                    <a class="settings icon" title="{{ 'Edit'|t('app') }}"></a>
+                {% endif %}
             </div>
         </div>
         <div class="fld-tabcontent">
-            {% for field in tabFields %}
-                <div class="fld-field" data-id="{{ field.id }}">
-                    <a class="settings icon" title="{{ 'Edit'|t('app') }}"></a>
-                    <span>{{ field.name|t }}</span>
-                    <input class="id-input" type="hidden" name="blockTypeFieldLayouts[{{ tabName|e('url') }}][]" value="{{ field.id }}">
-                </div>
+            {% for element in elements %}
+                {{ _self.elementSelector(element, false) }}
             {% endfor %}
         </div>
     </div>
 {% endmacro %}
 
-<div id="spoon-fields-configurator" class="fieldlayoutform">
+{% macro elementSelector(element, forLibrary, attr) %}
+    {% if element is instance of('craft\\fieldlayoutelements\\BaseField') %}
+        {% set attr = {
+            class: [
+                not forLibrary and element.required ? 'fld-required',
+            ]|filter,
+            data: {
+                keywords: forLibrary ? element.keywords()|join(' ')|lower : false,
+            },
+        }|merge(attr ?? {}, recursive=true) %}
+    {% endif %}
+    {% set settingsHtml = element.settingsHtml() %}
+    {{ element.selectorHtml()|attr({
+        class: [
+            'fld-element',
+            forLibrary ? 'unused',
+        ]|filter,
+        data: {
+            type: className(element),
+            config: element.toArray(),
+            'has-custom-width': element.hasCustomWidth(),
+            'settings-html': settingsHtml ? settingsHtml|namespaceAttributes("element-#{random()}") ?: false,
+        },
+    }|merge(attr ?? {}, recursive=true)) }}
+{% endmacro %}
 
-    <input type="hidden" name="spoonedBlockTypeId" value="{{ spoonedBlockType.id }}">
+<input type="hidden" name="spoonedBlockTypeId" value="{{ spoonedBlockType.id }}">
 
-    <h2>{{ "Editing the “{name}” block field layout"|t('spoon', { 'name' : spoonedBlockType.matrixBlockType.name|t }) }}</h2>
+<h2>{{ "Editing the “{name}” block field layout"|t('spoon', { 'name' : spoonedBlockType.matrixBlockType.name|t }) }}</h2>
 
-    <div class="fld-tabs">
-        {% if fieldLayout %}
-            {% import _self as macros %}
+<div id="spoon-fields-configurator" class="layoutdesigner">
+    <div class="fld-workspace">
+        <div class="fld-tabs">
+            {% if customizableTabs %}
+                {% for tab in fieldLayout.getTabs() %}
+                    {{ _self.tab(tab.name, tab.elements, _context) }}
+                {% endfor %}
+            {% else %}
+                {% set elements = [] %}
+                {% for tab in fieldLayout.getTabs() %}
+                    {% for element in tab.elements %}
+                        {% set elements = elements|push(element) %}
+                    {% endfor %}
+                {% endfor %}
+                {{ _self.tab(pretendTabName, elements, _context) }}
+            {% endif %}
+        </div>
 
-            {% for tab in fieldLayout.getTabs() %}
-                {{ macros.tab(tab.name, tab.getFields()) }}
-            {% endfor %}
+        {% if customizableTabs %}
+            <div class="fld-new-tab-btn btn add icon">{{ "New Tab"|t('app') }}</div>
         {% endif %}
     </div>
 
-    <div class="newtabbtn-container">
-        <div class="btn add icon">{{ "New Tab"|t('app') }}</div>
-    </div>
+    <div class="fld-sidebar">
+{#        {% if customizableUi %}#}
+{#            <div class="btngroup small fullwidth" role="listbox" aria-label="{{ 'Layout element types'|t('app') }}" tabindex="0">#}
+{#                <div class="btn small active" role="option" aria-selected="true" data-library="field">{{ 'Fields'|t('app') }}</div>#}
+{#                <div class="btn small" role="option" aria-selected="false" data-library="ui">{{ 'UI Elements'|t('app') }}</div>#}
+{#            </div>#}
+{#        {% endif %}#}
 
-    <div class="unusedfields">
-
-        {% if fieldLayout %}
-            {% set totalUnselected = 0 %}
-            {% for field in spoonedBlockType.matrixBlockType.getFields() %}
-                {% if field.id not in fieldLayout.getFieldIds() %}
-                    {% set totalUnselected = totalUnselected + 1 %}
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-
-        <div class="fld-tab unused{% if fieldLayout and totalUnselected == 0 %} hidden{% endif %}">
-            <div class="tabs">
-                <div class="tab sel"><span>{{ "Fields"|t('app') }}</span></div>
+        <div class="fld-field-library">
+            <div class="texticon search icon clearable">
+                {{ forms.text({
+                    class: 'fullwidth',
+                    inputmode: 'search',
+                    placeholder: "Search"|t('app')
+                }) }}
+                <div class="clear hidden" title="{{ 'Clear'|t('app') }}"></div>
             </div>
-            <div class="fld-tabcontent">
-                {% for field in spoonedBlockType.matrixBlockType.getFields() %}
-                    {% set selected = fieldLayout and field.id in fieldLayout.getFieldIds() %}
-                    <div class="fld-field unused{% if selected %} hidden{% endif %}" data-id="{{ field.id }}">
-                        <span>{{ field.name|t }}</span>
+
+            {% set unusedFieldIds = [] %}
+            {% if fieldLayout %}
+                {% for field in blockTypeFields %}
+                    {% set customField = field.getField() %}
+                    {% if customField.id not in fieldLayout.getFieldIds() %}
+                        {% set unusedFieldIds = unusedFieldIds|merge([customField.id]) %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            <div class="fld-field-group" data-name="blocktypefields">
+                <h6>{{ "Fields"|t('app') }}</h6>
+                {% for field in blockTypeFields %}
+                    {% set customField = field.getField() %}
+                    {% set selected = customField.id not in unusedFieldIds %}
+                    <div class="fld-field fld-element unused{% if selected %} hidden{% endif %}" data-attribute="{{ customField.handle }}" data-id="{{ customField.id }}" data-type="{{ className(field) }}" data-config="{{ field.toArray|json_encode }}" data-keywords="{{ customField.name }} {{ customField.handle }}">
+                        <div class="field-name">
+                            <h4 class="fld-element-label" title="{{ customField.name|t('site') }}">{{ customField.name|t('site') }}</h4>
+                            <div class="smalltext light code" title="{{ customField.handle }}">{{ customField.handle }}</div>
+                        </div>
+                        <a class="move icon" title="{{ 'Reorder'|t('app') }}"></a>
                     </div>
                 {% endfor %}
             </div>
         </div>
 
+{#        {% if customizableUi %}#}
+{#            <div class="fld-ui-library hidden">#}
+{#                {% for element in fieldLayout.getAvailableUiElements() %}#}
+{#                    {{ _self.elementSelector(element, true) }}#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#        {% endif %}#}
     </div>
-
 </div>

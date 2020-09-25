@@ -7,6 +7,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+
+## 3.6.0 - 2020-09-25
+
+### Changed
+- Spoon is now compatible with Craft 3.5, as a result of these changes Spoon requires Craft 3.5 or greater from this release onward.
+
+
 ## 3.5.3 - 2020-07-30
 
 ### Fixed

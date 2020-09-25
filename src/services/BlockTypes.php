@@ -220,7 +220,7 @@ class BlockTypes extends Component
         /** @var FieldLayout $fieldLayout */
         $fieldLayout = $blockType->getFieldLayout();
 
-        if ($fieldLayout && $fieldLayout->uid) {
+        if ($blockType->fieldLayoutId && $fieldLayout && $fieldLayout->uid) {
             $fieldLayoutConfig = $fieldLayout->getConfig();
 
             $layoutUid = $fieldLayout->uid;
@@ -319,14 +319,17 @@ class BlockTypes extends Component
             $blockTypeRecord->uid = $uid;
 
             // Handle the field layout
-            if (!empty($data['fieldLayout'])) {
-                // Save the field layout
-                $layout = FieldLayout::createFromConfig(reset($data['fieldLayout']));
-                $layout->id = $blockTypeRecord->fieldLayoutId;
-                $layout->type = BlockType::class;
-                $layout->uid = key($data['fieldLayout']);
-                $fieldsService->saveLayout($layout);
-                $blockTypeRecord->fieldLayoutId = $layout->id;
+            if ($data['fieldLayout']) {
+                $flData = reset($data['fieldLayout']);
+                if ($flData) {
+                    // Save the field layout
+                    $layout = FieldLayout::createFromConfig($flData);
+                    $layout->id = $blockTypeRecord->fieldLayoutId;
+                    $layout->type = BlockType::class;
+                    $layout->uid = key($data['fieldLayout']);
+                    $fieldsService->saveLayout($layout);
+                    $blockTypeRecord->fieldLayoutId = $layout->id;
+                }
             } else if ($blockTypeRecord->fieldLayoutId) {
                 // Delete the field layout
                 $fieldsService->deleteLayoutById($blockTypeRecord->fieldLayoutId);

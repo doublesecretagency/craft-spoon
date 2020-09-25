@@ -15,7 +15,6 @@
         Spoon = {};
     }
 
-
     Spoon.GroupsDesigner = Craft.FieldLayoutDesigner.extend(
         {
 
@@ -24,78 +23,60 @@
 
             modal: null,
 
-            initField: function($blockType)
-            {
-                var $editBtn = $blockType.find('.settings'),
-                    $menu = $('<div class="menu" data-align="center"/>').insertAfter($editBtn),
-                    $ul = $('<ul/>').appendTo($menu);
+            initElement: function($element) {
+                // Base init
+                new Craft.FieldLayoutDesigner.Element(this, $element);
 
-                $('<li><a data-action="edit-field-layout">'+Craft.t('spoon', 'Edit field layout')+'</a></li>').appendTo($ul);
-
-                $('<li><a data-action="remove">'+Craft.t('app', 'Remove')+'</a></li>').appendTo($ul);
-
-                new Garnish.MenuBtn($editBtn, {
-                    onOptionSelect: $.proxy(this, 'onFieldOptionSelect')
+                // Add our settings button
+                var $editBtn = $('<a/>', {
+                    role: 'button',
+                    tabindex: 0,
+                    class: 'settings icon',
+                    title: Craft.t('app', 'Edit')
                 });
-            },
 
-            onFieldOptionSelect: function(option)
-            {
-                var $option = $(option),
-                    $blockType = $option.data('menu').$anchor.parent(),
-                    action = $option.data('action');
+                $editBtn.on('click', $.proxy(function() {
+                    this.onEditFieldLayout($element, $editBtn);
+                }, this));
 
-                switch (action)
-                {
-                    case 'edit-field-layout':
-                    {
-                        this.onEditFieldLayout($blockType);
-                        break;
-                    }
-                    case 'remove':
-                    {
-                        this.removeField($blockType);
-                        break;
-                    }
-                }
+                $editBtn.appendTo($element);
             },
 
             // cloned for language adjustments
             renameTab: function($tab)
             {
-                if (!this.settings.customizableTabs)
-                {
+                if (!this.settings.customizableTabs) {
                     return;
                 }
 
-                var $labelSpan = $tab.find('.tabs .tab span'),
-                    oldName = $labelSpan.text(),
-                    newName = prompt(Craft.t('spoon', 'Give your group a name.'), oldName);
+                var $labelSpan = $tab.find('.tabs .tab span');
+                var oldName = $labelSpan.text();
+                var newName = prompt(Craft.t('app', 'Give your group a name.'), oldName);
 
-                if (newName && newName != oldName)
-                {
+                if (newName && newName !== oldName) {
                     $labelSpan.text(newName);
-                    $tab.find('.id-input').attr('name', this.getFieldInputName(newName));
+                    $tab.find('.placement-input').attr('name', this.getElementPlacementInputName(newName));
                 }
             },
 
             // cloned for language adjustments
             addTab: function()
             {
-                if (!this.settings.customizableTabs)
-                {
+                if (!this.settings.customizableTabs) {
                     return;
                 }
 
-                var $tab = $('<div class="fld-tab">' +
-                    '<div class="tabs">' +
-                    '<div class="tab sel draggable">' +
-                    '<span>'+Craft.t('app', 'Group')+' '+(this.tabGrid.$items.length+1)+'</span>' +
-                    '<a class="settings icon" title="'+Craft.t('app', 'Rename')+'"></a>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="fld-tabcontent"></div>' +
-                    '</div>').appendTo(this.$tabContainer);
+                var $tab = $(
+'<div class="fld-tab">' +
+  '<div class="tabs">' +
+    '<div class="tab sel draggable">' +
+      '<span>Group '+ (this.tabGrid.$items.length + 1) +'</span>' +
+      '<a class="settings icon" title="'+Craft.t('app', 'Rename')+'"></a>' +
+    '</div>' +
+  '</div>' +
+  '<div class="fld-tabcontent"></div>' +
+'</div>')
+                    .appendTo(this.$tabContainer);
 
                 this.tabGrid.addItems($tab);
                 this.tabDrag.addItems($tab);
@@ -107,9 +88,16 @@
              * When trying to edit a field layout make sure the
              * block groups have saved first
              */
-            onEditFieldLayout: function($blockType)
+            onEditFieldLayout: function($blockType, $btn)
             {
+                if ($btn.hasClass('disabled')) {
+                    return;
+                }
+
+                $btn.addClass('disabled');
+
                 var $modalForm = $blockType.parents('.modal');
+
                 $modalForm.one('blockTypesSaved', $.proxy(function()
                 {
                     this.editFieldLayout($blockType);
@@ -135,10 +123,10 @@
                     $footer = $('<div class="footer"/>').appendTo(this.$form),
                     $buttons = $('<div class="buttons right"/>').appendTo($footer);
 
-                this.$spinner = $('<div class="spinner hidden"/>').appendTo($buttons);
-
                 var $cancelBtn = $('<div class="btn">'+Craft.t('app', 'Cancel')+'</div>').appendTo($buttons),
                     $submitBtn = $('<input type="submit" class="btn submit" value="'+Craft.t('app', 'Save')+'"/>').appendTo($buttons);
+
+                this.$spinner = $('<div class="spinner hidden"/>').appendTo($buttons);
 
                 this.modal = new Garnish.Modal(this.$form,
                     {
@@ -158,8 +146,10 @@
                                 {
                                     $(response.html).appendTo($body);
                                     $bigSpinner.addClass('hidden');
-                                    var fld = new Spoon.BlockTypeFieldLayoutDesigner('#spoon-fields-configurator', {
-                                        fieldInputName: 'blockTypeFieldLayouts[__TAB_NAME__][]'
+
+                                    var fld = new Craft.FieldLayoutDesigner('#spoon-fields-configurator', {
+                                        customizableTabs: true,
+                                        customizableUi: false,
                                     });
                                 }
                             }, this));

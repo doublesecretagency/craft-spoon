@@ -42,8 +42,21 @@ class FieldManipulatorAsset extends AssetBundle
             MatrixAsset::class
         ];
 
-        // define the relative path to CSS/JS files that should be registered with the page
-        // when this asset bundle is registered
+
+        // TODO: hook up entire stack of flds to js window state so we can swap in the UI rendered version of the raw
+        //       html around line 384 of FieldManipulator.js
+//        $blockTypes = Spoon::$plugin->blockTypes->getByContext('global');
+//
+//        foreach ($blockTypes as $blockType) {
+//
+//            if ($blockType->fieldLayoutId) {
+//                foreach ($blockType->getFieldLayout()->getTabs() as $tab) {
+//                    Craft::dd($tab->elements);
+//                }
+//            }
+//        }
+
+
         $this->js = [
             'js/FieldManipulator.min.js',
         ];
