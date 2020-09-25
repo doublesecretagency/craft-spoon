@@ -14,10 +14,7 @@
     {
         Spoon = {};
     }
-    // customizableTabs: customizableTabs,
-    //     customizableUi: customizableUi,
-    //     elementPlacementInputName: 'elementPlacements[__TAB_NAME__][]'|namespaceInputName,
-    //     elementConfigInputName: 'elementConfigs[__ELEMENT_KEY__]'|namespaceInputName,
+
     Spoon.GroupsDesigner = Craft.FieldLayoutDesigner.extend(
         {
 
