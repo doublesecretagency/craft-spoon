@@ -319,7 +319,7 @@ class BlockTypes extends Component
             $blockTypeRecord->uid = $uid;
 
             // Handle the field layout
-            if ($data['fieldLayout']) {
+            if (isset($data['fieldLayout']) && $data['fieldLayout'] !== null) {
                 $flData = reset($data['fieldLayout']);
                 if ($flData) {
                     // Save the field layout
