@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 
 
+## 3.6.1 - 2021-02-09
+
+### Fixed
+- Fixed an issue with project config that could cause it to throw a big wobbly ([#105](https://github.com/angell-co/Spoon/issues/105))
+
+
 ## 3.6.0 - 2020-09-25
 
 ### Changed
