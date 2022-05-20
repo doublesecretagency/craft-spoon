@@ -4,13 +4,13 @@
  *
  * Enhance Matrix
  *
- * @link      https://angell.io
- * @copyright Copyright (c) 2018 Angell & Co
+ * @link      https://plugins.doublesecretagency.com/
+ * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */
 
-namespace angellco\spoon\services;
+namespace doublesecretagency\spoon\services;
 
-use angellco\spoon\Spoon;
+use doublesecretagency\spoon\Spoon;
 
 use Craft;
 use craft\base\Component;
@@ -19,7 +19,6 @@ use craft\db\Query;
 /**
  * Fields
  *
- * @author    Angell & Co
  * @package   Spoon
  * @since     3.0.0
  */

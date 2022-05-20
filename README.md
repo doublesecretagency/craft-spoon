@@ -1,10 +1,10 @@
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/angell-co/Spoon/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/angell-co/Spoon/?branch=master) [![Build Status](https://scrutinizer-ci.com/g/angell-co/Spoon/badges/build.png?b=master)](https://scrutinizer-ci.com/g/angell-co/Spoon/build-status/master) [![Code Intelligence Status](https://scrutinizer-ci.com/g/angell-co/Spoon/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
+<img align="left" width="120" src="https://raw.githubusercontent.com/doublesecretagency/craft-spoon/085982bfc5dbc7b4f07433383cf5e534931b981d/resources/img/icon.svg" alt="Plugin icon">
 
-# Spoon
+# Spoon plugin for Craft CMS
 
-Enhance your Matrix fields with groups, tabs and more!
+**Enhance your Matrix fields with groups, tabs and more!**
 
-![Banner](resources/img/banner.png)
+---
 
 Use Spoon to group Matrix blocks, hide blocks and / or fields, and organise your block layouts with tabs.
 
@@ -17,9 +17,6 @@ Or is it the red pill. Which is the real illusion?!
 Get inception heavy with either a Matrix inside a Super Table or go wild and nest that Super Table in _another_ Matrix for more fun.
 
 ---
-
-**Note:** The license fee for this plugin is $59 via the Craft Plugin Store.
-
 
 ## Requirements
 
@@ -36,7 +33,7 @@ To install the plugin, follow these instructions.
 
 2. Then tell Composer to load the plugin:
 
-        composer require angellco/spoon
+        composer require doublesecretagency/craft-spoon
 
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Spoon.
 
@@ -54,16 +51,6 @@ Arrange fields into tabbed groups on each block type.
 Use just one Matrix field and hide and show blocks or fields based on the Entry Type, Category Group and more.
 
 ![group block types button](resources/img/docs/group-block-types.jpg)
-
-
-### Roadmap
-
-If you wish to keep up with the progress of this project you can do so in the [GitHub project](https://github.com/angell-co/Spoon/projects/2).
-
-
-### Support
-
-All support requests should be submitted via [GitHub issues](https://github.com/angell-co/Spoon/issues), if you need more in-depth help then please do reach out to me on the [Craft Slack](https://craftcms.com/community#slack) (@joshangell) or email me - [josh@angell.io](mailto:josh@angell.io). 
 
 
 ## Usage
@@ -118,8 +105,12 @@ Spoon supports the standard config.php multi-environment friendly config file fo
 
 ---
 
-Brought to you by [Angell & Co](https://angell.io)
+## Further Support
 
-This project used to live under a [different name](https://github.com/angell-co/Pimp-My-Matrix) in Craft 2, but I renamed it for obvious reasons.
+If you have any remaining questions, feel free to [reach out to us](https://www.doublesecretagency.com/contact) (via Discord is preferred).
 
-Big thanks to the lovely people at [Supercool](https://github.com/supercool) for letting me take this project over.
+**On behalf of Double Secret Agency, thanks for checking out our plugin!** 🍺
+
+<p align="center">
+    <img width="130" src="https://www.doublesecretagency.com/resources/images/dsa-transparent.png" alt="Logo for Double Secret Agency">
+</p>

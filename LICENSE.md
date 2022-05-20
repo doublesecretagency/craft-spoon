@@ -1,4 +1,6 @@
-Copyright © Angell & Co
+The Craft License
+
+Copyright © Double Secret Agency
 
 Permission is hereby granted to any person obtaining a copy of this software
 (the “Software”) to use, copy, modify, merge, publish and/or distribute copies

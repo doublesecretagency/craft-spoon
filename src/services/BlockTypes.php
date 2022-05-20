@@ -4,15 +4,15 @@
  *
  * Enhance Matrix
  *
- * @link      https://angell.io
- * @copyright Copyright (c) 2018 Angell & Co
+ * @link      https://plugins.doublesecretagency.com/
+ * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */
 
-namespace angellco\spoon\services;
+namespace doublesecretagency\spoon\services;
 
-use angellco\spoon\models\BlockType;
-use angellco\spoon\records\BlockType as BlockTypeRecord;
-use angellco\spoon\errors\BlockTypeNotFoundException;
+use doublesecretagency\spoon\models\BlockType;
+use doublesecretagency\spoon\records\BlockType as BlockTypeRecord;
+use doublesecretagency\spoon\errors\BlockTypeNotFoundException;
 
 use Craft;
 use craft\base\Component;
@@ -27,7 +27,6 @@ use craft\models\FieldLayout;
 /**
  * BlockTypes Service
  *
- * @author    Angell & Co
  * @package   Spoon
  * @since     3.0.0
  */

@@ -5,13 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## Unreleased
+## 3.7.0 - 2022-05-20
+
+### Changed
+- Transferred plugin ownership to Double Secret Agency.
 
 
 ## 3.6.1 - 2021-02-09
 
 ### Fixed
-- Fixed an issue with project config that could cause it to throw a big wobbly ([#105](https://github.com/angell-co/Spoon/issues/105))
+- Fixed an issue with project config that could cause it to throw a big wobbly ([#105](https://github.com/doublesecretagency/craft-spoon/issues/105))
 
 
 ## 3.6.0 - 2020-09-25
@@ -23,25 +26,25 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 3.5.3 - 2020-07-30
 
 ### Fixed
-- Fixed an issue where project config could fail with an "Integrity constraint violation" error - thanks to [@qrazi](https://github.com/qrazi) for pointing me in the right direction! ([#90](https://github.com/angell-co/Spoon/issues/90) & [PR #93](https://github.com/angell-co/Spoon/pull/93))
-- Fixed an issue with newer versions of Super Table which caused Matrix blocks to render empty if there was at least one Super Table configured inside the Matrix field ([#98](https://github.com/angell-co/Spoon/issues/98))
-- Fixed an error that could occur when matrix fields don’t return properly by ID ([#92](https://github.com/angell-co/Spoon/issues/92))
+- Fixed an issue where project config could fail with an "Integrity constraint violation" error - thanks to [@qrazi](https://github.com/qrazi) for pointing me in the right direction! ([#90](https://github.com/doublesecretagency/craft-spoon/issues/90) & [PR #93](https://github.com/doublesecretagency/craft-spoon/pull/93))
+- Fixed an issue with newer versions of Super Table which caused Matrix blocks to render empty if there was at least one Super Table configured inside the Matrix field ([#98](https://github.com/doublesecretagency/craft-spoon/issues/98))
+- Fixed an error that could occur when matrix fields don’t return properly by ID ([#92](https://github.com/doublesecretagency/craft-spoon/issues/92))
 
 
 ## 3.5.2 - 2020-02-07
 
 ### Changed
-- Spoon-specific project config data is now wiped on uninstall ([#85](https://github.com/angell-co/Spoon/issues/85))
+- Spoon-specific project config data is now wiped on uninstall ([#85](https://github.com/doublesecretagency/craft-spoon/issues/85))
 
 ### Fixed
-- Fixed an issue with updating to 3.5.x from 3.3.x ([#89](https://github.com/angell-co/Spoon/issues/89))
-- Fixed an issue with removing field layouts from current block type configurations ([#84](https://github.com/angell-co/Spoon/issues/84))
+- Fixed an issue with updating to 3.5.x from 3.3.x ([#89](https://github.com/doublesecretagency/craft-spoon/issues/89))
+- Fixed an issue with removing field layouts from current block type configurations ([#84](https://github.com/doublesecretagency/craft-spoon/issues/84))
 
 
 ## 3.5.1 - 2020-02-05
 
 ### Fixed
-- Fixed missing sort fields on new installs ([#86](https://github.com/angell-co/Spoon/issues/86))
+- Fixed missing sort fields on new installs ([#86](https://github.com/doublesecretagency/craft-spoon/issues/86))
 
 
 ## 3.5.0 - 2020-02-05
@@ -49,49 +52,49 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 > {note} Before updating to 3.5.0 or greater it is a good idea to update to 3.4.3 first.
 
 ### Fixed
-- Fixed things not working with Craft 3.4 ([#79](https://github.com/angell-co/Spoon/issues/79))
-- Fixed an issue with block type configurations not keeping their order when deployed to another environment via project config ([#80](https://github.com/angell-co/Spoon/issues/80))
-- Fixed an issue where Craft’s info table was being updated on every CP request ([#82](https://github.com/angell-co/Spoon/issues/82))
+- Fixed things not working with Craft 3.4 ([#79](https://github.com/doublesecretagency/craft-spoon/issues/79))
+- Fixed an issue with block type configurations not keeping their order when deployed to another environment via project config ([#80](https://github.com/doublesecretagency/craft-spoon/issues/80))
+- Fixed an issue where Craft’s info table was being updated on every CP request ([#82](https://github.com/doublesecretagency/craft-spoon/issues/82))
 
 
 ## 3.4.3 - 2019-12-16
 
 ### Fixed
-- Removed a few more return type declarations that rely on PHP >= 7.1.0 ([#78](https://github.com/angell-co/Spoon/issues/78))
+- Removed a few more return type declarations that rely on PHP >= 7.1.0 ([#78](https://github.com/doublesecretagency/craft-spoon/issues/78))
 
 
 ## 3.4.2 - 2019-12-04
 
 ### Fixed
-- Refactored the codebase to not rely on PHP >= 7.1.0 and removed the composer requirement ([#74](https://github.com/angell-co/Spoon/issues/74))
+- Refactored the codebase to not rely on PHP >= 7.1.0 and removed the composer requirement ([#74](https://github.com/doublesecretagency/craft-spoon/issues/74))
 
 
 ## 3.4.1 - 2019-12-04
 
 ### Changed
-- Bumped the PHP requirement to >= 7.1 ([#72](https://github.com/angell-co/Spoon/issues/72))
+- Bumped the PHP requirement to >= 7.1 ([#72](https://github.com/doublesecretagency/craft-spoon/issues/72))
 
 ### Fixed
-- Fixed a couple of bad references to the `uid` field on a Solspace Calendar model ([#73](https://github.com/angell-co/Spoon/issues/73))
-- Fixed the collapsed / expanded reflow issues ([#58](https://github.com/angell-co/Spoon/issues/58) & [#67](https://github.com/angell-co/Spoon/issues/67)) - hat tip to [@jsunsawyer](https://github.com/jsunsawyer) for pinpointing the specific circumstances that cause this to pop up
+- Fixed a couple of bad references to the `uid` field on a Solspace Calendar model ([#73](https://github.com/doublesecretagency/craft-spoon/issues/73))
+- Fixed the collapsed / expanded reflow issues ([#58](https://github.com/doublesecretagency/craft-spoon/issues/58) & [#67](https://github.com/doublesecretagency/craft-spoon/issues/67)) - hat tip to [@jsunsawyer](https://github.com/jsunsawyer) for pinpointing the specific circumstances that cause this to pop up
 
 
 ## 3.4.0 - 2019-11-22
 
 ### Added
-- Added project config support - at long last! ([#24](https://github.com/angell-co/Spoon/issues/24))
+- Added project config support - at long last! ([#24](https://github.com/doublesecretagency/craft-spoon/issues/24))
 
 ### Changed
-- Moved the settings page to the standard plugin settings area ([#60](https://github.com/angell-co/Spoon/issues/60))
+- Moved the settings page to the standard plugin settings area ([#60](https://github.com/doublesecretagency/craft-spoon/issues/60))
 
 ### Fixed
-- Fixed a bug where all Matrix fields were getting hidden when viewing an entry revision ([#66](https://github.com/angell-co/Spoon/issues/66))
+- Fixed a bug where all Matrix fields were getting hidden when viewing an entry revision ([#66](https://github.com/doublesecretagency/craft-spoon/issues/66))
 
 
 ## 3.3.7 - 2019-04-25
 
 ### Fixed
-- Fixed an error that occurred when trying to remove existing field layouts ([#57](https://github.com/angell-co/Spoon/issues/57))
+- Fixed an error that occurred when trying to remove existing field layouts ([#57](https://github.com/doublesecretagency/craft-spoon/issues/57))
 
 
 ## 3.3.6 - 2019-04-05
@@ -100,26 +103,26 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Qualified the Loader count() calls for opcode speed improvements
 
 ### Fixed
-- Fixed an issue with the configurations not being loaded on existing entries for non-default sites ([#54](https://github.com/angell-co/Spoon/issues/54))
+- Fixed an issue with the configurations not being loaded on existing entries for non-default sites ([#54](https://github.com/doublesecretagency/craft-spoon/issues/54))
 - Fixed an issue where the global block types settings page would still show deleted global configs if there was a global set with a contextual config for that field 
 
 
 ## 3.3.5 - 2019-03-06
 
 ### Fixed
-- Fixed an issue where spooned blocks with no field layout wouldn’t render if there was a validation error ([#53](https://github.com/angell-co/Spoon/issues/53))
+- Fixed an issue where spooned blocks with no field layout wouldn’t render if there was a validation error ([#53](https://github.com/doublesecretagency/craft-spoon/issues/53))
 
 
 ## 3.3.4 - 2019-03-01
 
 ### Fixed
-- Fixed an issue where sometimes the fields cache needs refreshing ([#46](https://github.com/angell-co/Spoon/pull/46))
+- Fixed an issue where sometimes the fields cache needs refreshing ([#46](https://github.com/doublesecretagency/craft-spoon/pull/46))
 
 
 ## 3.3.3 - 2019-02-22
 
 ### Fixed
-- Fixed a couple more cases where the Matrix blocktype might not exist for some reason ([#52](https://github.com/angell-co/Spoon/issues/52)) 
+- Fixed a couple more cases where the Matrix blocktype might not exist for some reason ([#52](https://github.com/doublesecretagency/craft-spoon/issues/52)) 
 
 
 ## 3.3.2 - 2019-02-21
@@ -131,51 +134,51 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 3.3.1 - 2019-02-21
 
 ### Added
-- Added support for [Solspace Calendar](https://solspace.com/craft/calendar/) specific contexts ([#36](https://github.com/angell-co/Spoon/issues/36))
-- Added partial support for [Craft Commerce](https://craftcms.com/commerce) product type contexts ([#49](https://github.com/angell-co/Spoon/issues/49))
+- Added support for [Solspace Calendar](https://solspace.com/craft/calendar/) specific contexts ([#36](https://github.com/doublesecretagency/craft-spoon/issues/36))
+- Added partial support for [Craft Commerce](https://craftcms.com/commerce) product type contexts ([#49](https://github.com/doublesecretagency/craft-spoon/issues/49))
 
 ### Changed
-- Moved the global block type context out of the plugin settings section ([#51](https://github.com/angell-co/Spoon/issues/51))
+- Moved the global block type context out of the plugin settings section ([#51](https://github.com/doublesecretagency/craft-spoon/issues/51))
 
 ### Fixed
-- Reverted PR [#46](https://github.com/angell-co/Spoon/pull/46) due to large DB impact resulting in slow page loads
-- Fixed an issue where Spoon was not loading on previous versions of an Entry ([#48](https://github.com/angell-co/Spoon/issues/48))
+- Reverted PR [#46](https://github.com/doublesecretagency/craft-spoon/pull/46) due to large DB impact resulting in slow page loads
+- Fixed an issue where Spoon was not loading on previous versions of an Entry ([#48](https://github.com/doublesecretagency/craft-spoon/issues/48))
 
 
 ## 3.3.0 - 2019-02-14
 
 ### Changed
-- Changed the way the JavaScript attaches to Matrix to use an event-based method rather than polling the page ([#20](https://github.com/angell-co/Spoon/issues/20))
+- Changed the way the JavaScript attaches to Matrix to use an event-based method rather than polling the page ([#20](https://github.com/doublesecretagency/craft-spoon/issues/20))
 
 ### Fixed
-- Fixed a PHP notice that would sometimes occur due to fields not being refreshed ([#46](https://github.com/angell-co/Spoon/pull/46))
+- Fixed a PHP notice that would sometimes occur due to fields not being refreshed ([#46](https://github.com/doublesecretagency/craft-spoon/pull/46))
 
 
 ## 3.2.7 - 2019-01-28
 
 ### Fixed
-- Fixed an issue with Super Table when upgrading to Craft 3.1 ([#44](https://github.com/angell-co/Spoon/issues/44))
+- Fixed an issue with Super Table when upgrading to Craft 3.1 ([#44](https://github.com/doublesecretagency/craft-spoon/issues/44))
 
 
 ## 3.2.6 - 2019-01-21
 
 ### Fixed
-- Fixed another issue when upgrading to Craft 3.1 ([#43](https://github.com/angell-co/Spoon/issues/43))
+- Fixed another issue when upgrading to Craft 3.1 ([#43](https://github.com/doublesecretagency/craft-spoon/issues/43))
 
 
 ## 3.2.5 - 2019-01-16
 
 ### Fixed
-- Fixed a bunch of issues when upgrading to Craft 3.1 ([#43](https://github.com/angell-co/Spoon/issues/43) & [#40](https://github.com/angell-co/Spoon/issues/40))
-- Fixed a layout issue where the tabs would overlap with the disabled block icon ([#42](https://github.com/angell-co/Spoon/issues/42)).
-- Stopped tracking node_modules ([#35](https://github.com/angell-co/Spoon/issues/35)).
+- Fixed a bunch of issues when upgrading to Craft 3.1 ([#43](https://github.com/doublesecretagency/craft-spoon/issues/43) & [#40](https://github.com/doublesecretagency/craft-spoon/issues/40))
+- Fixed a layout issue where the tabs would overlap with the disabled block icon ([#42](https://github.com/doublesecretagency/craft-spoon/issues/42)).
+- Stopped tracking node_modules ([#35](https://github.com/doublesecretagency/craft-spoon/issues/35)).
 
 
 ## 3.2.4 - 2018-10-12
 
 ### Changed
-- Highlighted the tab if a field inside it has an error ([#27](https://github.com/angell-co/Spoon/issues/27)).
-- Improved the asset bundle structure and minified all of the resources ([#21](https://github.com/angell-co/Spoon/issues/21)).
+- Highlighted the tab if a field inside it has an error ([#27](https://github.com/doublesecretagency/craft-spoon/issues/27)).
+- Improved the asset bundle structure and minified all of the resources ([#21](https://github.com/doublesecretagency/craft-spoon/issues/21)).
 
 
 ## 3.2.3 - 2018-09-21
@@ -194,10 +197,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 3.2.1 - 2018-09-13
 
 ### Added
-- Added support for static translations ([#22](https://github.com/angell-co/Spoon/issues/22)).
+- Added support for static translations ([#22](https://github.com/doublesecretagency/craft-spoon/issues/22)).
 
 ### Fixed
-- Fixed an issue where the Settings model wasn’t referencing the correct array validator class and was throwing an error when using the Schematic plugin ([#26](https://github.com/angell-co/Spoon/pull/26) and [#14](https://github.com/angell-co/Spoon/pull/14)).
+- Fixed an issue where the Settings model wasn’t referencing the correct array validator class and was throwing an error when using the Schematic plugin ([#26](https://github.com/doublesecretagency/craft-spoon/pull/26) and [#14](https://github.com/doublesecretagency/craft-spoon/pull/14)).
 
 
 ## 3.2.0 - 2018-09-04
@@ -212,31 +215,31 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Now the global settings page shows you the parent field if the Matrix field is contained in a Super Table block
 
 ### Fixed
-- Fixed an issue with the settings model rules not being declared properly ([#14](https://github.com/angell-co/Spoon/pull/14))
-- Fixed an issue where sometimes the loader js wasn’t getting run ([#13](https://github.com/angell-co/Spoon/issues/13))
-- Fixed an issue where no fields would show if the Matrix field being spooned was inside another Matrix field some how, tested inside Super Table ([#7](https://github.com/angell-co/Spoon/issues/7))
+- Fixed an issue with the settings model rules not being declared properly ([#14](https://github.com/doublesecretagency/craft-spoon/pull/14))
+- Fixed an issue where sometimes the loader js wasn’t getting run ([#13](https://github.com/doublesecretagency/craft-spoon/issues/13))
+- Fixed an issue where no fields would show if the Matrix field being spooned was inside another Matrix field some how, tested inside Super Table ([#7](https://github.com/doublesecretagency/craft-spoon/issues/7))
 
 
 ## 3.0.1 - 2018-07-18
 
 ### Changed
-- Updated the README with the relevant [GitHub project](https://github.com/angell-co/Spoon/projects/2) and a note about support
-- Changed the required version of Craft to 3.0.16 which fixes an issue with Safari when configuring block type layouts ([#8](https://github.com/angell-co/Spoon/issues/8)) 
+- Updated the README with the relevant [GitHub project](https://github.com/doublesecretagency/craft-spoon/projects/2) and a note about support
+- Changed the required version of Craft to 3.0.16 which fixes an issue with Safari when configuring block type layouts ([#8](https://github.com/doublesecretagency/craft-spoon/issues/8)) 
 
 ### Fixed
 - Fixed a typo in the README
-- Fixed an issue where the initial page load in Safari was showing blank blocks ([#10](https://github.com/angell-co/Spoon/issues/10))
+- Fixed an issue where the initial page load in Safari was showing blank blocks ([#10](https://github.com/doublesecretagency/craft-spoon/issues/10))
 
 
 ## 3.0.0 - 2018-07-10
 
 ### Added
-- Added the `nestedSettings` config setting to allow a new, nested settings menu format ([#2](https://github.com/angell-co/Spoon/issues/2))
+- Added the `nestedSettings` config setting to allow a new, nested settings menu format ([#2](https://github.com/doublesecretagency/craft-spoon/issues/2))
 - Added the Craft 2 > 3 migration 
 
 ### Fixed
-- Fixed an issue where switching the entry type didn’t update the UI - requires Craft v3.0.15 or greater ([#4](https://github.com/angell-co/Spoon/issues/4))
-- Fixed a missing translation group key ([#5](https://github.com/angell-co/Spoon/issues/5))
+- Fixed an issue where switching the entry type didn’t update the UI - requires Craft v3.0.15 or greater ([#4](https://github.com/doublesecretagency/craft-spoon/issues/4))
+- Fixed a missing translation group key ([#5](https://github.com/doublesecretagency/craft-spoon/issues/5))
 
 
 ## 3.0.0-beta.4 - 2018-07-03
@@ -259,8 +262,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Added roadmap and pricing notes.
 
 ### Fixed
-- Fixed an error if the plugin wasn’t installed ([thanks nilsenpaul](https://github.com/angell-co/Spoon/commit/2b364750f081484377c89b9af38d34fa7055412d))
-- Fixed a filename casing issue ([thanks nilsenpaul](https://github.com/angell-co/Spoon/commit/03d377cf99ad2e6f7c7250d4c7af401d502a2675))
+- Fixed an error if the plugin wasn’t installed ([thanks nilsenpaul](https://github.com/doublesecretagency/craft-spoon/commit/2b364750f081484377c89b9af38d34fa7055412d))
+- Fixed a filename casing issue ([thanks nilsenpaul](https://github.com/doublesecretagency/craft-spoon/commit/03d377cf99ad2e6f7c7250d4c7af401d502a2675))
 
 
 ## 3.0.0-beta.2 - 2018-07-02
@@ -272,4 +275,4 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 3.0.0-beta.1 - 2018-07-02
 
 ### Added 
-- Initial port from [Pimp My Matrix](https://github.com/angell-co/Pimp-My-Matrix/tree/master/pimpmymatrix)
+- Initial port from **Pimp My Matrix** (Craft 2).

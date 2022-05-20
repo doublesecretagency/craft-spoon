@@ -1,10 +1,10 @@
 <?php
 
-namespace angellco\spoon\migrations;
+namespace doublesecretagency\spoon\migrations;
 
-use angellco\spoon\helpers\ProjectConfig as ProjectConfigHelper;
-use angellco\spoon\services\BlockTypes;
-use angellco\spoon\Spoon;
+use doublesecretagency\spoon\helpers\ProjectConfig as ProjectConfigHelper;
+use doublesecretagency\spoon\services\BlockTypes;
+use doublesecretagency\spoon\Spoon;
 use Craft;
 use craft\db\Migration;
 use craft\helpers\App;
