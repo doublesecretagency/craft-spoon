@@ -4,8 +4,8 @@
  *
  * Enhance Matrix
  *
- * @link      https://angell.io
- * @copyright Copyright (c) 2018 Angell & Co
+ * @link      https://plugins.doublesecretagency.com/
+ * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */
 
 /**
@@ -16,7 +16,6 @@
  *
  * http://www.yiiframework.com/doc-2.0/guide-tutorial-i18n.html
  *
- * @author    Angell & Co
  * @package   Spoon
  * @since     3.0.0
  */

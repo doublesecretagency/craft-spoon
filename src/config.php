@@ -4,8 +4,8 @@
  *
  * Enhance Matrix
  *
- * @link      https://angell.io
- * @copyright Copyright (c) 2018 Angell & Co
+ * @link      https://plugins.doublesecretagency.com/
+ * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */
 
 /**

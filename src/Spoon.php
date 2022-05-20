@@ -4,18 +4,18 @@
  *
  * Enhance Matrix
  *
- * @link      https://angell.io
- * @copyright Copyright (c) 2018 Angell & Co
+ * @link      https://plugins.doublesecretagency.com/
+ * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */
 
-namespace angellco\spoon;
+namespace doublesecretagency\spoon;
 
-use angellco\spoon\base\PluginTrait;
-use angellco\spoon\helpers\ProjectConfig as ProjectConfigHelper;
-use angellco\spoon\models\Settings;
-use angellco\spoon\services\BlockTypes;
-use angellco\spoon\services\Fields;
-use angellco\spoon\services\Loader;
+use doublesecretagency\spoon\base\PluginTrait;
+use doublesecretagency\spoon\helpers\ProjectConfig as ProjectConfigHelper;
+use doublesecretagency\spoon\models\Settings;
+use doublesecretagency\spoon\services\BlockTypes;
+use doublesecretagency\spoon\services\Fields;
+use doublesecretagency\spoon\services\Loader;
 
 use Craft;
 use craft\base\Plugin;
@@ -48,7 +48,6 @@ use yii\web\Response;
  * @method Fields     getFields()     Returns the fields component.
  * @method Loader     getLoader()     Returns the loader component.
  * @method Settings   getSettings()   Returns the settings model.
- * @author    Angell & Co
  * @package   Spoon
  * @since     3.0.0
  */

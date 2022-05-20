@@ -4,13 +4,13 @@
  *
  * Enhance Matrix
  *
- * @link      https://angell.io
- * @copyright Copyright (c) 2018 Angell & Co
+ * @link      https://plugins.doublesecretagency.com/
+ * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */
 
-namespace angellco\spoon\records;
+namespace doublesecretagency\spoon\records;
 
-use angellco\spoon\Spoon;
+use doublesecretagency\spoon\Spoon;
 
 use Craft;
 use craft\db\ActiveRecord;
@@ -34,7 +34,6 @@ use yii\db\ActiveQueryInterface;
  * @property \yii\db\ActiveQueryInterface $field
  * @property \yii\db\ActiveQueryInterface $fieldLayout
  *
- * @author    Angell & Co
  * @package   Spoon
  * @since     3.0.0
  */

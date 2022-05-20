@@ -4,18 +4,17 @@
  *
  * Enhance Matrix
  *
- * @link      https://angell.io
- * @copyright Copyright (c) 2018 Angell & Co
+ * @link      https://plugins.doublesecretagency.com/
+ * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */
 
-namespace angellco\spoon\errors;
+namespace doublesecretagency\spoon\errors;
 
 use yii\base\Exception;
 
 /**
  * Class BlockTypeNotFoundException
  *
- * @author    Angell & Co
  * @package   Spoon
  * @since     3.2.2
  */

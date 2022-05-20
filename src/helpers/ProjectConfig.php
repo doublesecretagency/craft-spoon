@@ -1,5 +1,5 @@
 <?php
-namespace angellco\spoon\helpers;
+namespace doublesecretagency\spoon\helpers;
 
 use Craft;
 use craft\db\Query;

@@ -1,8 +1,8 @@
 <?php
 
-namespace angellco\spoon\migrations;
+namespace doublesecretagency\spoon\migrations;
 
-use angellco\spoon\models\BlockType;
+use doublesecretagency\spoon\models\BlockType;
 use Craft;
 use craft\db\Migration;
 use craft\records\FieldLayout as FieldLayoutRecord;

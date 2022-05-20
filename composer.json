@@ -1,7 +1,8 @@
 {
-    "name": "angellco/spoon",
+    "name": "doublesecretagency/craft-spoon",
     "description": "A plugin for Craft to enhance your Matrix fields with groups, tabs and more!",
     "type": "craft-plugin",
+    "version": "3.7.0",
     "keywords": [
         "craft",
         "cms",
@@ -11,17 +12,14 @@
         "matrix"
     ],
     "support": {
-        "email": "josh@angell.io",
-        "issues": "https://github.com/angell-co/spoon/issues",
-        "source": "https://github.com/angell-co/spoon",
-        "docs": "https://github.com/angell-co/spoon/blob/master/README.md",
-        "rss": "https://github.com/angell-co/spoon/commits/v2.atom"
+        "docs": "https://github.com/doublesecretagency/craft-spoon/blob/master/README.md",
+        "issues": "https://github.com/doublesecretagency/craft-spoon/issues"
     },
     "license": "proprietary",
     "authors": [
         {
-            "name": "Angell & Co",
-            "homepage": "https://angell.io"
+            "name": "Double Secret Agency",
+            "homepage": "https://plugins.doublesecretagency.com"
         }
     ],
     "require": {
@@ -29,15 +27,15 @@
     },
     "autoload": {
         "psr-4": {
-          "angellco\\spoon\\": "src/"
+          "doublesecretagency\\spoon\\": "src/"
         }
     },
     "extra": {
         "name": "Spoon",
         "handle": "spoon",
         "description" : "A plugin for Craft to enhance your Matrix fields with groups, tabs and more!",
-        "documentationUrl": "https://github.com/angell-co/spoon/blob/master/README.md",
-        "changelogUrl": "https://raw.githubusercontent.com/angell-co/spoon/master/CHANGELOG.md",
-        "class": "angellco\\spoon\\Spoon"
+        "documentationUrl": "https://github.com/doublesecretagency/craft-spoon/blob/master/README.md",
+        "changelogUrl": "https://raw.githubusercontent.com/doublesecretagency/craft-spoon/master/CHANGELOG.md",
+        "class": "doublesecretagency\\spoon\\Spoon"
     }
 }

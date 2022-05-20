@@ -1,8 +1,8 @@
 <?php
 
-namespace angellco\spoon\migrations;
+namespace doublesecretagency\spoon\migrations;
 
-use angellco\spoon\records\BlockType;
+use doublesecretagency\spoon\records\BlockType;
 use Craft;
 use craft\db\Migration;
 

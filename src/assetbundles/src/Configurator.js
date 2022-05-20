@@ -1,9 +1,8 @@
 /**
  * Spoon plugin for Craft CMS
  *
- * @author    Angell & Co
- * @copyright Copyright (c) 2018 Angell & Co
- * @link      https://angell.io
+ * @copyright Copyright (c) 2018, 2022 Double Secret Agency
+ * @link      https://plugins.doublesecretagency.com/
  * @package   Spoon
  * @since     3.0.0
  */

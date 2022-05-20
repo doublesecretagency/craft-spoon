@@ -4,13 +4,13 @@
  *
  * Enhance Matrix
  *
- * @link      https://angell.io
- * @copyright Copyright (c) 2018 Angell & Co
+ * @link      https://plugins.doublesecretagency.com/
+ * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */
 
-namespace angellco\spoon\migrations;
+namespace doublesecretagency\spoon\migrations;
 
-use angellco\spoon\Spoon;
+use doublesecretagency\spoon\Spoon;
 
 use Craft;
 use craft\config\DbConfig;
@@ -27,7 +27,6 @@ use craft\db\Query;
  * If you need to perform any additional actions on install/uninstall, override the
  * safeUp() and safeDown() methods.
  *
- * @author    Angell & Co
  * @package   Spoon
  * @since     3.0.0
  */
