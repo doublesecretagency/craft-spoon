@@ -1,23 +1,31 @@
 <?php
+/**
+ * Spoon plugin for Craft CMS
+ *
+ * Bend the Matrix field with block groups, tabs, and more.
+ *
+ * @author    Double Secret Agency
+ * @link      https://plugins.doublesecretagency.com/
+ * @copyright Copyright (c) 2018, 2022 Double Secret Agency
+ */
 
 namespace doublesecretagency\spoon\migrations;
 
-use doublesecretagency\spoon\helpers\ProjectConfig as ProjectConfigHelper;
-use doublesecretagency\spoon\services\BlockTypes;
-use doublesecretagency\spoon\Spoon;
 use Craft;
 use craft\db\Migration;
-use craft\helpers\App;
+use doublesecretagency\spoon\helpers\ProjectConfig as ProjectConfigHelper;
+use doublesecretagency\spoon\services\BlockTypes;
 
 /**
  * m191122_115434_UpgradeToSupportProjectConfig migration.
  */
 class m191122_115434_UpgradeToSupportProjectConfig extends Migration
 {
+
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): void
     {
 
         $projectConfig = Craft::$app->getProjectConfig();
@@ -38,9 +46,10 @@ class m191122_115434_UpgradeToSupportProjectConfig extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m191122_115434_UpgradeToSupportProjectConfig cannot be reverted.\n";
         return false;
     }
+
 }

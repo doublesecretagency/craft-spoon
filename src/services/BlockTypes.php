@@ -1,60 +1,70 @@
 <?php
 /**
- * Spoon plugin for Craft CMS 3.x
+ * Spoon plugin for Craft CMS
  *
- * Enhance Matrix
+ * Bend the Matrix field with block groups, tabs, and more.
  *
+ * @author    Double Secret Agency
  * @link      https://plugins.doublesecretagency.com/
  * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */
 
 namespace doublesecretagency\spoon\services;
 
-use doublesecretagency\spoon\models\BlockType;
-use doublesecretagency\spoon\records\BlockType as BlockTypeRecord;
-use doublesecretagency\spoon\errors\BlockTypeNotFoundException;
-
 use Craft;
 use craft\base\Component;
 use craft\base\Field;
+use craft\base\PluginInterface;
 use craft\db\Table;
 use craft\events\ConfigEvent;
 use craft\helpers\Db;
 use craft\helpers\ProjectConfig as ProjectConfigHelper;
 use craft\helpers\StringHelper;
 use craft\models\FieldLayout;
+use doublesecretagency\spoon\errors\BlockTypeNotFoundException;
+use doublesecretagency\spoon\models\BlockType;
+use doublesecretagency\spoon\records\BlockType as BlockTypeRecord;
+use Exception;
+use Throwable;
+use yii\db\Transaction;
 
 /**
  * BlockTypes Service
- *
- * @package   Spoon
- * @since     3.0.0
+ * @since 3.0.0
  */
 class BlockTypes extends Component
 {
-    // Private Properties
-    // =========================================================================
-
-    private $_blockTypesByContext;
-
-    private $_superTablePlugin;
-
-    private $_superTableService;
-
-    const CONFIG_BLOCKTYPE_KEY = 'spoonBlockTypes';
-
-    // Public Methods
-    // =========================================================================
 
     /**
-     * Returns a Spoon block type model by its ID
+     * @var array
+     */
+    private array $_blockTypesByContext = [];
+
+    /**
+     * @var PluginInterface|null
+     */
+    private ?PluginInterface $_superTablePlugin = null;
+
+    /**
+     * @var verbb\supertable\services\SuperTableService|null
+     */
+    private mixed $_superTableService;
+
+    /**
+     * @const CONFIG_BLOCKTYPE_KEY
+     */
+    public const CONFIG_BLOCKTYPE_KEY = 'spoonBlockTypes';
+
+    // ========================================================================= //
+
+    /**
+     * Returns a Spoon block type model by its ID.
      *
-     * @param $id
-     *
+     * @param int $id
      * @return BlockType|null
      * @throws BlockTypeNotFoundException
      */
-    public function getById($id)
+    public function getById(int $id): ?BlockType
     {
         $blockTypeRecord = BlockTypeRecord::findOne($id);
 
@@ -66,45 +76,44 @@ class BlockTypes extends Component
     }
 
     /**
-     * Returns a single BlockType Model by its context and blockTypeId
+     * Returns a single BlockType Model by its context and blockTypeId.
      *
-     * @param bool $context
-     * @param bool $matrixBlockTypeId
-     *
-     * @return BlockType|bool|null
+     * @param string|null $context
+     * @param int|null $matrixBlockTypeId
+     * @return BlockType|null
      */
-    public function getBlockType($context = false, $matrixBlockTypeId = false)
+    public function getBlockType(?string $context = null, ?int $matrixBlockTypeId = null): ?BlockType
     {
-
-        if (!$context || !$matrixBlockTypeId)
-        {
-            return false;
+        // If no context or ID, bail
+        if (!$context || !$matrixBlockTypeId) {
+            return null;
         }
 
+        // Get the existing block type record
         $blockTypeRecord = BlockTypeRecord::findOne([
             'context'           => $context,
             'matrixBlockTypeId' => $matrixBlockTypeId
         ]);
 
+        // If no block type record exists, bail
         if (!$blockTypeRecord) {
             return null;
         }
 
+        // Return the block type
         return $this->_populateBlockTypeFromRecord($blockTypeRecord);
-
     }
 
     /**
      * Returns a block type by its context.
      *
-     * @param string       $context
-     * @param null|string  $groupBy Group by an optional model attribute to group by
-     * @param bool         $ignoreSubContext Optionally ignore the sub context (id)
-     * @param null|integer $fieldId Optionally filter by fieldId
-     *
+     * @param string $context
+     * @param string|null $groupBy Group by an optional model attribute.
+     * @param bool $ignoreSubContext Optionally ignore the sub context (id).
+     * @param int|null $fieldId Optionally filter by fieldId.
      * @return array
      */
-    public function getByContext($context, $groupBy = null, $ignoreSubContext = false, $fieldId = null): array
+    public function getByContext(string $context, ?string $groupBy = null, bool $ignoreSubContext = false, ?int $fieldId = null): array
     {
 
         if ($ignoreSubContext) {
@@ -176,12 +185,11 @@ class BlockTypes extends Component
     }
 
     /**
-     * Saves our version of a block type into the project config
+     * Saves our version of a block type into the project config.
      *
      * @param BlockType $blockType
-     *
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function save(BlockType $blockType): bool
     {
@@ -243,40 +251,65 @@ class BlockTypes extends Component
     }
 
     /**
-     * Deletes all the block types for a given context from the project config
+     * Deletes all the block types for a given context from the project config.
      *
-     * @param null $context
-     * @param null $fieldId
-     *
+     * @param string|null $context
+     * @param int|null $fieldId
      * @return bool|null
-     * @throws \Exception
+     * @throws Exception
      */
-    public function deleteByContext($context = null, $fieldId = null)
+    public function deleteByContext(?string $context = null, ?int $fieldId = null): ?bool
     {
+        // If no context was provided, bail
         if (!$context) {
             return false;
         }
 
-        $blockTypes = $this->getByContext($context, null, false, $fieldId);
-
-        foreach ($blockTypes as $blockType) {
-            Craft::$app->getProjectConfig()->remove(self::CONFIG_BLOCKTYPE_KEY . '.' . $blockType->uid);
+        // If no field ID was provided, bail
+        if (!$fieldId) {
+            return false;
         }
 
+        // Get project config services
+        $pc = Craft::$app->getProjectConfig();
+
+        // Match only specified field in specified context
+        $conditions = [
+            'fieldId' => $fieldId,
+            'context' => $context
+        ];
+
+        // Get UIDs of all existing block type records
+        $uids = BlockTypeRecord::find()
+            ->select('uid')
+            ->where($conditions)
+            ->column();
+
+        // Delete existing block type records from database
+        BlockTypeRecord::deleteAll($conditions);
+
+        // Loop through UIDs
+        foreach ($uids as $uid) {
+            // Get path for project config file
+            $path = self::CONFIG_BLOCKTYPE_KEY.'.'.$uid;
+            // Remove project config file
+            $pc->remove($path, "Remove block type from Spoon data");
+        }
+
+        // Return success
         return true;
     }
 
     // Project config methods
-    // =========================================================================
+    // ========================================================================= //
 
     /**
-     * Handles a changed block type and saves it to the database
+     * Handles a changed block type and saves it to the database.
      *
      * @param ConfigEvent $event
-     *
-     * @throws \Throwable
+     * @throws Throwable
      */
-    public function handleChangedBlockType(ConfigEvent $event)
+    public function handleChangedBlockType(ConfigEvent $event): void
     {
         $fieldsService = Craft::$app->getFields();
 
@@ -302,6 +335,8 @@ class BlockTypes extends Component
         }
 
         $db = Craft::$app->getDb();
+
+        /** @var Transaction $transaction */
         $transaction = $db->beginTransaction();
 
         try {
@@ -339,20 +374,19 @@ class BlockTypes extends Component
             $blockTypeRecord->save(false);
 
             $transaction->commit();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $transaction->rollBack();
             throw $e;
         }
     }
 
     /**
-     * Handles a deleted block type and removes it from the database
+     * Handles a deleted block type and removes it from the database.
      *
      * @param ConfigEvent $event
-     *
-     * @throws \Throwable
+     * @throws Throwable
      */
-    public function handleDeletedBlockType(ConfigEvent $event)
+    public function handleDeletedBlockType(ConfigEvent $event): void
     {
         $uid = $event->tokenMatches[0];
         $blockTypeRecord = $this->_getBlockTypeRecord($uid);
@@ -362,6 +396,8 @@ class BlockTypes extends Component
         }
 
         $db = Craft::$app->getDb();
+
+        /** @var Transaction $transaction */
         $transaction = $db->beginTransaction();
         try {
             // Delete the block type record
@@ -370,22 +406,21 @@ class BlockTypes extends Component
                 ->execute();
 
             $transaction->commit();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $transaction->rollBack();
             throw $e;
         }
     }
 
     // Public Methods for FLDs on our Block Types
-    // =========================================================================
+    // ========================================================================= //
 
     /**
-     * Saves a field layout into the project config nested under the block type config
+     * Saves a field layout into the project config nested under the block type config.
      *
      * @param BlockType $blockType
-     *
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function saveFieldLayout(BlockType $blockType): bool
     {
@@ -413,15 +448,14 @@ class BlockTypes extends Component
 
     /**
      * Returns an array of fieldLayoutIds indexed by matrixBlockTypeIds
-     * for the given context and fieldId combination
+     * for the given context and fieldId combination.
      *
-     * @param  string       $context required
-     * @param  bool|integer $fieldId required
-     * @return false|array
+     * @param  string $context required
+     * @param  int|bool $fieldId required
+     * @return array|false
      */
-    public function getFieldLayoutIds($context, $fieldId = false)
+    public function getFieldLayoutIds(string $context, int|bool $fieldId = false): array|false
     {
-
         if (!$fieldId)
         {
             return false;
@@ -432,24 +466,21 @@ class BlockTypes extends Component
             'fieldId' => $fieldId
         ]);
 
-        $return = array();
+        $return = [];
         foreach ($blockTypeRecords as $blockTypeRecord)
         {
             $return[$blockTypeRecord->matrixBlockTypeId] = $blockTypeRecord->fieldLayoutId;
         }
         return $return;
-
     }
 
-
     // Private Methods
-    // =========================================================================
+    // ========================================================================= //
 
     /**
      * Gets a block type's record by uid.
      *
      * @param string $uid
-     *
      * @return BlockTypeRecord
      */
     private function _getBlockTypeRecord(string $uid): BlockTypeRecord
@@ -462,10 +493,9 @@ class BlockTypes extends Component
      * Populates a BlockTypeModel with attributes from a BlockTypeRecord.
      *
      * @param BlockTypeRecord $blockTypeRecord
-     *
      * @return BlockType|null
      */
-    private function _populateBlockTypeFromRecord(BlockTypeRecord $blockTypeRecord)
+    private function _populateBlockTypeFromRecord(BlockTypeRecord $blockTypeRecord): ?BlockType
     {
         $blockType = new BlockType($blockTypeRecord->toArray([
             'id',
@@ -490,12 +520,12 @@ class BlockTypes extends Component
 
         // Super Table support
         if (!$this->_superTablePlugin) {
-            $this->_superTablePlugin = \Craft::$app->plugins->getPluginByPackageName('verbb/super-table');
+            $this->_superTablePlugin = Craft::$app->plugins->getPluginByPackageName('verbb/super-table');
         }
         if ($this->_superTablePlugin) {
 
             if (!$this->_superTableService) {
-                $this->_superTableService = new \verbb\supertable\services\SuperTableService();
+                $this->_superTableService = new verbb\supertable\services\SuperTableService();
             }
 
             // If the field is actually inside a SuperTable
@@ -540,9 +570,32 @@ class BlockTypes extends Component
         // Save the field layout content on to our model
         if ($blockType->fieldLayoutId) {
             $layout = $blockType->getFieldLayout();
+
+            // Get the tabs
+            $tabs = $layout->getTabs();
+
+            // Initialize the fields
+            $fields = [];
+
+            // Loop through all tabs
+            foreach ($tabs as $tab) {
+
+                // Get the fields for each tab
+                foreach ($tab->getElements() as $element) {
+                    // Get element field
+                    $f = $element->field;
+                    // Ensure tab ID is set
+                    $f['tabId'] = $tab->id;
+                    // Add field
+                    $fields[] = $f;
+                }
+
+            }
+
+            // Set the field layout model
             $blockType->fieldLayoutModel = [
-                'tabs' => $layout->getTabs(),
-                'fields' => $layout->getFields()
+                'tabs' => $tabs,
+                'fields' => $fields
             ];
         }
 

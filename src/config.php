@@ -1,9 +1,10 @@
 <?php
 /**
- * Spoon plugin for Craft CMS 3.x
+ * Spoon plugin for Craft CMS
  *
- * Enhance Matrix
+ * Bend the Matrix field with block groups, tabs, and more.
  *
+ * @author    Double Secret Agency
  * @link      https://plugins.doublesecretagency.com/
  * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */

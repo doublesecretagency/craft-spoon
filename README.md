@@ -2,7 +2,7 @@
 
 # Spoon plugin for Craft CMS
 
-**Enhance your Matrix fields with groups, tabs and more!**
+**Bend the Matrix field with block groups, tabs, and more.**
 
 ---
 

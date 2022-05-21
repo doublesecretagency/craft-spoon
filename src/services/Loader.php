@@ -1,31 +1,29 @@
 <?php
 /**
- * Spoon plugin for Craft CMS 3.x
+ * Spoon plugin for Craft CMS
  *
- * Enhance Matrix
+ * Bend the Matrix field with block groups, tabs, and more.
  *
+ * @author    Double Secret Agency
  * @link      https://plugins.doublesecretagency.com/
  * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */
 
 namespace doublesecretagency\spoon\services;
 
-use doublesecretagency\spoon\assetbundles\ConfiguratorAsset;
-use doublesecretagency\spoon\assetbundles\FieldManipulatorAsset;
-use doublesecretagency\spoon\Spoon;
-
 use Craft;
 use craft\base\Component;
 use craft\helpers\Db;
 use craft\helpers\Json;
 use craft\models\Section;
+use doublesecretagency\spoon\Spoon;
+use doublesecretagency\spoon\assetbundles\ConfiguratorAsset;
+use doublesecretagency\spoon\assetbundles\FieldManipulatorAsset;
 use yii\base\InvalidConfigException;
 
 /**
  * Loader methods
- *
- * @package   Spoon
- * @since     3.0.0
+ * @since 3.0.0
  */
 class Loader extends Component
 {
@@ -37,7 +35,7 @@ class Loader extends Component
      *
      * @throws InvalidConfigException
      */
-    public function run()
+    public function run(): void
     {
         $request = Craft::$app->getRequest();
 
@@ -58,7 +56,7 @@ class Loader extends Component
              * Work out the context for the block type groups configuration
              */
             // Entry types
-            if (\count($segments) === 5
+            if (count($segments) === 5
                 && $segments[0] === 'settings'
                 && $segments[1] === 'sections'
                 && $segments[3] === 'entrytypes'
@@ -70,7 +68,7 @@ class Loader extends Component
             }
 
             // Category groups
-            if (\count($segments) === 3
+            if (count($segments) === 3
                 && $segments[0] === 'settings'
                 && $segments[1] === 'categories'
                 && $segments[2] !== 'new'
@@ -81,7 +79,7 @@ class Loader extends Component
             }
 
             // Global sets
-            if (\count($segments) === 3
+            if (count($segments) === 3
                 && $segments[0] === 'settings'
                 && $segments[1] === 'globals'
                 && $segments[2] !== 'new'
@@ -92,7 +90,7 @@ class Loader extends Component
             }
 
             // Users
-            if (\count($segments) === 2
+            if (count($segments) === 2
                 && $segments[0] === 'settings'
                 && $segments[1] === 'users'
             )
@@ -101,7 +99,7 @@ class Loader extends Component
             }
 
             // Solpace Calendar
-            if (\count($segments) === 3
+            if (count($segments) === 3
                 && $segments[0] === 'calendar'
                 && $segments[1] === 'calendars'
                 && $segments[2] !== 'new'
@@ -119,7 +117,7 @@ class Loader extends Component
             }
 
             // Commerce
-            if (\count($segments) === 4
+            if (count($segments) === 4
                 && $segments[0] === 'commerce'
                 && $segments[1] === 'settings'
                 && $segments[2] === 'producttypes'
@@ -143,7 +141,7 @@ class Loader extends Component
             $versioned = false;
 
             // Entry types
-            if (\count($segments) >= 3 && $segments[0] === 'entries') {
+            if (count($segments) >= 3 && $segments[0] === 'entries') {
 
                 if ($segments[2] === 'new') {
                     /** @var Section $section */
@@ -179,7 +177,7 @@ class Loader extends Component
 
             }
             // Category groups
-            else if (\count($segments) >= 3 && $segments[0] === 'categories')
+            else if (count($segments) >= 3 && $segments[0] === 'categories')
             {
                 $group = Craft::$app->getCategories()->getGroupByHandle($segments[1]);
                 if ($group)
@@ -188,7 +186,7 @@ class Loader extends Component
                 }
             }
             // Global sets
-            else if (\count($segments) >= 2 && $segments[0] === 'globals')
+            else if (count($segments) >= 2 && $segments[0] === 'globals')
             {
                 $set = Craft::$app->getGlobals()->getSetByHandle(end($segments));
                 if ($set)
@@ -197,12 +195,12 @@ class Loader extends Component
                 }
             }
             // Users
-            else if ((\count($segments) === 1 && $segments[0] === 'myaccount') || (\count($segments) == 2 && $segments[0] === 'users'))
+            else if ((count($segments) === 1 && $segments[0] === 'myaccount') || (count($segments) == 2 && $segments[0] === 'users'))
             {
                 $context = 'users';
             }
             // Solspace Calendar
-            else if (\count($segments) >= 4
+            else if (count($segments) >= 4
                 && $segments[0] === 'calendar'
                 && $segments[1] === 'events'
                 && $calendarPlugin
@@ -227,7 +225,7 @@ class Loader extends Component
                 }
             }
             // Commerce
-            else if (\count($segments) >= 3
+            else if (count($segments) >= 3
                 && $segments[0] === 'commerce'
                 && $segments[1] === 'products'
                 && $commercePlugin
@@ -249,38 +247,39 @@ class Loader extends Component
     }
 
     /**
-     * Loads a Spoon.Configurator() for the correct context
+     * Loads a Spoon.Configurator() for the correct context.
      *
-     * @param $container
-     * @param $context
-     *
+     * @param string $container
+     * @param string $context
      * @throws InvalidConfigException
      */
-    public function configurator($container, $context)
+    public function configurator(string $container, string $context): void
     {
-
         $view = Craft::$app->getView();
 
         $view->registerAssetBundle(ConfiguratorAsset::class);
 
+        // Publish the icon mask
+        $file = $view->getAssetManager()->publish('@doublesecretagency/spoon/icon-mask.svg');
+        $iconMask = $file[1];
+
         $settings = [
+            'context' => $context,
             'matrixFieldIds' => Spoon::$plugin->fields->getMatrixFieldIds(),
-            'context' => $context
+            'iconMask' => $iconMask,
         ];
 
-        $view->registerJs('new Spoon.Configurator("'.$container.'", '.Json::encode($settings, JSON_UNESCAPED_UNICODE).');');
-
+        $view->registerJs('window.configurator = new Spoon.Configurator("'.$container.'", '.Json::encode($settings, JSON_UNESCAPED_UNICODE).');');
     }
 
     /**
-     * Loads a Spoon.FieldManipulator() for the correct context
+     * Loads a Spoon.FieldManipulator() for the correct context.
      *
-     * @param      $context
+     * @param string $context
      * @param bool $versioned
-     *
      * @throws InvalidConfigException
      */
-    public function fieldManipulator($context, $versioned = false)
+    public function fieldManipulator(string $context, bool $versioned = false): void
     {
         // Get global data
         $globalSpoonedBlockTypes = Spoon::$plugin->blockTypes->getByContext('global', 'context');

@@ -1,6 +1,6 @@
 {
     "name": "doublesecretagency/craft-spoon",
-    "description": "A plugin for Craft to enhance your Matrix fields with groups, tabs and more!",
+    "description": "Bend the Matrix field with block groups, tabs, and more.",
     "type": "craft-plugin",
     "version": "3.7.0",
     "keywords": [
@@ -33,9 +33,6 @@
     "extra": {
         "name": "Spoon",
         "handle": "spoon",
-        "description" : "A plugin for Craft to enhance your Matrix fields with groups, tabs and more!",
-        "documentationUrl": "https://github.com/doublesecretagency/craft-spoon/blob/master/README.md",
-        "changelogUrl": "https://raw.githubusercontent.com/doublesecretagency/craft-spoon/master/CHANGELOG.md",
         "class": "doublesecretagency\\spoon\\Spoon"
     }
 }

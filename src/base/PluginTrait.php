@@ -1,40 +1,37 @@
 <?php
 /**
- * Spoon plugin for Craft CMS 3.x
+ * Spoon plugin for Craft CMS
  *
- * Enhance Matrix
+ * Bend the Matrix field with block groups, tabs, and more.
  *
+ * @author    Double Secret Agency
  * @link      https://plugins.doublesecretagency.com/
  * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */
 
 namespace doublesecretagency\spoon\base;
 
+use doublesecretagency\spoon\Spoon;
 use doublesecretagency\spoon\services\BlockTypes;
 use doublesecretagency\spoon\services\Fields;
 use doublesecretagency\spoon\services\Loader;
-use doublesecretagency\spoon\Spoon;
 
 /**
  * Trait PluginTrait
  *
- * @property-read BlockTypes $blockTypes The block types service
- * @property-read Fields $fields The fields service
- * @property-read Loader $loader The loader service
- * @package doublesecretagency\spoon\base
+ * @property-read BlockTypes $blockTypes The block types service.
+ * @property-read Fields $fields The fields service.
+ * @property-read Loader $loader The loader service.
  */
 trait PluginTrait
 {
-    // Static Properties
-    // =========================================================================
 
     /**
-     * @var Spoon
+     * @var Spoon Self-referential plugin property.
      */
-    public static $plugin;
+    public static Spoon $plugin;
 
-    // Public Methods
-    // =========================================================================
+    // ========================================================================= //
 
     /**
      * @return BlockTypes
@@ -60,10 +57,12 @@ trait PluginTrait
         return $this->get('fields');
     }
 
-    // Private Methods
-    // =========================================================================
+    // ========================================================================= //
 
-    private function _setPluginComponents()
+    /**
+     * Register services.
+     */
+    private function _setPluginComponents(): void
     {
         $this->setComponents([
             'blockTypes' => BlockTypes::class,
@@ -71,4 +70,5 @@ trait PluginTrait
             'fields' => Fields::class,
         ]);
     }
+
 }

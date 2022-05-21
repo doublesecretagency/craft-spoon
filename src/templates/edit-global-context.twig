@@ -3,12 +3,14 @@
 {% set title = "Spoon"|t('spoon') %}
 
 {% set content %}
-    <p>{{ "Here you can set up default block type groups and field layouts for all your Matrix fields."|t('spoon') }}</p>
+    <h2>Select a Matrix field to configure the Block Type Groups</h2>
+    <p>This will be used as the <strong>default</strong> group arrangement. For each instance of the Matrix field in your field layouts, you will be able to override the configuration.</p>
+{#    <p>{{ "Here you can set up default block type groups and field layouts for all your Matrix fields."|t('spoon') }}</p>#}
     {% if matrixFields|length %}
         <table id="spoon-global-context-table" class="data fullwidth">
             <thead>
                 <tr>
-                    <th>{{ 'Matrix Field'|t('spoon') }}</th>
+                    <th>{{ 'Matrix Fields'|t('spoon') }}</th>
                     {% if superTableFields is defined %}
                         <th></th>
                     {% endif %}

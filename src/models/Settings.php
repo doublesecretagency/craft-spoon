@@ -1,48 +1,38 @@
 <?php
 /**
- * Spoon plugin for Craft CMS 3.x
+ * Spoon plugin for Craft CMS
  *
- * Enhance Matrix
+ * Bend the Matrix field with block groups, tabs, and more.
  *
+ * @author    Double Secret Agency
  * @link      https://plugins.doublesecretagency.com/
  * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */
 
 namespace doublesecretagency\spoon\models;
 
-use doublesecretagency\spoon\Spoon;
-
-use Craft;
 use craft\base\Model;
 use craft\validators\ArrayValidator;
 
 /**
  * Settings Model
- *
- * @package   Spoon
- * @since     3.0.0
+ * @since 3.0.0
  */
 class Settings extends Model
 {
 
-    // Public Properties
-    // =========================================================================
-
     /**
-     * An array of Matrix field handles that should use the nested settings menu
-     * display mode
+     * An array of Matrix field handles which should
+     * use the nested settings menu display mode.
      *
      * @var array
      */
-    public $nestedSettings = [];
-
-    // Public Methods
-    // =========================================================================
+    public array $nestedSettings = [];
 
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             ['nestedSettings', ArrayValidator::class]

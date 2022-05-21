@@ -1,9 +1,10 @@
 <?php
 /**
- * Spoon plugin for Craft CMS 3.x
+ * Spoon plugin for Craft CMS
  *
- * Enhance Matrix
+ * Bend the Matrix field with block groups, tabs, and more.
  *
+ * @author    Double Secret Agency
  * @link      https://plugins.doublesecretagency.com/
  * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */
@@ -14,17 +15,17 @@ use yii\base\Exception;
 
 /**
  * Class BlockTypeNotFoundException
- *
- * @package   Spoon
- * @since     3.2.2
+ * @since 3.2.2
  */
 class BlockTypeNotFoundException extends Exception
 {
+
     /**
-     * @return string the user-friendly name of this exception
+     * @inheritdoc
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Block Type not found';
     }
+
 }

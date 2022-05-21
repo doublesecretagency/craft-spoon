@@ -1,21 +1,30 @@
 <?php
+/**
+ * Spoon plugin for Craft CMS
+ *
+ * Bend the Matrix field with block groups, tabs, and more.
+ *
+ * @author    Double Secret Agency
+ * @link      https://plugins.doublesecretagency.com/
+ * @copyright Copyright (c) 2018, 2022 Double Secret Agency
+ */
 
 namespace doublesecretagency\spoon\migrations;
 
-use doublesecretagency\spoon\records\BlockType;
-use Craft;
 use craft\db\Migration;
 use craft\helpers\Db;
+use doublesecretagency\spoon\records\BlockType;
 
 /**
  * m190815_153234_UpdateBlockTypeContexts migration.
  */
 class m190815_153234_UpdateBlockTypeContexts extends Migration
 {
+
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): void
     {
         $records = BlockType::find()->all();
         foreach ($records as $record) {
@@ -60,9 +69,10 @@ class m190815_153234_UpdateBlockTypeContexts extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m190815_153234_UpdateBlockTypeContexts cannot be reverted.\n";
         return false;
     }
+
 }

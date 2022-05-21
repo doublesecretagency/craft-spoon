@@ -1,20 +1,30 @@
 <?php
+/**
+ * Spoon plugin for Craft CMS
+ *
+ * Bend the Matrix field with block groups, tabs, and more.
+ *
+ * @author    Double Secret Agency
+ * @link      https://plugins.doublesecretagency.com/
+ * @copyright Copyright (c) 2018, 2022 Double Secret Agency
+ */
 
 namespace doublesecretagency\spoon\migrations;
 
-use doublesecretagency\spoon\records\BlockType;
 use Craft;
 use craft\db\Migration;
+use doublesecretagency\spoon\records\BlockType;
 
 /**
  * m200204_132923_FixBlockTypeSorting migration.
  */
 class m200204_132923_FixBlockTypeSorting extends Migration
 {
+
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): void
     {
 
         if (!$this->db->columnExists('{{%spoon_blocktypes}}', 'groupSortOrder')) {
@@ -60,9 +70,10 @@ class m200204_132923_FixBlockTypeSorting extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m200204_132923_FixBlockTypeSorting cannot be reverted.\n";
         return false;
     }
+
 }

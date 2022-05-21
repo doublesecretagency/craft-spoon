@@ -1,114 +1,109 @@
 <?php
 /**
- * Spoon plugin for Craft CMS 3.x
+ * Spoon plugin for Craft CMS
  *
- * Enhance Matrix
+ * Bend the Matrix field with block groups, tabs, and more.
  *
+ * @author    Double Secret Agency
  * @link      https://plugins.doublesecretagency.com/
  * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */
 
 namespace doublesecretagency\spoon\controllers;
 
-use doublesecretagency\spoon\Spoon;
-
 use Craft;
-use craft\fieldlayoutelements\CustomField;
 use craft\web\Controller;
+use doublesecretagency\spoon\Spoon;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use yii\base\Exception;
+use yii\base\InvalidConfigException;
+use yii\web\BadRequestHttpException;
+use yii\web\Response;
 
 /**
  * Configurator Controller
- *
- * @package   Spoon
- * @since     3.0.0
+ * @since 3.0.0
  */
 class ConfiguratorController extends Controller
 {
 
-    // Protected Properties
-    // =========================================================================
-
-    /**
-     * @var    bool|array Allows anonymous access to this controller's actions.
-     *         The actions must be in 'kebab-case'
-     * @access protected
-     */
-    protected $allowAnonymous = false;
-
-    // Public Methods
-    // =========================================================================
-
-    /**
-     * Returns the fld HTML for the main configurator
-     *
-     * @return \yii\web\Response
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
-     * @throws \yii\web\BadRequestHttpException
-     */
-    public function actionGetHtml()
-    {
-        $this->requirePostRequest();
-        $this->requireAcceptsJson();
-
-        $fieldId = Craft::$app->getRequest()->getParam('fieldId');
-        $field = Craft::$app->fields->getFieldById($fieldId);
-        $blockTypes = Craft::$app->matrix->getBlockTypesByFieldId($fieldId);
-
-        $blockTypeIds = [];
-        foreach ($blockTypes as $blockType)
-        {
-            $blockTypeIds[] = $blockType->id;
-        }
-
-        $context = Craft::$app->getRequest()->getParam('context');
-
-        $spoonedBlockTypes = Spoon::$plugin->blockTypes->getByContext($context, 'groupName', false, $fieldId);
-
-        $fld = Craft::$app->view->renderTemplate('spoon/flds/configurator', array(
-            'matrixField' => $field,
-            'blockTypes' => $blockTypes,
-            'blockTypeIds' => $blockTypeIds,
-            'spoonedBlockTypes' => $spoonedBlockTypes
-        ));
-
-        return $this->asJson([
-            'html' => $fld
-        ]);
-    }
-
     /**
      * Returns the html for the individual block type fld.
      *
-     * @return \yii\web\Response
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
-     * @throws \yii\web\BadRequestHttpException
+     * @return Response
+     * @throws BadRequestHttpException
+     * @throws Exception
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws InvalidConfigException
      */
-    public function actionGetFieldsHtml()
+    public function actionGetFieldsHtml(): Response
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
 
+        $element = Craft::$app->getRequest()->getParam('element');
+        $matrixBlockTypeId = Craft::$app->getRequest()->getParam('matrixBlockTypeId');
         $context = Craft::$app->getRequest()->getParam('context');
-        $blockTypeId = Craft::$app->getRequest()->getParam('blockTypeId');
 
-        $spoonedBlockType = Spoon::$plugin->blockTypes->getBlockType($context, $blockTypeId);
+        $spoonedBlockType = Spoon::$plugin->blockTypes->getBlockType($context, $element['id']);
 
-        $fieldLayout = $spoonedBlockType->getFieldLayout();
+        // Get the existing tabs
+        $tabs = ($spoonedBlockType->fieldLayoutModel['tabs'] ?? []);
 
-        $blockTypeFldFields = [];
-        foreach ($spoonedBlockType->matrixBlockType->getFields() as $field) {
-            $blockTypeFldFields[] = Craft::createObject(CustomField::class, [$field]);
+        // Initialize current configuration
+        $config = [];
+
+        // Loop through groups
+        foreach ($tabs as $tab) {
+
+            // Initialize array of selected IDs
+            $selected = [];
+
+            // Append each block type ID to array of selected IDs
+            foreach ($tab->elements as $e) {
+                $selected[] = (int) $e->field->id;
+            }
+
+            // Append each group details to the array
+            $config[] = [
+                'name' => $tab->name,
+                'ids' => $selected
+            ];
+
         }
 
-        $fld = Craft::$app->view->renderTemplate('spoon/flds/fields', array(
-            'spoonedBlockType' => $spoonedBlockType,
-            'fieldLayout' => $fieldLayout,
-            'blockTypeFields' => $blockTypeFldFields,
-//            'customizableUi' => true
-        ));
+        // Get all fields for this block type
+        $blockFields = $spoonedBlockType->matrixBlockType->getCustomFields();
 
+        // Initialize set of block fields
+        $fields = [];
+
+        // Loop through block field
+        foreach ($blockFields as $field) {
+            // Append each field details to the array
+            $fields[] = [
+                'id' => (int) $field->id,
+                'name' => $field->name,
+                'handle' => $field->handle
+            ];
+        }
+
+        // Configure the field layout designer
+        $fld = Craft::$app->view->renderTemplate('spoon/group-settings/block-tabs', [
+            'element' => $element,
+            'matrixBlockTypeId' => $matrixBlockTypeId,
+            'context' => $context,
+            'blockTabsData' => [
+                'config' => $config,
+                'elements' => $fields,
+            ]
+        ]);
+
+        // Return field layout designer HTML
         return $this->asJson([
             'html' => $fld
         ]);

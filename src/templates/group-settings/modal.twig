@@ -1,0 +1,26 @@
+{% import '_includes/forms' as forms %}
+
+{% do view.registerTranslations('app', [
+    'Apply',
+    'Delete',
+    'Give your tab a name.',
+    'Move to the left',
+    'Move to the right',
+    'Remove',
+    'Rename',
+    'Required',
+    '{pct} width',
+]) %}
+
+<h2>{{ "Create groups for your block types"|t('spoon') }}</h2>
+<p>Each tab represents a <strong>group</strong>. Organize your block types into logical groups.</p>
+
+<script>
+    // Pass data from PHP to JavaScript
+    window.blockGroupsData = {{ blockGroupsData|json_encode|raw }};
+</script>
+
+<input type="hidden" name="fieldId" value="{{ fieldId }}">
+<input type="hidden" name="context" value="{{ context }}">
+
+<div id="spoon-configurator" class="layoutdesigner"></div>

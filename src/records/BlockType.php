@@ -1,22 +1,19 @@
 <?php
 /**
- * Spoon plugin for Craft CMS 3.x
+ * Spoon plugin for Craft CMS
  *
- * Enhance Matrix
+ * Bend the Matrix field with block groups, tabs, and more.
  *
+ * @author    Double Secret Agency
  * @link      https://plugins.doublesecretagency.com/
  * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */
 
 namespace doublesecretagency\spoon\records;
 
-use doublesecretagency\spoon\Spoon;
-
-use Craft;
 use craft\db\ActiveRecord;
 use craft\records\Field;
 use craft\records\FieldLayout;
-
 use yii\db\ActiveQueryInterface;
 
 /**
@@ -31,21 +28,18 @@ use yii\db\ActiveQueryInterface;
  * @property int    $groupSortOrder
  * @property int    $sortOrder
  *
- * @property \yii\db\ActiveQueryInterface $field
- * @property \yii\db\ActiveQueryInterface $fieldLayout
+ * @property ActiveQueryInterface $field
+ * @property ActiveQueryInterface $fieldLayout
  *
- * @package   Spoon
- * @since     3.0.0
+ * @since 3.0.0
  */
 class BlockType extends ActiveRecord
 {
-    // Public Static Methods
-    // =========================================================================
 
     /**
-     * @return string the table name
+     * @inheritdoc
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%spoon_blocktypes}}';
     }

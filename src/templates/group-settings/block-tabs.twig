@@ -1,0 +1,26 @@
+{% import '_includes/forms' as forms %}
+
+{% do view.registerTranslations('app', [
+    'Apply',
+    'Delete',
+    'Give your tab a name.',
+    'Move to the left',
+    'Move to the right',
+    'Remove',
+    'Rename',
+    'Required',
+    '{pct} width',
+]) %}
+
+<h2>{{ "Editing the “{name}” block field layout"|t('spoon', {'name': element.name|t}) }}</h2>
+<p>Organize the fields of each block type into <strong>tabs</strong> within each block.</p>
+
+<script>
+    // Pass data from PHP to JavaScript
+    window.blockTabsData = {{ blockTabsData|json_encode|raw }};
+</script>
+
+<input type="hidden" name="matrixBlockTypeId" value="{{ matrixBlockTypeId }}">
+<input type="hidden" name="context" value="{{ context }}">
+
+<div id="spoon-fields-configurator" class="layoutdesigner"></div>

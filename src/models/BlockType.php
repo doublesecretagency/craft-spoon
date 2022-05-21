@@ -1,16 +1,15 @@
 <?php
 /**
- * Spoon plugin for Craft CMS 3.x
+ * Spoon plugin for Craft CMS
  *
- * Enhance Matrix
+ * Bend the Matrix field with block groups, tabs, and more.
  *
+ * @author    Double Secret Agency
  * @link      https://plugins.doublesecretagency.com/
  * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */
 
 namespace doublesecretagency\spoon\models;
-
-use doublesecretagency\spoon\Spoon;
 
 use Craft;
 use craft\base\FieldInterface;
@@ -21,88 +20,77 @@ use craft\models\MatrixBlockType;
 
 /**
  * BlockType Model
- *
- * Models are containers for data. Just about every time information is passed
- * between services, controllers, and templates in Craft, it’s passed via a model.
- *
- * https://craftcms.com/docs/plugins/models
- *
- * @package   Spoon
- * @since     3.0.0
+ * @since 3.0.0
  */
 class BlockType extends Model
 {
-    // Public Properties
-    // =========================================================================
 
     /**
      * @var int|string|null ID The block ID. If unsaved, it will be in the format "newX".
      */
-    public $id;
+    public int|string|null $id = null;
 
     /**
      * @var int|null Field ID
      */
-    public $fieldId;
+    public ?int $fieldId = null;
 
     /**
      * @var FieldInterface|null Field
      */
-    public $field;
+    public ?FieldInterface $field = null;
 
     /**
      * @var int|null Field layout ID
      */
-    public $fieldLayoutId;
+    public ?int $fieldLayoutId = null;
 
     /**
-     * @var mixed|null Field layout model
+     * @var array|null Field layout model
      */
-    public $fieldLayoutModel;
+    public ?array $fieldLayoutModel = null;
 
     /**
      * @var string|null Field handle
      */
-    public $fieldHandle;
+    public ?string $fieldHandle = null;
 
     /**
      * @var int|null Matrix block type ID
      */
-    public $matrixBlockTypeId;
+    public ?int $matrixBlockTypeId = null;
 
     /**
      * @var MatrixBlockType|null Matrix block type model
      */
-    public $matrixBlockType;
+    public ?MatrixBlockType $matrixBlockType = null;
 
     /**
      * @var string|null Group name
      */
-    public $groupName;
+    public ?string $groupName = null;
 
     /**
      * @var string|null Context
      */
-    public $context;
+    public ?string $context = null;
+
+    /**
+     * @var int
+     */
+    public int $groupSortOrder;
+
+    /**
+     * @var int
+     */
+    public int $sortOrder;
 
     /**
      * @var string|mixed
      */
-    public $uid;
+    public mixed $uid = null;
 
-    /**
-     * @var int
-     */
-    public $groupSortOrder;
-
-    /**
-     * @var int
-     */
-    public $sortOrder;
-
-
-    // Public Methods
-    // =========================================================================
+    // ========================================================================= //
 
     /**
      * Use the block type name as the string representation.
@@ -111,15 +99,15 @@ class BlockType extends Model
      */
     public function __toString(): string
     {
-        return (string)$this->getBlockType()->name;
+        return (string) $this->getBlockType()->name;
     }
 
     /**
-     * Returns the Field instance
+     * Returns the Field instance.
      *
      * @return FieldInterface|null
      */
-    public function getField()
+    public function getField(): ?FieldInterface
     {
         if ($this->field) {
             return $this->field;
@@ -128,13 +116,12 @@ class BlockType extends Model
         return Craft::$app->fields->getFieldById($this->fieldId);
     }
 
-
     /**
-     * Returns the Matrix Block Type model
+     * Returns the Matrix Block Type model.
      *
      * @return MatrixBlockType|null
      */
-    public function getBlockType()
+    public function getBlockType(): ?MatrixBlockType
     {
         if ($this->matrixBlockType) {
             return $this->matrixBlockType;
@@ -146,7 +133,7 @@ class BlockType extends Model
     /**
      * @inheritdoc
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'fieldLayout' => [
@@ -157,16 +144,9 @@ class BlockType extends Model
     }
 
     /**
-     * Returns the validation rules for attributes.
-     *
-     * Validation rules are used by [[validate()]] to check if attribute values are valid.
-     * Child classes may override this method to declare different validation rules.
-     *
-     * More info: http://www.yiiframework.com/doc-2.0/guide-input-validation.html
-     *
-     * @return array
+     * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['id', 'fieldId', 'matrixBlockTypeId', 'fieldLayoutId', 'groupSortOrder', 'sortOrder'], 'number', 'integerOnly' => true],
