@@ -1,0 +1,244 @@
+@charset "UTF-8";
+/**
+ * Spoon plugin for Craft CMS
+ *
+ * Spoon CSS
+ *
+ * @copyright Copyright (c) 2018, 2022 Double Secret Agency
+ * @link      https://plugins.doublesecretagency.com/
+ * @package   Spoon
+ * @since     3.0.0
+ */
+/**
+ * Fix lack of .buttons class
+ */
+.buttons-spooned:first-child {
+  margin-top: 0 !important;
+}
+
+.buttons-spooned:last-child {
+  margin-bottom: 0 !important;
+}
+
+.buttons-spooned {
+  position: relative;
+  margin: 24px 0;
+  min-height: 30px;
+}
+
+.buttons-spooned:before {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+  margin-bottom: -5px;
+}
+
+body.ltr .buttons-spooned > .btn, body.ltr .buttons-spooned > .btngroup {
+  float: left;
+}
+
+body.rtl .buttons-spooned > .btn, body.rtl .buttons-spooned > .btngroup {
+  float: right;
+}
+
+body.ltr .buttons-spooned > .btn, body.ltr .buttons-spooned > .btngroup {
+  margin: 5px 5px 0 0;
+}
+
+body.rtl .buttons-spooned > .btn, body.rtl .buttons-spooned > .btngroup {
+  margin: 5px 0 0 5px;
+}
+
+.buttons-spooned > .btn:first, .buttons-spooned > .btngroup:first {
+  margin-top: 5px !important;
+}
+
+.border-box + .buttons-spooned, .shadow-box + .buttons-spooned {
+  margin-top: 7px;
+}
+
+.matrix > .buttons-spooned {
+  margin-top: 0;
+  height: 30px;
+}
+
+/**
+ * Make the configurator fld all red to give some differentiation
+ * as it’s not actually a field layout that we’re designing
+ */
+.modal.spoon-configurator .fieldlayoutform,
+.modal.spoon-configurator .fieldlayoutform h2,
+.modal.spoon-configurator .fieldlayoutform .fld-field,
+.modal.spoon-configurator .fieldlayoutform .fld-tab,
+.modal.spoon-configurator .fieldlayoutform .fld-tab .tabs .tab,
+.modal.spoon-configurator .fieldlayoutform .fld-tab .fld-tabcontent,
+.modal.spoon-configurator .fieldlayoutform .fld-tab .icon:before,
+.modal.spoon-configurator .fieldlayoutform .fld-field .icon:before {
+  color: #da5a47;
+}
+
+.modal.spoon-configurator .fieldlayoutform .fld-tab .tabs .tab,
+.modal.spoon-configurator .fieldlayoutform .fld-tab .fld-tabcontent,
+.modal.spoon-configurator .fieldlayoutform .fld-field {
+  border-color: #da5a47;
+}
+
+.modal.spoon-configurator .fieldlayoutform .fld-tab .tabs .tab {
+  border-bottom-color: #f4f3fb;
+}
+
+.modal.spoon-configurator .fieldlayoutform .newtabbtn-container .btn.add {
+  color: #da5a47;
+  border-color: #da5a47;
+}
+
+/**
+ * Make our inception modal a bit smaller than the default
+ */
+.modal.spoon-fields-configurator {
+  width: 60%;
+  height: 60%;
+  min-width: 560px;
+  min-height: 360px;
+}
+
+.modal.spoon-fields-configurator .fld-field .settings,
+.modal.spoon-fields-configurator + .fld-field.draghelper .settings {
+  display: none;
+}
+
+/**
+ * Block level field layouts
+ */
+/* hide all matrix block fields */
+.matrix-field > .blocks > .matrixblock > .fields {
+  -webkit-opacity: 0;
+  -moz-opacity: 0;
+  opacity: 0;
+}
+
+/* don’t break blocks that don’t need spooning */
+.matrixblock.matrixblock-not-spooned > .fields {
+  -webkit-opacity: 1 !important;
+  -moz-opacity: 1 !important;
+  opacity: 1 !important;
+}
+
+/* fix for animating and collapsed blocks */
+.matrixblock-spooned.collapsed.draghelper .spoon-tabs,
+.matrixblock-spooned.collapsed.draghelper .spoon-fields,
+.matrixblock-spooned.velocity-animating .spoon-tabs,
+.matrixblock-spooned.velocity-animating .spoon-fields,
+.matrixblock-spooned.collapsed .spoon-tabs,
+.matrixblock-spooned.collapsed .spoon-fields {
+  -webkit-opacity: 0 !important;
+  -moz-opacity: 0 !important;
+  opacity: 0 !important;
+  overflow: hidden;
+}
+
+/* tabs */
+.matrixblock-spooned .spoon-tabs {
+  position: absolute;
+  top: 0;
+  right: 76px;
+  display: block;
+  font-size: 0;
+}
+
+.matrixblock-spooned .spoon-tabs li {
+  display: inline-block;
+  font-size: 13px;
+}
+
+.matrixblock-spooned .spoon-tabs li a {
+  display: block;
+  padding: 5px 10px;
+  color: #777;
+  white-space: nowrap;
+}
+
+.matrixblock-spooned .spoon-tabs li a:hover {
+  text-decoration: none;
+  color: #0d78f2;
+}
+
+.matrixblock-spooned .spoon-tabs li a.sel {
+  color: #29323d;
+  background-color: #fbfcfd;
+  border-left: 1px solid #e3e5e8;
+  border-right: 1px solid #e3e5e8;
+  border-bottom: 1px solid #fbfcfd;
+}
+
+.matrixblock-spooned.disabled .spoon-tabs {
+  right: 106px;
+}
+
+.matrixblock-spooned--disabled {
+  padding-top: 30px;
+}
+
+/**
+ * Block level settings menu
+ */
+.spoon-settings-menu h6 {
+  margin-top: 10px;
+  margin-bottom: 0;
+  padding-left: 10px;
+}
+
+body.ltr .spoon-settings-menu a.fieldtoggle:before {
+  left: -12px;
+}
+
+body.rtl .spoon-settings-menu a.fieldtoggle:before {
+  right: -12px;
+}
+
+.spoon-secondary-menu {
+  padding-top: 10px;
+}
+
+/**
+ * Keep long menus from going offscreen in Live Preview where scrolling is not possible
+ *
+ * TODO: make the menus open at the correct position so they are more visible
+ */
+html.noscroll .spoon-secondary-menu,
+html.noscroll .spoon-settings-menu {
+  max-height: 50%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/**
+ * Fix the structure inside the global context table
+ */
+body.ltr #spoon-global-context-table .structure li {
+  padding-left: 0;
+}
+
+body.rtl #spoon-global-context-table .structure li {
+  padding-right: 0;
+}
+
+body.ltr #spoon-global-context-table .structure ul {
+  margin-left: 0;
+}
+
+body.rtl #spoon-global-context-table .structure ul {
+  margin-right: 0;
+}
+
+body.ltr #spoon-global-context-table .structure ul li {
+  padding-left: 44px;
+}
+
+body.rtl #spoon-global-context-table .structure ul li {
+  padding-right: 44px;
+}
+
+/*# sourceMappingURL=main.css.map*/

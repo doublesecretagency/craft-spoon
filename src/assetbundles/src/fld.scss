@@ -1,0 +1,115 @@
+$base: 24px;
+$gridColor: hsl(212, 50%, 95%);
+
+// ========================================================================= //
+
+// Top margin for elements...
+.fld-element {
+    margin-top: 7px;
+}
+// ... except for the first element in each tab
+.fld-tabcontent {
+    div[data-draggable="true"]:first-child {
+        .fld-element {
+            margin-top: 0;
+        }
+    }
+}
+
+// ========================================================================= //
+
+// Position options menu relative to tab
+.fld-tab {
+    position: relative;
+}
+.fld-options {
+    position: absolute;
+    top: 38px;
+    left: 10px;
+    z-index: 100;
+    background-color: #ffffff;
+    border-radius: 4px;
+    padding: 0 14px;
+    overflow: auto;
+    user-select: none;
+    box-shadow: 0 0 0 1px rgb(31 41 51 / 10%), 0 5px 20px rgb(31 41 51 / 25%);
+    ul li a {
+        display: block;
+        color: #3f4d5a;
+        font-size: 14px;
+        white-space: nowrap;
+        text-decoration: none;
+        margin: 0 -14px;
+        padding: 10px 14px;
+    }
+    hr {
+        margin: 5px -14px;
+    }
+}
+
+// Top margin for "New Tab" button
+.fld-new-tab-btn {
+    margin-top: 4px;
+}
+
+// ========================================================================= //
+
+// Ghost images of dragged objects
+.insertion {
+
+    // ===================================================================== //
+    // Tab handle
+    .draggable.handle {
+        * {
+            visibility: hidden;
+        }
+    }
+    // Tab
+    .tabs .tab,
+    .fld-tabcontent {
+        margin: -2px;
+        border: 2px dashed var(--hairline-color);
+        box-shadow: none;
+
+        background-color: var(--gray-050);
+        background-image: linear-gradient(to right, $gridColor 1px, transparent 0px),
+        linear-gradient(to bottom, $gridColor 1px, transparent 1px);
+        background-size: $base $base;
+    }
+    .tabs .tab {
+        background-position: -1px -1px;
+    }
+    .fld-tabcontent {
+        background-position: -1px -13px;
+        * {
+            visibility: hidden;
+        }
+    }
+    // ===================================================================== //
+
+    // ===================================================================== //
+    // Element
+    .fld-element {
+        .field-name,
+        a.settings {
+            display: none;
+        }
+        &.fld-field {
+            height:46px;
+            box-sizing: border-box;
+            border: 2px dashed var(--hairline-color);
+            border-radius: var(--medium-border-radius);
+            background: none;
+            box-shadow: none;
+        }
+    }
+    // ===================================================================== //
+
+}
+
+// ========================================================================= //
+
+// Hide gear icon for elements in the sidebar
+.fld-sidebar .fld-element a.settings {
+    display: none;
+}

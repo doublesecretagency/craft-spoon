@@ -8,12 +8,12 @@
  */
 (function($){
 
-
     if (typeof Spoon == 'undefined')
     {
         Spoon = {};
     }
 
+    // noinspection JSVoidFunctionReturnValueUsed
     Spoon.GroupsDesigner = Craft.FieldLayoutDesigner.extend(
         {
 
@@ -34,6 +34,10 @@
                     title: Craft.t('app', 'Edit')
                 });
 
+
+                // THIS IS THE BUTTON YOU WANT TO IMITATE?
+
+
                 $editBtn.on('click', $.proxy(function() {
                     this.onEditFieldLayout($element, $editBtn);
                 }, this));
@@ -41,22 +45,22 @@
                 $editBtn.appendTo($element);
             },
 
-            // cloned for language adjustments
-            renameTab: function($tab)
-            {
-                if (!this.settings.customizableTabs) {
-                    return;
-                }
-
-                var $labelSpan = $tab.find('.tabs .tab span');
-                var oldName = $labelSpan.text();
-                var newName = prompt(Craft.t('app', 'Give your group a name.'), oldName);
-
-                if (newName && newName !== oldName) {
-                    $labelSpan.text(newName);
-                    $tab.find('.placement-input').attr('name', this.getElementPlacementInputName(newName));
-                }
-            },
+            // // cloned for language adjustments
+            // renameTab: function($tab)
+            // {
+            //     if (!this.settings.customizableTabs) {
+            //         return;
+            //     }
+            //
+            //     var $labelSpan = $tab.find('.tabs .tab span');
+            //     var oldName = $labelSpan.text();
+            //     var newName = prompt(Craft.t('app', 'Give your group a name.'), oldName);
+            //
+            //     if (newName && newName !== oldName) {
+            //         $labelSpan.text(newName);
+            //         $tab.find('.placement-input').attr('name', this.getElementPlacementInputName(newName));
+            //     }
+            // },
 
             // cloned for language adjustments
             addTab: function()
@@ -141,15 +145,15 @@
 
                             Craft.postActionRequest('spoon/configurator/get-fields-html', data, $.proxy(function(response, textStatus)
                             {
-                                if (textStatus == 'success')
+                                if (textStatus === 'success')
                                 {
                                     $(response.html).appendTo($body);
                                     $bigSpinner.addClass('hidden');
 
-                                    var fld = new Craft.FieldLayoutDesigner('#spoon-fields-configurator', {
-                                        customizableTabs: true,
-                                        customizableUi: false,
-                                    });
+                                    // var fld = new Craft.FieldLayoutDesigner('#spoon-fields-configurator', {
+                                    //     customizableTabs: true,
+                                    //     customizableUi: false,
+                                    // });
                                 }
                             }, this));
 
@@ -183,14 +187,14 @@
                 Craft.postActionRequest('spoon/block-types/save-field-layout', data, $.proxy(function(response, textStatus)
                 {
                     this.$spinner.addClass('hidden');
-                    if (textStatus == 'success' && response.success)
+                    if (textStatus === 'success' && response.success)
                     {
                         Craft.cp.displayNotice(Craft.t('app', 'Field layout saved.'));
                         this.modal.hide();
                     }
                     else
                     {
-                        if (textStatus == 'success')
+                        if (textStatus === 'success')
                         {
                             Craft.cp.displayError(Craft.t('app', 'An unknown error occurred.'));
                         }

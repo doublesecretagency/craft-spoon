@@ -1,9 +1,10 @@
 <?php
 /**
- * Spoon plugin for Craft CMS 3.x
+ * Spoon plugin for Craft CMS
  *
- * Enhance Matrix
+ * Bend the Matrix field with block groups, tabs, and more.
  *
+ * @author    Double Secret Agency
  * @link      https://plugins.doublesecretagency.com/
  * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */
@@ -17,19 +18,15 @@ use craft\web\View;
 
 /**
  * ConfiguratorAsset AssetBundle
- *
- * @package   Spoon
- * @since     3.0.0
+ * @since 3.0.0
  */
 class ConfiguratorAsset extends AssetBundle
 {
-    // Public Methods
-    // =========================================================================
 
     /**
-     * Initializes the bundle.
+     * @inheritdoc
      */
-    public function init()
+    public function init(): void
     {
         // define the path that your publishable resources live
         $this->sourcePath = "@doublesecretagency/spoon/assetbundles/dist";
@@ -42,12 +39,14 @@ class ConfiguratorAsset extends AssetBundle
         // define the relative path to CSS/JS files that should be registered with the page
         // when this asset bundle is registered
         $this->js = [
-            'js/GroupsDesigner.min.js',
-            'js/Configurator.min.js'
+            'js/GroupsDesigner.js',
+            'js/Configurator.js',
+            'js/vue/fld.js'
         ];
 
         $this->css = [
-            'css/main.min.css',
+            'css/main.css',
+            'css/fld.css',
         ];
 
         parent::init();

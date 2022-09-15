@@ -1,9 +1,10 @@
 <?php
 /**
- * Spoon plugin for Craft CMS 3.x
+ * Spoon plugin for Craft CMS
  *
- * Enhance Matrix
+ * Bend the Matrix field with block groups, tabs, and more.
  *
+ * @author    Double Secret Agency
  * @link      https://plugins.doublesecretagency.com/
  * @copyright Copyright (c) 2018, 2022 Double Secret Agency
  */
@@ -18,19 +19,15 @@ use craft\web\View;
 
 /**
  * FieldManipulatorAsset AssetBundle
- *
- * @package   Spoon
- * @since     3.0.0
+ * @since 3.0.0
  */
 class FieldManipulatorAsset extends AssetBundle
 {
-    // Public Methods
-    // =========================================================================
 
     /**
-     * Initializes the bundle.
+     * @inheritdoc
      */
-    public function init()
+    public function init(): void
     {
         // define the path that your publishable resources live
         $this->sourcePath = "@doublesecretagency/spoon/assetbundles/dist";
@@ -57,11 +54,11 @@ class FieldManipulatorAsset extends AssetBundle
 
 
         $this->js = [
-            'js/FieldManipulator.min.js',
+            'js/FieldManipulator.js',
         ];
 
         $this->css = [
-            'css/main.min.css',
+            'css/main.css',
         ];
 
         parent::init();

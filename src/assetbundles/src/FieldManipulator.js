@@ -14,6 +14,7 @@
         Spoon = {};
     }
 
+    // noinspection JSVoidFunctionReturnValueUsed
     /**
      * Overrides the default Matrix ‘add block’ buttons with our grouped ones
      * and keeps them up to date based on the current context.
@@ -32,7 +33,7 @@
                 // Set up
                 this.setSettings(settings, Spoon.FieldManipulator.defaults);
 
-                // Work out if we’re in the 'entrytype' context so we can keep things up to date
+                // Work out if we’re in the 'entrytype' context, so we can keep things up to date
                 if (this.settings.context.split(':')[0] === 'entrytype')
                 {
                     // Listen to entry type switch
@@ -131,7 +132,7 @@
                         // add some data to tell us we’re spooned
                         $matrixField.data('spooned', true);
 
-                        // store the data for when we loop the blocks themselves so we don’t have to run all this again
+                        // store the data for when we loop the blocks themselves, so we don’t have to run all this again
                         $matrixField.data('spoon-block-types', spoonedBlockTypes);
 
                         // Only do the buttons if we’re not versioned
@@ -259,7 +260,7 @@
                             this.initSettingsMenu($settingsBtn, spoonedBlockTypes, $matrixField);
                         }
 
-                        // Second, get the current block’s type out of the dom so we can do the field layout
+                        // Second, get the current block’s type out of the dom, so we can do the field layout
                         var matrixBlockTypeHandle = this._getMatrixBlockTypeHandle($matrixBlock);
 
                         // Further filter our spoonedBlockTypes array by the current block’s type
