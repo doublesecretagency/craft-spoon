@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.0.0-beta.1 - 2022-09-15
+
+### Added
+- Craft 4 compatibility.
+
+### Changed
+- Refactored field layout designer to use Vue instead of Garnish.
+
 ## 3.7.0 - 2022-05-20
 
 ### Changed
