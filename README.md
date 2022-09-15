@@ -1,4 +1,4 @@
-<img align="left" width="120" src="https://raw.githubusercontent.com/doublesecretagency/craft-spoon/085982bfc5dbc7b4f07433383cf5e534931b981d/resources/img/icon.svg" alt="Plugin icon">
+<img align="left" width="120" src="https://raw.githubusercontent.com/doublesecretagency/craft-spoon/45a4a86792ba76b2f35144d13cd61cd06d520247/src/icon.svg" alt="Plugin icon">
 
 # Spoon plugin for Craft CMS
 
@@ -18,25 +18,43 @@ Get inception heavy with either a Matrix inside a Super Table or go wild and nes
 
 ---
 
-## Requirements
+## How to Install the Plugin
 
-This plugin requires Craft CMS 3.0.15 or later.
+### Installation via Plugin Store
 
+To install the Spoon plugin via the plugin store, follow these steps:
 
-## Installation
+1. In your site's control panel, visit the Plugin Store page. If you do not see a link to the Plugin Store, be sure you are working in an environment which allows admin changes.
 
-To install the plugin, follow these instructions.
+2. Search for "Spoon".
+
+3. Install the plugin titled **Spoon**.
+
+### Installation via Console Commands
+
+To install the Spoon plugin via the console, follow these steps:
 
 1. Open your terminal and go to your Craft project:
 
-        cd /path/to/project
+```sh
+cd /path/to/project
+```
 
 2. Then tell Composer to load the plugin:
 
-        composer require doublesecretagency/craft-spoon
+```sh
+composer require doublesecretagency/craft-spoon
+```
 
-3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Spoon.
+3. Then tell Craft to install the plugin:
 
+```sh
+./craft plugin/install spoon
+```
+
+>Alternatively, you can visit the **Settings > Plugins** page to finish the installation.
+
+---
 
 ## Overview
 
