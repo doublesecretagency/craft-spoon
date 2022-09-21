@@ -110,7 +110,7 @@ class Spoon extends Plugin
         // If Super Table is installed get all ST fields and store by child field context
         $superTablePlugin = Craft::$app->plugins->getPlugin('super-table');
         if ($superTablePlugin && $variables['matrixFields']) {
-            $superTableService = new verbb\supertable\services\SuperTableService();
+            $superTableService = new \verbb\supertable\services\Service();
 
             foreach ($variables['matrixFields'] as $matrixField) {
                 if (strpos($matrixField->context, 'superTableBlockType') === 0) {
@@ -120,10 +120,10 @@ class Spoon extends Plugin
                         $superTableBlockTypeId = Db::idByUid('{{%supertableblocktypes}}', $parts[1]);
 
                         if ($superTableBlockTypeId) {
-                            /** @var verbb\supertable\models\SuperTableBlockTypeModel $superTableBlockType */
+                            /** @var \verbb\supertable\models\SuperTableBlockType $superTableBlockType */
                             $superTableBlockType = $superTableService->getBlockTypeById($superTableBlockTypeId);
 
-                            /** @var verbb\supertable\fields\SuperTableField $superTableField */
+                            /** @var \verbb\supertable\fields\SuperTableField $superTableField */
                             $superTableField = Craft::$app->fields->getFieldById($superTableBlockType->fieldId);
 
                             $variables['superTableFields'][$matrixField->context] = [

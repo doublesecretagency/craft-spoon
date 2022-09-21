@@ -33,15 +33,15 @@
                 // Set up
                 this.setSettings(settings, Spoon.FieldManipulator.defaults);
 
-                // Work out if we’re in the 'entrytype' context, so we can keep things up to date
-                if (this.settings.context.split(':')[0] === 'entrytype')
-                {
-                    // Listen to entry type switch
-                    Garnish.on(Craft.EntryTypeSwitcher, 'beforeTypeChange', $.proxy(function(ev)
-                    {
-                        this.settings.context = 'entrytype:' + ev.target.$typeSelect.val();
-                    }, this));
-                }
+                // // Work out if we’re in the 'entrytype' context, so we can keep things up to date
+                // if (this.settings.context.split(':')[0] === 'entrytype')
+                // {
+                //     // Listen to entry type switch
+                //     Garnish.on(Craft.EntryTypeSwitcher, 'beforeTypeChange', $.proxy(function(ev)
+                //     {
+                //         this.settings.context = 'entrytype:' + ev.target.$typeSelect.val();
+                //     }, this));
+                // }
 
                 this._handleMatrixInputInitProxy = $.proxy(this, 'handleMatrixInputInit');
                 this._handleMatrixInputBlockAddedProxy = $.proxy(this, 'handleMatrixInputBlockAdded');
@@ -102,140 +102,141 @@
 
             initBlockTypeGroups: function($matrixField)
             {
+                // If the field has already been spooned, bail
+                if ($matrixField.data('spooned')) {
+                    return;
+                }
 
-                // check if we’ve already spooned this field
-                if ( !$matrixField.data('spooned') )
+                // get matrix field handle out of the dom
+                var matrixFieldHandle = this._getMatrixFieldName($matrixField);
+
+                // Filter by the current matrix field
+                var spoonedBlockTypes = [];
+
+                // Check current context first
+                if (typeof this.settings.blockTypes[this.settings.context] !== "undefined")
                 {
+                    spoonedBlockTypes = $.grep(this.settings.blockTypes[this.settings.context], function(e){
+                        return e.fieldHandle === matrixFieldHandle;
+                    });
+                }
 
-                    // get matrix field handle out of the dom
-                    var matrixFieldHandle = this._getMatrixFieldName($matrixField);
+                // Check global context
+                if (spoonedBlockTypes.length < 1 && typeof this.settings.blockTypes['global'] !== "undefined")
+                {
+                    spoonedBlockTypes = $.grep(this.settings.blockTypes['global'], function(e){
+                        return e.fieldHandle === matrixFieldHandle;
+                    });
+                }
 
-                    // Filter by the current matrix field
-                    var spoonedBlockTypes = [];
+                // If no config, bail
+                if (spoonedBlockTypes.length < 1) {
+                    return;
+                }
 
-                    // Check current context first
-                    if (typeof this.settings.blockTypes[this.settings.context] !== "undefined")
-                    {
-                        spoonedBlockTypes = $.grep(this.settings.blockTypes[this.settings.context], function(e){ return e.fieldHandle === matrixFieldHandle; });
-                    }
+                // add some data to tell us we’re spooned
+                $matrixField.data('spooned', true);
 
-                    // Check global context
-                    if (spoonedBlockTypes.length < 1 && typeof this.settings.blockTypes['global'] !== "undefined")
-                    {
-                        spoonedBlockTypes = $.grep(this.settings.blockTypes['global'], function(e){ return e.fieldHandle === matrixFieldHandle; });
-                    }
+                // store the data for when we loop the blocks themselves, so we don’t have to run all this again
+                $matrixField.data('spoon-block-types', spoonedBlockTypes);
 
-                    // Check we have some config
-                    if ( spoonedBlockTypes.length >= 1 )
-                    {
+                // If versioned, bail
+                if (this.settings.versioned) {
+                    return;
+                }
 
-                        // add some data to tell us we’re spooned
-                        $matrixField.data('spooned', true);
+                // find the original buttons
+                var $origButtons = $matrixField.find('> .buttons').first();
 
-                        // store the data for when we loop the blocks themselves, so we don’t have to run all this again
-                        $matrixField.data('spoon-block-types', spoonedBlockTypes);
+                // hide the original ones and start the button spooning process
+                $origButtons.addClass('hidden');
 
-                        // Only do the buttons if we’re not versioned
-                        if (!this.settings.versioned) {
+                // make our own container, not using .buttons as it gets event bindings
+                // from MatrixInput.js that we really don't want
+                var $spoonedButtonsContainer = $('<div class="buttons-spooned" />').insertAfter($origButtons);
 
-                            // find the original buttons
-                            var $origButtons = $matrixField.find('> .buttons').first();
+                // the main button group
+                var $mainButtons = $('<div class="btngroup" />').appendTo($spoonedButtonsContainer);
 
-                            // hide the original ones and start the button spooning process
-                            $origButtons.addClass('hidden');
+                // the secondary one, used when the container gets too small
+                var $secondaryButtons = $('<div class="btn add icon menubtn hidden">' + Craft.t('app', 'Add a block') + '</div>').appendTo($spoonedButtonsContainer),
+                    $secondaryMenu = $('<div class="menu spoon-secondary-menu" />').appendTo($spoonedButtonsContainer);
 
-                            // make our own container, not using .buttons as it gets event bindings
-                            // from MatrixInput.js that we really don't want
-                            var $spoonedButtonsContainer = $('<div class="buttons-spooned" />').insertAfter($origButtons);
+                // loop each block type config
+                for (var i = 0; i < spoonedBlockTypes.length; i++) {
 
-                            // the main button group
-                            var $mainButtons = $('<div class="btngroup" />').appendTo($spoonedButtonsContainer);
+                    // check if group exists, add if not
+                    if ($mainButtons.find('[data-spooned-group="' + spoonedBlockTypes[i].groupName + '"]').length === 0) {
+                        // main buttons
+                        var $mainMenuBtn = $('<div class="btn  menubtn">' + Craft.t('site', spoonedBlockTypes[i]['groupName']) + '</div>').appendTo($mainButtons),
+                            $mainMenu = $('<div class="menu" data-spooned-group="' + spoonedBlockTypes[i]['groupName'] + '" />').appendTo($mainButtons),
+                            $mainUl = $('<ul />').appendTo($mainMenu);
 
-                            // the secondary one, used when the container gets too small
-                            var $secondaryButtons = $('<div class="btn add icon menubtn hidden">' + Craft.t('app', 'Add a block') + '</div>').appendTo($spoonedButtonsContainer),
-                                $secondaryMenu = $('<div class="menu spoon-secondary-menu" />').appendTo($spoonedButtonsContainer);
-
-                            // loop each block type config
-                            for (var i = 0; i < spoonedBlockTypes.length; i++) {
-
-                                // check if group exists, add if not
-                                if ($mainButtons.find('[data-spooned-group="' + spoonedBlockTypes[i].groupName + '"]').length === 0) {
-                                    // main buttons
-                                    var $mainMenuBtn = $('<div class="btn  menubtn">' + Craft.t('site', spoonedBlockTypes[i]['groupName']) + '</div>').appendTo($mainButtons),
-                                        $mainMenu = $('<div class="menu" data-spooned-group="' + spoonedBlockTypes[i]['groupName'] + '" />').appendTo($mainButtons),
-                                        $mainUl = $('<ul />').appendTo($mainMenu);
-
-                                    // single group buttons
-                                    if (i !== 0) {
-                                        $('<hr>').appendTo($secondaryMenu);
-                                    }
-                                    $('<h6>' + Craft.t('site', spoonedBlockTypes[i]['groupName']) + '</h6>').appendTo($secondaryMenu);
-                                    var $secondaryUl = $('<ul/>').appendTo($secondaryMenu);
-                                }
-
-                                // make a link
-                                $li = $('<li><a data-type="' + spoonedBlockTypes[i].matrixBlockType.handle + '">' + Craft.t('site', spoonedBlockTypes[i].matrixBlockType.name) + '</a></li>');
-
-                                // add it to the main list
-                                $li.appendTo($mainUl);
-
-                                // add a copy to the secondary one as well
-                                $li.clone().appendTo($secondaryUl);
-
-                            }
-
-                            // make the MenuBtns work
-                            $mainButtons.find('.menubtn').each(function() {
-
-                                new Garnish.MenuBtn($(this),
-                                    {
-                                        onOptionSelect: function(option) {
-                                            // find our type and click the correct original btn!
-                                            var type = $(option).data('type');
-                                            $origButtons.find('[data-type="' + type + '"]').trigger('click');
-                                        }
-                                    });
-
-                            });
-
-                            new Garnish.MenuBtn($secondaryButtons,
-                                {
-                                    onOptionSelect: function(option) {
-                                        // find our type and click the correct original btn!
-                                        var type = $(option).data('type');
-                                        $origButtons.find('[data-type="' + type + '"]').trigger('click');
-                                    }
-                                });
-
-                            // Bind a resize to the $matrixField so we can work out which groups UI to show
-                            this.addListener($matrixField, 'resize', $.proxy(function() {
-                                // Do we know what the button group width is yet?
-                                if (!$matrixField.data('spoon-main-buttons-width')) {
-                                    $matrixField.data('spoon-main-buttons-width', $mainButtons.width());
-
-                                    if (!$matrixField.data('spoon-main-buttons-width')) {
-                                        return;
-                                    }
-                                }
-
-                                // Check the widths and do the hide/show
-                                var fieldWidth = $matrixField.width(),
-                                    mainButtonsWidth = $matrixField.data('spoon-main-buttons-width');
-                                if (fieldWidth < mainButtonsWidth) {
-                                    $secondaryButtons.removeClass('hidden');
-                                    $mainButtons.addClass('hidden');
-                                } else {
-                                    $secondaryButtons.addClass('hidden');
-                                    $mainButtons.removeClass('hidden');
-                                }
-
-                            }, this));
+                        // single group buttons
+                        if (i !== 0) {
+                            $('<hr>').appendTo($secondaryMenu);
                         }
-
+                        $('<h6>' + Craft.t('site', spoonedBlockTypes[i]['groupName']) + '</h6>').appendTo($secondaryMenu);
+                        var $secondaryUl = $('<ul/>').appendTo($secondaryMenu);
                     }
+
+                    // make a link
+                    $li = $('<li><a data-type="' + spoonedBlockTypes[i].matrixBlockType.handle + '">' + Craft.t('site', spoonedBlockTypes[i].matrixBlockType.name) + '</a></li>');
+
+                    // add it to the main list
+                    $li.appendTo($mainUl);
+
+                    // add a copy to the secondary one as well
+                    $li.clone().appendTo($secondaryUl);
 
                 }
 
+                // make the MenuBtns work
+                $mainButtons.find('.menubtn').each(function() {
+
+                    new Garnish.MenuBtn($(this),
+                        {
+                            onOptionSelect: function(option) {
+                                // find our type and click the correct original btn!
+                                var type = $(option).data('type');
+                                $origButtons.find('[data-type="' + type + '"]').trigger('click');
+                            }
+                        });
+
+                });
+
+                new Garnish.MenuBtn($secondaryButtons,
+                    {
+                        onOptionSelect: function(option) {
+                            // find our type and click the correct original btn!
+                            var type = $(option).data('type');
+                            $origButtons.find('[data-type="' + type + '"]').trigger('click');
+                        }
+                    });
+
+                // Bind a resize to the $matrixField so we can work out which groups UI to show
+                this.addListener($matrixField, 'resize', $.proxy(function() {
+                    // Do we know what the button group width is yet?
+                    if (!$matrixField.data('spoon-main-buttons-width')) {
+                        $matrixField.data('spoon-main-buttons-width', $mainButtons.width());
+
+                        if (!$matrixField.data('spoon-main-buttons-width')) {
+                            return;
+                        }
+                    }
+
+                    // Check the widths and do the hide/show
+                    var fieldWidth = $matrixField.width(),
+                        mainButtonsWidth = $matrixField.data('spoon-main-buttons-width');
+                    if (fieldWidth < mainButtonsWidth) {
+                        $secondaryButtons.removeClass('hidden');
+                        $mainButtons.addClass('hidden');
+                    } else {
+                        $secondaryButtons.addClass('hidden');
+                        $mainButtons.removeClass('hidden');
+                    }
+
+                }, this));
             },
 
             initBlocks: function($matrixBlock, $matrixField)
@@ -523,31 +524,42 @@
              */
             _getMatrixFieldName: function($matrixField)
             {
+                // Initialize handle
+                var matrixFieldHandle = '';
 
-                var matrixFieldId = $matrixField.parentsUntil('.field').parent().prop('id'),
-                    parts = matrixFieldId.split("-");
+                // Get the Matrix field ID
+                var matrixFieldId = $matrixField.parentsUntil('.field').parent().prop('id');
 
-                // Matrix inside Something (e.g. Super Table) inside Matrix
-                if (parts.length === 9) {
-                    var matrixFieldHandle = parts[parts.length-8] + '-' + parts[parts.length-5] + '-' + parts[parts.length-2];
-                }
-                // Matrix inside Something (e.g. Super Table)
-                else if (parts.length === 6) {
-                    var matrixFieldHandle = parts[parts.length-5] + '-' + parts[parts.length-2];
-                }
-                // Normal Matrix
-                else if (parts.length === 3) {
-                    var matrixFieldHandle = parts[parts.length-2];
+                // Split ID into separate parts
+                var parts = matrixFieldId.split("-");
+
+                // Configure handle based on number of parts
+                switch (parts.length) {
+
+                    case 9:
+                        // Matrix inside Something (e.g. Super Table) inside Matrix
+                        matrixFieldHandle = parts[1] + '-' + parts[4] + '-' + parts[7];
+                        break;
+
+                    case 7:
+                        // Matrix inside Something (e.g. Super Table)
+                        matrixFieldHandle = parts[1] + '-' + parts[5];
+                        break;
+
+                    case 3:
+                        // Normal Matrix
+                        matrixFieldHandle = parts[1];
+                        break;
+
                 }
 
-                if ( matrixFieldHandle !== '' )
-                {
-                    return matrixFieldHandle;
-                }
-                else
-                {
+                // If no handle, bail
+                if (!matrixFieldHandle) {
                     return false;
                 }
+
+                // Return the Matrix field handle
+                return matrixFieldHandle;
             },
 
             /**

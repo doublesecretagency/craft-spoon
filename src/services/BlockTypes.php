@@ -46,9 +46,9 @@ class BlockTypes extends Component
     private ?PluginInterface $_superTablePlugin = null;
 
     /**
-     * @var verbb\supertable\services\SuperTableService|null
+     * @var \verbb\supertable\services\Service|null
      */
-    private mixed $_superTableService;
+    private mixed $_superTableService = null;
 
     /**
      * @const CONFIG_BLOCKTYPE_KEY
@@ -525,7 +525,7 @@ class BlockTypes extends Component
         if ($this->_superTablePlugin) {
 
             if (!$this->_superTableService) {
-                $this->_superTableService = new verbb\supertable\services\SuperTableService();
+                $this->_superTableService = new \verbb\supertable\services\Service();
             }
 
             // If the field is actually inside a SuperTable
