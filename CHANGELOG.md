@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.0.0 - 2022-10-04
+
+### Added
+- Brought Super Table compatibility to Craft 4.
+
+### Fixed
+- Fixed Super Table compatibility. ([#115](https://github.com/doublesecretagency/craft-spoon/issues/115))
+
 ## 4.0.0-beta.1 - 2022-09-15
 
 ### Added
