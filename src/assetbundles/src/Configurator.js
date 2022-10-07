@@ -75,7 +75,6 @@ import FieldLayoutDesigner from './vue/fld';
                     return;
                 }
 
-
                 // Get the current slideout container
                 let $slideoutContainer = $('.slideout-container:not(.hidden)');
                 let $slideoutFooter = $slideoutContainer.find('.fld-element-settings-footer');

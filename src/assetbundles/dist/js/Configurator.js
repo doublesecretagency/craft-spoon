@@ -18500,7 +18500,7 @@ __webpack_require__.r(__webpack_exports__);
       } // If not a matrix field, bail
 
 
-      if (this.settings.matrixFieldIds.indexOf(id.toString()) === -1) {
+      if (!this.settings.matrixFieldIds.map(Number).includes(Number(id))) {
         return;
       } // Get the current slideout container
 
