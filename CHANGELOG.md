@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.1 - 2022-10-07
+
+### Fixed
+- Fixed a bug which could prevent the button from showing in a slideout. ([#120](https://github.com/doublesecretagency/craft-spoon/issues/120)) (thanks @tomdavies)
+
 ## 4.0.0 - 2022-10-04
 
 ### Added
