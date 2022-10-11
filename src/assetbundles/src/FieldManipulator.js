@@ -439,10 +439,10 @@
                 Garnish.requestAnimationFrame($.proxy(function()
                 {
                     // Get the Garnish.MenuBtn object
-                    var menuBtn = $settingsBtn.data('menubtn') || false;
+                    var disclosureMenuBtn = $settingsBtn.data('trigger') || false;
 
                     // If there wasn’t one then fail and try again
-                    if (!menuBtn)
+                    if (!disclosureMenuBtn)
                     {
                         this.initSettingsMenu($settingsBtn, spoonedBlockTypes, $matrixField);
                         return;
@@ -452,7 +452,7 @@
                     var matrixFieldHandle = this._getMatrixFieldName($matrixField);
 
                     // Get the actual menu out of it once we get this far
-                    var $menu = menuBtn.menu.$container;
+                    var $menu = disclosureMenuBtn.$container;
                     $menu.addClass('spoon-settings-menu');
 
                     // Hide all the li’s with add block links in them
