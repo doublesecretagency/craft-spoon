@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.2 - 2022-10-12
+
+### Fixed
+- Fixed bug which allowed hidden blocks to be available via the cog menu. ([#122](https://github.com/doublesecretagency/craft-spoon/issues/122)) (thanks @tomdavies)
+
 ## 4.0.1 - 2022-10-07
 
 ### Fixed
