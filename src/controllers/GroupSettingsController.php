@@ -140,6 +140,9 @@ class GroupSettingsController extends Controller
         // Get any existing field layouts, so we don’t lose them
         $fieldLayoutIds = Spoon::$plugin->blockTypes->getFieldLayoutIds($context, $fieldId);
 
+        // Get old block types so we can preserve uuids for project config
+        $oldBlockTypes = Spoon::$plugin->blockTypes->getByContext($context, 'matrixBlockTypeId', false, $fieldId);
+
         // Remove all current block types by context
         Spoon::$plugin->blockTypes->deleteByContext($context, $fieldId);
 
@@ -178,7 +181,7 @@ class GroupSettingsController extends Controller
                     'context' => $context,
                     'groupSortOrder' => $groupOrder,
                     'sortOrder' => $blockTypeOrder,
-                    'uid' => StringHelper::UUID(),
+                    'uid' => $oldBlockTypes[$blockTypeId][0]['uid'] ?? StringHelper::UUID(),
                 ]);
 
                 // Attempt to save the block type
