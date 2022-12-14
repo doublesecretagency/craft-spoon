@@ -137,14 +137,8 @@ class GroupSettingsController extends Controller
         // JSON decode config
         $config = Json::decode($config);
 
-        // Get any existing field layouts, so we don’t lose them
-        $fieldLayoutIds = Spoon::$plugin->blockTypes->getFieldLayoutIds($context, $fieldId);
-
         // Get old block types so we can preserve uuids for project config
         $oldBlockTypes = Spoon::$plugin->blockTypes->getByContext($context, 'matrixBlockTypeId', false, $fieldId);
-
-        // Remove all current block types by context
-        Spoon::$plugin->blockTypes->deleteByContext($context, $fieldId);
 
         // Assume no errors to start
         $errors = 0;
@@ -172,16 +166,19 @@ class GroupSettingsController extends Controller
                 // Increment the block type order
                 $blockTypeOrder++;
 
-                // Create new block type model
-                $model = new BlockTypeModel([
+                // Existing spoon block type or new with default attributes
+                $model = $oldBlockTypes[$blockTypeId][0] ?? new BlockTypeModel([
                     'fieldId' => $fieldId,
                     'matrixBlockTypeId' => $blockTypeId,
-                    'fieldLayoutId' => $fieldLayoutIds[$blockTypeId] ?? null,
+                    'uid' => StringHelper::UUID(),
+                    'context' => $context
+                ]);
+
+                // Set attributes to change
+                $model->setAttributes([
                     'groupName' => $group['name'] ?? 'missing',
-                    'context' => $context,
                     'groupSortOrder' => $groupOrder,
                     'sortOrder' => $blockTypeOrder,
-                    'uid' => $oldBlockTypes[$blockTypeId][0]['uid'] ?? StringHelper::UUID(),
                 ]);
 
                 // Attempt to save the block type
