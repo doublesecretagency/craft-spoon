@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.3 - 2022-12-16
+
+### Fixed
+- Preserve existing block type UUIDs when saving. ([#124](https://github.com/doublesecretagency/craft-spoon/pull/124)) (thanks @bvangennep)
+
 ## 4.0.2 - 2022-10-12
 
 ### Fixed
