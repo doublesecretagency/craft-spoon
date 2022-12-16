@@ -137,8 +137,8 @@ class GroupSettingsController extends Controller
         // JSON decode config
         $config = Json::decode($config);
 
-        // Get old block types so we can preserve uuids for project config
-        $oldBlockTypes = Spoon::$plugin->blockTypes->getByContext($context, 'matrixBlockTypeId', false, $fieldId);
+        // Get existing block types
+        $existingBlockTypes = Spoon::$plugin->blockTypes->getByContext($context, 'matrixBlockTypeId', false, $fieldId);
 
         // Assume no errors to start
         $errors = 0;
@@ -167,7 +167,7 @@ class GroupSettingsController extends Controller
                 $blockTypeOrder++;
 
                 // Existing spoon block type or new with default attributes
-                $model = $oldBlockTypes[$blockTypeId][0] ?? new BlockTypeModel([
+                $model = $existingBlockTypes[$blockTypeId][0] ?? new BlockTypeModel([
                     'fieldId' => $fieldId,
                     'matrixBlockTypeId' => $blockTypeId,
                     'uid' => StringHelper::UUID(),
