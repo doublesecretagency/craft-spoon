@@ -5,6 +5,9 @@
 ### Added
 - Added a new "Welcome" message when installing the plugin.
 
+### Changed
+- Completely overhauled the [Spoon documentation](https://plugins.doublesecretagency.com/spoon/).
+
 ### Fixed
 - Fixed spacing of nested menu toggle.
 
