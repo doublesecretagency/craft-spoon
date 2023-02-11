@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+- Fixed spacing of nested menu toggle.
+
 ## 4.0.3 - 2022-12-16
 
 ### Fixed

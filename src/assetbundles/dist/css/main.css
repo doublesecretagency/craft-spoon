@@ -191,11 +191,11 @@ body.rtl .buttons-spooned > .btn, body.rtl .buttons-spooned > .btngroup {
 }
 
 body.ltr .spoon-settings-menu a.fieldtoggle:before {
-  left: -12px;
+  left: -7px;
 }
 
 body.rtl .spoon-settings-menu a.fieldtoggle:before {
-  right: -12px;
+  right: -7px;
 }
 
 .spoon-secondary-menu {
