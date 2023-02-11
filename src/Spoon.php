@@ -14,8 +14,10 @@ namespace doublesecretagency\spoon;
 use Craft;
 use craft\base\Model;
 use craft\base\Plugin;
+use craft\events\PluginEvent;
 use craft\events\RebuildConfigEvent;
 use craft\helpers\Db;
+use craft\helpers\UrlHelper;
 use craft\services\Plugins;
 use craft\services\ProjectConfig;
 use craft\web\assets\vue\VueAsset;
@@ -64,6 +66,9 @@ class Spoon extends Plugin
         self::$plugin = $this;
 
         $this->_setPluginComponents();
+
+        // Redirect after plugin install
+        $this->_postInstallRedirect();
 
         // Wait until all the plugins have loaded before running the loader
         Event::on(
@@ -189,5 +194,38 @@ class Spoon extends Plugin
         $projectConfig->remove(BlockTypes::CONFIG_BLOCKTYPE_KEY);
         $projectConfig->muteEvents = false;
     }
+    // ========================================================================= //
+
+    /**
+     * After the plugin has been installed,
+     * redirect to the "Welcome" settings page.
+     *
+     * @return void
+     */
+    private function _postInstallRedirect(): void
+    {
+        // After the plugin has been installed
+        Event::on(
+            Plugins::class,
+            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
+            static function (PluginEvent $event) {
+
+                // If installed plugin isn't Spoon, bail
+                if ('spoon' !== $event->plugin->handle) {
+                    return;
+                }
+
+                // If installed via console, no need for a redirect
+                if (Craft::$app->getRequest()->getIsConsoleRequest()) {
+                    return;
+                }
+
+                // Redirect to the plugin's settings page (with a welcome message)
+                $url = UrlHelper::cpUrl('settings/plugins/spoon', ['welcome' => 1]);
+                Craft::$app->getResponse()->redirect($url)->send();
+            }
+        );
+    }
+
 
 }

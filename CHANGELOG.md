@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Added
+- Added a new "Welcome" message when installing the plugin.
+
 ### Fixed
 - Fixed spacing of nested menu toggle.
 
