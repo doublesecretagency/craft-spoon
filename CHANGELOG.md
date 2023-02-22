@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 4.0.4 - 2023-02-22
 
 ### Added
 - Added a new "Welcome" message when installing the plugin.
